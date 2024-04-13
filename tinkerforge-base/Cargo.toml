@@ -1,0 +1,30 @@
+[package]
+name = "tinkerforge-base"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.71.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+publish = ["kellnr-berg-turbenthal"]
+
+[dependencies]
+byteorder = "1.5.0"
+hmac = "0.12.1"
+rand = "0.8.5"
+rand_chacha = "0.3.1"
+sha-1 = "0.10.1"
+thiserror = "1.0.58"
+tokio = { version = "1.37.0", features = ["net", "io-util", "rt-multi-thread", "macros", "sync"] }
+tokio-stream = { version = "0.1.15", features = ["sync"] }
+futures-core = "0.3.30"
+log = "0.4.21"
+prometheus = { version = "0.13.3", optional = true }
+lazy_static = { version = "1.4.0", optional = true }
+serde = { version = "1.0.197", optional = true }
+const-str = "0.5.7"
+socket2 = "0.5.6"
+
+[features]
+fail-on-warnings = []
+prometheus = ["dep:prometheus", "dep:lazy_static"]
