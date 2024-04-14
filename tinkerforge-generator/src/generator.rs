@@ -89,7 +89,7 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
          let mut items = Vec::new();
          items.push(parse_quote!(
          #[allow(unused_imports)]
-         use crate::byte_converter::{FromByteSlice, ToBytes};
+         use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
      ));
          items.push(parse_quote!(
          #[allow(unused_imports)]
@@ -106,17 +106,17 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
          items.push(parse_quote!(
          #[derive(Clone, Debug)]
          pub struct #device_struct_name {
-             device: crate::device::Device,
+             device: tinkerforge_base::device::Device,
          }
      ));
          let mut device_impl: ItemImpl = parse_quote!(
          impl #device_struct_name {
-             pub fn new(uid: crate::base58::Uid, connection: crate::ip_connection::async_io::AsyncIpConnection) -> #device_struct_name {
+             pub fn new(uid: tinkerforge_base::base58::Uid, connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection) -> #device_struct_name {
                  Self{
-                     device: crate::device::Device::new(uid,connection,#raw_package_name)
+                     device: tinkerforge_base::device::Device::new(uid,connection,#raw_package_name)
                  }
              }
-             pub fn uid(&self)->crate::base58::Uid{
+             pub fn uid(&self)->tinkerforge_base::base58::Uid{
                  self.device.uid()
              }
          }
@@ -368,7 +368,7 @@ fn generate_packet_element_item_json(
             let mut function_statements = Vec::new();
             if request_type.is_some() {
                 function_statements.push(parse_quote!(let mut payload = [0; #request_size];));
-                function_statements.push(parse_quote!(crate::byte_converter::ToBytes::write_to_slice(request,&mut payload);))
+                function_statements.push(parse_quote!(tinkerforge_base::byte_converter::ToBytes::write_to_slice(request,&mut payload);))
             } else {
                 function_statements.push(parse_quote!(let payload = [0; #request_size];));
             }
@@ -385,13 +385,13 @@ fn generate_packet_element_item_json(
             if let Some(request_type) = request_type {
                 parse_quote!(
                 #[doc = #doc_de]
-                pub async fn #function_name(&mut self, request: #request_type) -> Result<#response_type, crate::error::TinkerforgeError>
+                pub async fn #function_name(&mut self, request: #request_type) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
                     #function_block
             )
             } else {
                 parse_quote!(
                 #[doc = #doc_de]
-                pub async fn #function_name(&mut self) -> Result<#response_type, crate::error::TinkerforgeError>
+                pub async fn #function_name(&mut self) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
                     #function_block
             )
             }
@@ -492,7 +492,7 @@ fn parse_packet_elements_json(
                             if wrap_enum {
                                 parse_quote!(#base_path::#constant_type_name)
                             } else {
-                                parse_quote!(crate::byte_converter::ParsedOrRaw<#base_path::#constant_type_name,#transfer_type>)
+                                parse_quote!(tinkerforge_base::byte_converter::ParsedOrRaw<#base_path::#constant_type_name,#transfer_type>)
                             },
                             parse_quote!(#extra_ident),
                         )
@@ -578,7 +578,7 @@ fn process_constant_group_json(items: &mut Vec<Item>, element: &JsonElement, gro
     }
 )));
     items.push(parse_quote!(
-    impl crate::byte_converter::ToBytes for #enum_name_ident {
+    impl tinkerforge_base::byte_converter::ToBytes for #enum_name_ident {
         fn write_to_slice(self,target: &mut [u8]){
             <#enum_name_ident as Into<#ty>>::into(self).write_to_slice(target);
         }
@@ -586,7 +586,7 @@ fn process_constant_group_json(items: &mut Vec<Item>, element: &JsonElement, gro
 ));
     let type_size = ty.bytecount(1);
     items.push(parse_quote!(
-    impl crate::byte_converter::FromByteSlice for #enum_name_ident {
+    impl tinkerforge_base::byte_converter::FromByteSlice for #enum_name_ident {
         fn from_le_byte_slice(bytes: &[u8])->Self{
             #ty::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -655,7 +655,7 @@ fn append_data_object(items: &mut Vec<Item>, fields: &[(Field, usize)], struct_n
     reader_statements.push(Stmt::Expr(parse_quote!(Self{#initialization_fields}), None));
     let read_fields = Block { brace_token: Default::default(), stmts: reader_statements };
     items.push(parse_quote!(
-   impl crate::byte_converter::FromByteSlice for #struct_name {
+   impl tinkerforge_base::byte_converter::FromByteSlice for #struct_name {
    fn from_le_byte_slice(bytes: &[u8]) -> Self
            #read_fields
    fn bytes_expected() -> usize {
@@ -664,7 +664,7 @@ fn append_data_object(items: &mut Vec<Item>, fields: &[(Field, usize)], struct_n
 }));
     let write_fields = Block { brace_token: Default::default(), stmts: writer_statements };
     items.push(parse_quote!(
-     impl crate::byte_converter::ToBytes for #struct_name {
+     impl tinkerforge_base::byte_converter::ToBytes for #struct_name {
         fn write_to_slice(self, target: &mut [u8])
             #write_fields
     }

@@ -50,7 +50,7 @@ pub mod async_io {
     }
 
     impl AsyncIpConnection  {
-        pub async fn enumerate<DI>(&mut self) -> Result<Box<dyn Stream<Item = EnumerateResponse> + Unpin + Send>, TinkerforgeError> {
+        pub async fn enumerate(&mut self) -> Result<Box<dyn Stream<Item = EnumerateResponse> + Unpin + Send>, TinkerforgeError> {
             self.inner.borrow_mut().lock().await.enumerate().await
         }
         pub async fn disconnect_probe(&mut self) -> Result<(), TinkerforgeError> {
@@ -59,7 +59,7 @@ pub mod async_io {
         pub async fn get_authentication_nonce(&mut self) -> Result<[u8; 4], TinkerforgeError> {
             self.inner.borrow_mut().lock().await.get_authentication_nonce().await
         }
-        pub(crate) async fn set(
+        pub async fn set(
             &mut self,
             uid: Uid,
             function_id: u8,
@@ -68,7 +68,7 @@ pub mod async_io {
         ) -> Result<Option<PacketData>, TinkerforgeError> {
             self.inner.borrow_mut().lock().await.set(uid, function_id, payload, timeout).await
         }
-        pub(crate) async fn get(
+        pub async fn get(
             &mut self,
             uid: Uid,
             function_id: u8,
@@ -77,8 +77,8 @@ pub mod async_io {
         ) -> Result<PacketData, TinkerforgeError> {
             self.inner.borrow_mut().lock().await.get(uid, function_id, payload, timeout).await
         }
-        pub(crate) async fn callback_stream<DI>(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item = PacketData> {
-            self.inner.borrow_mut().lock().await.callback_stream::<DI>(uid, function_id).await
+        pub async fn callback_stream(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item = PacketData> {
+            self.inner.borrow_mut().lock().await.callback_stream(uid, function_id).await
         }
         pub async fn new<T: ToSocketAddrs + Debug + Clone + Send + 'static>(addr: T) -> Result<Self, TinkerforgeError> {
             Ok(Self { inner: Arc::new(Mutex::new(InnerAsyncIpConnection::new(addr).await?)) })
@@ -250,7 +250,7 @@ pub mod async_io {
                 Err(e) => Some(Err(e)),
             }
         }
-        pub(crate) async fn callback_stream<DI>(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item = PacketData> {
+        pub async fn callback_stream(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item = PacketData> {
             BroadcastStream::new(self.receiver.resubscribe())
                 .map_while(move |result| match result {
                     Ok(Some(p)) => {
@@ -314,7 +314,7 @@ pub mod async_io {
     }
 
     #[derive(Clone, Debug)]
-    pub(crate) struct PacketData {
+    pub struct PacketData {
         header: PacketHeader,
         body: Box<[u8]>,
     }
@@ -330,7 +330,7 @@ pub mod async_io {
     }
 
     #[derive(Debug, Clone)]
-    pub(crate) enum Request<'a> {
+    pub enum Request<'a> {
         Set { uid: Uid, function_id: u8, payload: &'a [u8] },
         Get { uid: Uid, function_id: u8, payload: &'a [u8] },
     }
@@ -356,7 +356,7 @@ pub mod async_io {
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
-pub(crate) struct PacketHeader {
+pub struct PacketHeader {
     uid: Uid,
     length: u8,
     function_id: u8,
@@ -366,11 +366,11 @@ pub(crate) struct PacketHeader {
 }
 
 impl PacketHeader {
-    pub(crate) fn with_payload(uid: Uid, function_id: u8, sequence_number: u8, response_expected: bool, payload_len: u8) -> PacketHeader {
+    pub fn with_payload(uid: Uid, function_id: u8, sequence_number: u8, response_expected: bool, payload_len: u8) -> PacketHeader {
         PacketHeader { uid, length: PacketHeader::SIZE as u8 + payload_len, function_id, sequence_number, response_expected, error_code: 0 }
     }
 
-    pub(crate) const SIZE: usize = 8;
+    pub const SIZE: usize = 8;
 }
 
 impl FromByteSlice for PacketHeader {

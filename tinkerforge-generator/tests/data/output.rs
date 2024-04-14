@@ -1,13 +1,13 @@
 pub mod master {
     #[allow(unused_imports)]
-    use crate::byte_converter::{FromByteSlice, ToBytes};
+    use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
     #[allow(unused_imports)]
     use tokio_stream::StreamExt;
     #[allow(unused_imports)]
     use std::convert::TryInto;
     #[derive(Clone, Debug)]
     pub struct MasterBrick {
-        device: crate::device::Device,
+        device: tinkerforge_base::device::Device,
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum ExtensionType {
@@ -28,12 +28,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for ExtensionType {
+    impl tinkerforge_base::byte_converter::ToBytes for ExtensionType {
         fn write_to_slice(self, target: &mut [u8]) {
             <ExtensionType as Into<u32>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for ExtensionType {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ExtensionType {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u32::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -59,7 +59,7 @@ pub mod master {
         pub extension: u8,
         pub exttype: crate::bindings::master::ExtensionType,
     }
-    impl crate::byte_converter::FromByteSlice for SetExtensionTypeRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for SetExtensionTypeRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let extension = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let exttype = crate::bindings::master::ExtensionType::from_le_byte_slice(
@@ -71,7 +71,7 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetExtensionTypeRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetExtensionTypeRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.extension.write_to_slice(&mut target[0usize..1usize]);
             self.exttype.write_to_slice(&mut target[1usize..5usize]);
@@ -82,7 +82,8 @@ pub mod master {
         pub num: u8,
         pub address: u8,
     }
-    impl crate::byte_converter::FromByteSlice for SetChibiSlaveAddressRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetChibiSlaveAddressRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let num = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let address = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -92,7 +93,7 @@ pub mod master {
             2usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetChibiSlaveAddressRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetChibiSlaveAddressRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.num.write_to_slice(&mut target[0usize..1usize]);
             self.address.write_to_slice(&mut target[1usize..2usize]);
@@ -105,7 +106,7 @@ pub mod master {
         pub no_ack: u16,
         pub overflow: u16,
     }
-    impl crate::byte_converter::FromByteSlice for GetChibiErrorLogResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetChibiErrorLogResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let underrun = u16::from_le_byte_slice(&bytes[0usize..2usize]);
             let crc_error = u16::from_le_byte_slice(&bytes[2usize..4usize]);
@@ -122,7 +123,7 @@ pub mod master {
             8usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetChibiErrorLogResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetChibiErrorLogResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.underrun.write_to_slice(&mut target[0usize..2usize]);
             self.crc_error.write_to_slice(&mut target[2usize..4usize]);
@@ -147,12 +148,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for ChibiFrequency {
+    impl tinkerforge_base::byte_converter::ToBytes for ChibiFrequency {
         fn write_to_slice(self, target: &mut [u8]) {
             <ChibiFrequency as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for ChibiFrequency {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ChibiFrequency {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -177,7 +178,8 @@ pub mod master {
         pub num: u8,
         pub address: u8,
     }
-    impl crate::byte_converter::FromByteSlice for SetRs485SlaveAddressRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetRs485SlaveAddressRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let num = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let address = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -187,7 +189,7 @@ pub mod master {
             2usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetRs485SlaveAddressRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetRs485SlaveAddressRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.num.write_to_slice(&mut target[0usize..1usize]);
             self.address.write_to_slice(&mut target[1usize..2usize]);
@@ -208,12 +210,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Rs485Parity {
+    impl tinkerforge_base::byte_converter::ToBytes for Rs485Parity {
         fn write_to_slice(self, target: &mut [u8]) {
             <Rs485Parity as Into<char>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Rs485Parity {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Rs485Parity {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             char::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -238,7 +240,8 @@ pub mod master {
         pub parity: crate::bindings::master::Rs485Parity,
         pub stopbits: u8,
     }
-    impl crate::byte_converter::FromByteSlice for SetRs485ConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetRs485ConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let speed = u32::from_le_byte_slice(&bytes[0usize..4usize]);
             let parity = crate::bindings::master::Rs485Parity::from_le_byte_slice(
@@ -251,7 +254,7 @@ pub mod master {
             6usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetRs485ConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetRs485ConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.speed.write_to_slice(&mut target[0usize..4usize]);
             self.parity.write_to_slice(&mut target[4usize..5usize]);
@@ -261,16 +264,17 @@ pub mod master {
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetRs485ConfigurationResponse {
         pub speed: u32,
-        pub parity: crate::byte_converter::ParsedOrRaw<
+        pub parity: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::Rs485Parity,
             char,
         >,
         pub stopbits: u8,
     }
-    impl crate::byte_converter::FromByteSlice for GetRs485ConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetRs485ConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let speed = u32::from_le_byte_slice(&bytes[0usize..4usize]);
-            let parity = crate::byte_converter::ParsedOrRaw::<
+            let parity = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::Rs485Parity,
                 char,
             >::from_le_byte_slice(&bytes[4usize..5usize]);
@@ -281,7 +285,7 @@ pub mod master {
             6usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetRs485ConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetRs485ConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.speed.write_to_slice(&mut target[0usize..4usize]);
             self.parity.write_to_slice(&mut target[4usize..5usize]);
@@ -309,12 +313,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for WifiConnection {
+    impl tinkerforge_base::byte_converter::ToBytes for WifiConnection {
         fn write_to_slice(self, target: &mut [u8]) {
             <WifiConnection as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for WifiConnection {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WifiConnection {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -345,7 +349,8 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub port: u16,
     }
-    impl crate::byte_converter::FromByteSlice for SetWifiConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetWifiConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let ssid = <[char; 32usize]>::from_le_byte_slice(&bytes[0usize..32usize]);
             let connection = crate::bindings::master::WifiConnection::from_le_byte_slice(
@@ -370,7 +375,7 @@ pub mod master {
             47usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetWifiConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetWifiConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.ssid.write_to_slice(&mut target[0usize..32usize]);
             self.connection.write_to_slice(&mut target[32usize..33usize]);
@@ -383,7 +388,7 @@ pub mod master {
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifiConfigurationResponse {
         pub ssid: [char; 32usize],
-        pub connection: crate::byte_converter::ParsedOrRaw<
+        pub connection: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::WifiConnection,
             u8,
         >,
@@ -392,10 +397,11 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub port: u16,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifiConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifiConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let ssid = <[char; 32usize]>::from_le_byte_slice(&bytes[0usize..32usize]);
-            let connection = crate::byte_converter::ParsedOrRaw::<
+            let connection = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::WifiConnection,
                 u8,
             >::from_le_byte_slice(&bytes[32usize..33usize]);
@@ -418,7 +424,7 @@ pub mod master {
             47usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifiConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifiConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.ssid.write_to_slice(&mut target[0usize..32usize]);
             self.connection.write_to_slice(&mut target[32usize..33usize]);
@@ -445,12 +451,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for WifiEncryption {
+    impl tinkerforge_base::byte_converter::ToBytes for WifiEncryption {
         fn write_to_slice(self, target: &mut [u8]) {
             <WifiEncryption as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for WifiEncryption {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WifiEncryption {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -497,12 +503,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for WifiEapOption {
+    impl tinkerforge_base::byte_converter::ToBytes for WifiEapOption {
         fn write_to_slice(self, target: &mut [u8]) {
             <WifiEapOption as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for WifiEapOption {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WifiEapOption {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -537,7 +543,7 @@ pub mod master {
         pub client_certificate_length: u16,
         pub private_key_length: u16,
     }
-    impl crate::byte_converter::FromByteSlice for SetWifiEncryptionRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for SetWifiEncryptionRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let encryption = crate::bindings::master::WifiEncryption::from_le_byte_slice(
                 &bytes[0usize..1usize],
@@ -568,7 +574,7 @@ pub mod master {
             59usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetWifiEncryptionRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetWifiEncryptionRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.encryption.write_to_slice(&mut target[0usize..1usize]);
             self.key.write_to_slice(&mut target[1usize..51usize]);
@@ -581,13 +587,13 @@ pub mod master {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifiEncryptionResponse {
-        pub encryption: crate::byte_converter::ParsedOrRaw<
+        pub encryption: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::WifiEncryption,
             u8,
         >,
         pub key: [char; 50usize],
         pub key_index: u8,
-        pub eap_options: crate::byte_converter::ParsedOrRaw<
+        pub eap_options: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::WifiEapOption,
             u8,
         >,
@@ -595,15 +601,15 @@ pub mod master {
         pub client_certificate_length: u16,
         pub private_key_length: u16,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifiEncryptionResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetWifiEncryptionResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let encryption = crate::byte_converter::ParsedOrRaw::<
+            let encryption = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::WifiEncryption,
                 u8,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
             let key = <[char; 50usize]>::from_le_byte_slice(&bytes[1usize..51usize]);
             let key_index = u8::from_le_byte_slice(&bytes[51usize..52usize]);
-            let eap_options = crate::byte_converter::ParsedOrRaw::<
+            let eap_options = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::WifiEapOption,
                 u8,
             >::from_le_byte_slice(&bytes[52usize..53usize]);
@@ -628,7 +634,7 @@ pub mod master {
             59usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifiEncryptionResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifiEncryptionResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.encryption.write_to_slice(&mut target[0usize..1usize]);
             self.key.write_to_slice(&mut target[1usize..51usize]);
@@ -658,12 +664,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for WifiState {
+    impl tinkerforge_base::byte_converter::ToBytes for WifiState {
         fn write_to_slice(self, target: &mut [u8]) {
             <WifiState as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for WifiState {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WifiState {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -695,12 +701,12 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub rx_count: u32,
         pub tx_count: u32,
-        pub state: crate::byte_converter::ParsedOrRaw<
+        pub state: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::WifiState,
             u8,
         >,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifiStatusResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetWifiStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let mac_address = <[u8; 6usize]>::from_le_byte_slice(&bytes[0usize..6usize]);
             let bssid = <[u8; 6usize]>::from_le_byte_slice(&bytes[6usize..12usize]);
@@ -713,7 +719,7 @@ pub mod master {
             let gateway = <[u8; 4usize]>::from_le_byte_slice(&bytes[23usize..27usize]);
             let rx_count = u32::from_le_byte_slice(&bytes[27usize..31usize]);
             let tx_count = u32::from_le_byte_slice(&bytes[31usize..35usize]);
-            let state = crate::byte_converter::ParsedOrRaw::<
+            let state = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::WifiState,
                 u8,
             >::from_le_byte_slice(&bytes[35usize..36usize]);
@@ -734,7 +740,7 @@ pub mod master {
             36usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifiStatusResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifiStatusResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.mac_address.write_to_slice(&mut target[0usize..6usize]);
             self.bssid.write_to_slice(&mut target[6usize..12usize]);
@@ -754,7 +760,7 @@ pub mod master {
         pub data: [u8; 32usize],
         pub data_length: u8,
     }
-    impl crate::byte_converter::FromByteSlice for SetWifiCertificateRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for SetWifiCertificateRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u16::from_le_byte_slice(&bytes[0usize..2usize]);
             let data = <[u8; 32usize]>::from_le_byte_slice(&bytes[2usize..34usize]);
@@ -765,7 +771,7 @@ pub mod master {
             35usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetWifiCertificateRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetWifiCertificateRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..2usize]);
             self.data.write_to_slice(&mut target[2usize..34usize]);
@@ -777,7 +783,7 @@ pub mod master {
         pub data: [u8; 32usize],
         pub data_length: u8,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifiCertificateResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetWifiCertificateResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let data = <[u8; 32usize]>::from_le_byte_slice(&bytes[0usize..32usize]);
             let data_length = u8::from_le_byte_slice(&bytes[32usize..33usize]);
@@ -787,7 +793,7 @@ pub mod master {
             33usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifiCertificateResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifiCertificateResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.data.write_to_slice(&mut target[0usize..32usize]);
             self.data_length.write_to_slice(&mut target[32usize..33usize]);
@@ -806,12 +812,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for WifiPowerMode {
+    impl tinkerforge_base::byte_converter::ToBytes for WifiPowerMode {
         fn write_to_slice(self, target: &mut [u8]) {
             <WifiPowerMode as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for WifiPowerMode {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WifiPowerMode {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -835,7 +841,7 @@ pub mod master {
         pub low_watermark: u16,
         pub used: u16,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifiBufferInfoResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetWifiBufferInfoResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let overflow = u32::from_le_byte_slice(&bytes[0usize..4usize]);
             let low_watermark = u16::from_le_byte_slice(&bytes[4usize..6usize]);
@@ -850,7 +856,7 @@ pub mod master {
             8usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifiBufferInfoResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifiBufferInfoResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.overflow.write_to_slice(&mut target[0usize..4usize]);
             self.low_watermark.write_to_slice(&mut target[4usize..6usize]);
@@ -872,12 +878,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for WifiDomain {
+    impl tinkerforge_base::byte_converter::ToBytes for WifiDomain {
         fn write_to_slice(self, target: &mut [u8]) {
             <WifiDomain as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for WifiDomain {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WifiDomain {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -915,12 +921,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for ThresholdOption {
+    impl tinkerforge_base::byte_converter::ToBytes for ThresholdOption {
         fn write_to_slice(self, target: &mut [u8]) {
             <ThresholdOption as Into<char>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for ThresholdOption {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ThresholdOption {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             char::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -947,7 +953,7 @@ pub mod master {
         pub min: u16,
         pub max: u16,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for SetStackCurrentCallbackThresholdRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let option = crate::bindings::master::ThresholdOption::from_le_byte_slice(
@@ -961,7 +967,8 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetStackCurrentCallbackThresholdRequest {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for SetStackCurrentCallbackThresholdRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
@@ -970,17 +977,17 @@ pub mod master {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetStackCurrentCallbackThresholdResponse {
-        pub option: crate::byte_converter::ParsedOrRaw<
+        pub option: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::ThresholdOption,
             char,
         >,
         pub min: u16,
         pub max: u16,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetStackCurrentCallbackThresholdResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let option = crate::byte_converter::ParsedOrRaw::<
+            let option = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::ThresholdOption,
                 char,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -992,7 +999,8 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetStackCurrentCallbackThresholdResponse {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for GetStackCurrentCallbackThresholdResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
@@ -1005,7 +1013,7 @@ pub mod master {
         pub min: u16,
         pub max: u16,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for SetStackVoltageCallbackThresholdRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let option = crate::bindings::master::ThresholdOption::from_le_byte_slice(
@@ -1019,7 +1027,8 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetStackVoltageCallbackThresholdRequest {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for SetStackVoltageCallbackThresholdRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
@@ -1028,17 +1037,17 @@ pub mod master {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetStackVoltageCallbackThresholdResponse {
-        pub option: crate::byte_converter::ParsedOrRaw<
+        pub option: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::ThresholdOption,
             char,
         >,
         pub min: u16,
         pub max: u16,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetStackVoltageCallbackThresholdResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let option = crate::byte_converter::ParsedOrRaw::<
+            let option = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::ThresholdOption,
                 char,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -1050,7 +1059,8 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetStackVoltageCallbackThresholdResponse {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for GetStackVoltageCallbackThresholdResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
@@ -1063,7 +1073,8 @@ pub mod master {
         pub min: u16,
         pub max: u16,
     }
-    impl crate::byte_converter::FromByteSlice for SetUsbVoltageCallbackThresholdRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetUsbVoltageCallbackThresholdRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let option = crate::bindings::master::ThresholdOption::from_le_byte_slice(
                 &bytes[0usize..1usize],
@@ -1076,7 +1087,8 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetUsbVoltageCallbackThresholdRequest {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for SetUsbVoltageCallbackThresholdRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
@@ -1085,17 +1097,17 @@ pub mod master {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetUsbVoltageCallbackThresholdResponse {
-        pub option: crate::byte_converter::ParsedOrRaw<
+        pub option: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::ThresholdOption,
             char,
         >,
         pub min: u16,
         pub max: u16,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetUsbVoltageCallbackThresholdResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let option = crate::byte_converter::ParsedOrRaw::<
+            let option = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::ThresholdOption,
                 char,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -1107,7 +1119,8 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetUsbVoltageCallbackThresholdResponse {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for GetUsbVoltageCallbackThresholdResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
@@ -1127,12 +1140,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for EthernetConnection {
+    impl tinkerforge_base::byte_converter::ToBytes for EthernetConnection {
         fn write_to_slice(self, target: &mut [u8]) {
             <EthernetConnection as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for EthernetConnection {
+    impl tinkerforge_base::byte_converter::FromByteSlice for EthernetConnection {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -1158,7 +1171,8 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub port: u16,
     }
-    impl crate::byte_converter::FromByteSlice for SetEthernetConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetEthernetConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let connection = crate::bindings::master::EthernetConnection::from_le_byte_slice(
                 &bytes[0usize..1usize],
@@ -1179,7 +1193,7 @@ pub mod master {
             15usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetEthernetConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetEthernetConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.connection.write_to_slice(&mut target[0usize..1usize]);
             self.ip.write_to_slice(&mut target[1usize..5usize]);
@@ -1190,7 +1204,7 @@ pub mod master {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetEthernetConfigurationResponse {
-        pub connection: crate::byte_converter::ParsedOrRaw<
+        pub connection: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::EthernetConnection,
             u8,
         >,
@@ -1199,9 +1213,10 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub port: u16,
     }
-    impl crate::byte_converter::FromByteSlice for GetEthernetConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetEthernetConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let connection = crate::byte_converter::ParsedOrRaw::<
+            let connection = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::EthernetConnection,
                 u8,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -1221,7 +1236,7 @@ pub mod master {
             15usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetEthernetConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetEthernetConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.connection.write_to_slice(&mut target[0usize..1usize]);
             self.ip.write_to_slice(&mut target[1usize..5usize]);
@@ -1240,7 +1255,7 @@ pub mod master {
         pub tx_count: u32,
         pub hostname: [char; 32usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetEthernetStatusResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetEthernetStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let mac_address = <[u8; 6usize]>::from_le_byte_slice(&bytes[0usize..6usize]);
             let ip = <[u8; 4usize]>::from_le_byte_slice(&bytes[6usize..10usize]);
@@ -1267,7 +1282,7 @@ pub mod master {
             58usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetEthernetStatusResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetEthernetStatusResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.mac_address.write_to_slice(&mut target[0usize..6usize]);
             self.ip.write_to_slice(&mut target[6usize..10usize]);
@@ -1283,7 +1298,7 @@ pub mod master {
         pub sockets: u8,
         pub port: u16,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for SetEthernetWebsocketConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let sockets = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -1294,7 +1309,8 @@ pub mod master {
             3usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetEthernetWebsocketConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for SetEthernetWebsocketConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.sockets.write_to_slice(&mut target[0usize..1usize]);
             self.port.write_to_slice(&mut target[1usize..3usize]);
@@ -1305,7 +1321,7 @@ pub mod master {
         pub sockets: u8,
         pub port: u16,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetEthernetWebsocketConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let sockets = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -1316,7 +1332,8 @@ pub mod master {
             3usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetEthernetWebsocketConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for GetEthernetWebsocketConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.sockets.write_to_slice(&mut target[0usize..1usize]);
             self.port.write_to_slice(&mut target[1usize..3usize]);
@@ -1347,12 +1364,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for ConnectionType {
+    impl tinkerforge_base::byte_converter::ToBytes for ConnectionType {
         fn write_to_slice(self, target: &mut [u8]) {
             <ConnectionType as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for ConnectionType {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ConnectionType {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -1381,7 +1398,8 @@ pub mod master {
         pub data: [u8; 60usize],
         pub length: u8,
     }
-    impl crate::byte_converter::FromByteSlice for WriteWifi2SerialPortRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for WriteWifi2SerialPortRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let data = <[u8; 60usize]>::from_le_byte_slice(&bytes[0usize..60usize]);
             let length = u8::from_le_byte_slice(&bytes[60usize..61usize]);
@@ -1391,7 +1409,7 @@ pub mod master {
             61usize
         }
     }
-    impl crate::byte_converter::ToBytes for WriteWifi2SerialPortRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for WriteWifi2SerialPortRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.data.write_to_slice(&mut target[0usize..60usize]);
             self.length.write_to_slice(&mut target[60usize..61usize]);
@@ -1402,7 +1420,8 @@ pub mod master {
         pub data: [u8; 60usize],
         pub result: u8,
     }
-    impl crate::byte_converter::FromByteSlice for ReadWifi2SerialPortResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for ReadWifi2SerialPortResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let data = <[u8; 60usize]>::from_le_byte_slice(&bytes[0usize..60usize]);
             let result = u8::from_le_byte_slice(&bytes[60usize..61usize]);
@@ -1412,7 +1431,7 @@ pub mod master {
             61usize
         }
     }
-    impl crate::byte_converter::ToBytes for ReadWifi2SerialPortResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for ReadWifi2SerialPortResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.data.write_to_slice(&mut target[0usize..60usize]);
             self.result.write_to_slice(&mut target[60usize..61usize]);
@@ -1433,12 +1452,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Wifi2PhyMode {
+    impl tinkerforge_base::byte_converter::ToBytes for Wifi2PhyMode {
         fn write_to_slice(self, target: &mut [u8]) {
             <Wifi2PhyMode as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Wifi2PhyMode {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2PhyMode {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -1466,7 +1485,8 @@ pub mod master {
         pub sleep_mode: u8,
         pub website: u8,
     }
-    impl crate::byte_converter::FromByteSlice for SetWifi2ConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetWifi2ConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let port = u16::from_le_byte_slice(&bytes[0usize..2usize]);
             let websocket_port = u16::from_le_byte_slice(&bytes[2usize..4usize]);
@@ -1489,7 +1509,7 @@ pub mod master {
             9usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetWifi2ConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetWifi2ConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.port.write_to_slice(&mut target[0usize..2usize]);
             self.websocket_port.write_to_slice(&mut target[2usize..4usize]);
@@ -1504,19 +1524,20 @@ pub mod master {
         pub port: u16,
         pub websocket_port: u16,
         pub website_port: u16,
-        pub phy_mode: crate::byte_converter::ParsedOrRaw<
+        pub phy_mode: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::Wifi2PhyMode,
             u8,
         >,
         pub sleep_mode: u8,
         pub website: u8,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2ConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifi2ConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let port = u16::from_le_byte_slice(&bytes[0usize..2usize]);
             let websocket_port = u16::from_le_byte_slice(&bytes[2usize..4usize]);
             let website_port = u16::from_le_byte_slice(&bytes[4usize..6usize]);
-            let phy_mode = crate::byte_converter::ParsedOrRaw::<
+            let phy_mode = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::Wifi2PhyMode,
                 u8,
             >::from_le_byte_slice(&bytes[6usize..7usize]);
@@ -1535,7 +1556,7 @@ pub mod master {
             9usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2ConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifi2ConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.port.write_to_slice(&mut target[0usize..2usize]);
             self.websocket_port.write_to_slice(&mut target[2usize..4usize]);
@@ -1568,12 +1589,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Wifi2ClientStatus {
+    impl tinkerforge_base::byte_converter::ToBytes for Wifi2ClientStatus {
         fn write_to_slice(self, target: &mut [u8]) {
             <Wifi2ClientStatus as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Wifi2ClientStatus {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2ClientStatus {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -1599,7 +1620,7 @@ pub mod master {
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2StatusResponse {
         pub client_enabled: bool,
-        pub client_status: crate::byte_converter::ParsedOrRaw<
+        pub client_status: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::Wifi2ClientStatus,
             u8,
         >,
@@ -1619,10 +1640,10 @@ pub mod master {
         pub ap_tx_count: u32,
         pub ap_connected_count: u8,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2StatusResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetWifi2StatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let client_enabled = bool::from_le_byte_slice(&bytes[0usize..1usize]);
-            let client_status = crate::byte_converter::ParsedOrRaw::<
+            let client_status = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::Wifi2ClientStatus,
                 u8,
             >::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -1677,7 +1698,7 @@ pub mod master {
             57usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2StatusResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifi2StatusResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.client_enabled.write_to_slice(&mut target[0usize..1usize]);
             self.client_status.write_to_slice(&mut target[1usize..2usize]);
@@ -1708,7 +1729,8 @@ pub mod master {
         pub mac_address: [u8; 6usize],
         pub bssid: [u8; 6usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetWifi2ClientConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetWifi2ClientConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let enable = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let ssid = <[char; 32usize]>::from_le_byte_slice(&bytes[1usize..33usize]);
@@ -1735,7 +1757,8 @@ pub mod master {
             57usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetWifi2ClientConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for SetWifi2ClientConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.enable.write_to_slice(&mut target[0usize..1usize]);
             self.ssid.write_to_slice(&mut target[1usize..33usize]);
@@ -1756,7 +1779,8 @@ pub mod master {
         pub mac_address: [u8; 6usize],
         pub bssid: [u8; 6usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2ClientConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifi2ClientConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let enable = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let ssid = <[char; 32usize]>::from_le_byte_slice(&bytes[1usize..33usize]);
@@ -1783,7 +1807,8 @@ pub mod master {
             57usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2ClientConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for GetWifi2ClientConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.enable.write_to_slice(&mut target[0usize..1usize]);
             self.ssid.write_to_slice(&mut target[1usize..33usize]);
@@ -1813,12 +1838,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Wifi2ApEncryption {
+    impl tinkerforge_base::byte_converter::ToBytes for Wifi2ApEncryption {
         fn write_to_slice(self, target: &mut [u8]) {
             <Wifi2ApEncryption as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Wifi2ApEncryption {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2ApEncryption {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -1851,7 +1876,8 @@ pub mod master {
         pub channel: u8,
         pub mac_address: [u8; 6usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetWifi2ApConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetWifi2ApConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let enable = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let ssid = <[char; 32usize]>::from_le_byte_slice(&bytes[1usize..33usize]);
@@ -1884,7 +1910,7 @@ pub mod master {
             54usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetWifi2ApConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetWifi2ApConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.enable.write_to_slice(&mut target[0usize..1usize]);
             self.ssid.write_to_slice(&mut target[1usize..33usize]);
@@ -1904,7 +1930,7 @@ pub mod master {
         pub ip: [u8; 4usize],
         pub subnet_mask: [u8; 4usize],
         pub gateway: [u8; 4usize],
-        pub encryption: crate::byte_converter::ParsedOrRaw<
+        pub encryption: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::Wifi2ApEncryption,
             u8,
         >,
@@ -1912,7 +1938,8 @@ pub mod master {
         pub channel: u8,
         pub mac_address: [u8; 6usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2ApConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifi2ApConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let enable = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let ssid = <[char; 32usize]>::from_le_byte_slice(&bytes[1usize..33usize]);
@@ -1921,7 +1948,7 @@ pub mod master {
                 &bytes[37usize..41usize],
             );
             let gateway = <[u8; 4usize]>::from_le_byte_slice(&bytes[41usize..45usize]);
-            let encryption = crate::byte_converter::ParsedOrRaw::<
+            let encryption = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::Wifi2ApEncryption,
                 u8,
             >::from_le_byte_slice(&bytes[45usize..46usize]);
@@ -1946,7 +1973,7 @@ pub mod master {
             54usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2ApConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifi2ApConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.enable.write_to_slice(&mut target[0usize..1usize]);
             self.ssid.write_to_slice(&mut target[1usize..33usize]);
@@ -1965,7 +1992,8 @@ pub mod master {
         pub firmware_version_minor: u8,
         pub firmware_version_revision: u8,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2FirmwareVersionResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifi2FirmwareVersionResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let firmware_version_major = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let firmware_version_minor = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -1982,7 +2010,7 @@ pub mod master {
             3usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2FirmwareVersionResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifi2FirmwareVersionResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.firmware_version_major.write_to_slice(&mut target[0usize..1usize]);
             self.firmware_version_minor.write_to_slice(&mut target[1usize..2usize]);
@@ -2001,7 +2029,8 @@ pub mod master {
         pub gateway_ip: [u8; 4usize],
         pub gateway_port: u16,
     }
-    impl crate::byte_converter::FromByteSlice for SetWifi2MeshConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetWifi2MeshConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let enable = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let root_ip = <[u8; 4usize]>::from_le_byte_slice(&bytes[1usize..5usize]);
@@ -2038,7 +2067,7 @@ pub mod master {
             47usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetWifi2MeshConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetWifi2MeshConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.enable.write_to_slice(&mut target[0usize..1usize]);
             self.root_ip.write_to_slice(&mut target[1usize..5usize]);
@@ -2063,7 +2092,8 @@ pub mod master {
         pub gateway_ip: [u8; 4usize],
         pub gateway_port: u16,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2MeshConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifi2MeshConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let enable = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let root_ip = <[u8; 4usize]>::from_le_byte_slice(&bytes[1usize..5usize]);
@@ -2100,7 +2130,8 @@ pub mod master {
             47usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2MeshConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for GetWifi2MeshConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.enable.write_to_slice(&mut target[0usize..1usize]);
             self.root_ip.write_to_slice(&mut target[1usize..5usize]);
@@ -2138,12 +2169,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Wifi2MeshStatus {
+    impl tinkerforge_base::byte_converter::ToBytes for Wifi2MeshStatus {
         fn write_to_slice(self, target: &mut [u8]) {
             <Wifi2MeshStatus as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Wifi2MeshStatus {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2MeshStatus {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -2169,7 +2200,7 @@ pub mod master {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2MeshCommonStatusResponse {
-        pub status: crate::byte_converter::ParsedOrRaw<
+        pub status: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::master::Wifi2MeshStatus,
             u8,
         >,
@@ -2179,9 +2210,10 @@ pub mod master {
         pub rx_count: u32,
         pub tx_count: u32,
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2MeshCommonStatusResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifi2MeshCommonStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let status = crate::byte_converter::ParsedOrRaw::<
+            let status = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::master::Wifi2MeshStatus,
                 u8,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -2203,7 +2235,7 @@ pub mod master {
             13usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2MeshCommonStatusResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshCommonStatusResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.status.write_to_slice(&mut target[0usize..1usize]);
             self.root_node.write_to_slice(&mut target[1usize..2usize]);
@@ -2221,7 +2253,8 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub mac_address: [u8; 6usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2MeshClientStatusResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifi2MeshClientStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let hostname = <[char; 32usize]>::from_le_byte_slice(
                 &bytes[0usize..32usize],
@@ -2246,7 +2279,7 @@ pub mod master {
             50usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2MeshClientStatusResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshClientStatusResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.hostname.write_to_slice(&mut target[0usize..32usize]);
             self.ip.write_to_slice(&mut target[32usize..36usize]);
@@ -2263,7 +2296,8 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub mac_address: [u8; 6usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetWifi2MeshApStatusResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetWifi2MeshApStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let ssid = <[char; 32usize]>::from_le_byte_slice(&bytes[0usize..32usize]);
             let ip = <[u8; 4usize]>::from_le_byte_slice(&bytes[32usize..36usize]);
@@ -2286,7 +2320,7 @@ pub mod master {
             50usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetWifi2MeshApStatusResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshApStatusResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.ssid.write_to_slice(&mut target[0usize..32usize]);
             self.ip.write_to_slice(&mut target[32usize..36usize]);
@@ -2302,7 +2336,8 @@ pub mod master {
         pub parameter_2: u32,
         pub data: [u8; 52usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetBrickletXmcFlashConfigRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetBrickletXmcFlashConfigRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let config = u32::from_le_byte_slice(&bytes[0usize..4usize]);
             let parameter_1 = u32::from_le_byte_slice(&bytes[4usize..8usize]);
@@ -2319,7 +2354,7 @@ pub mod master {
             64usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetBrickletXmcFlashConfigRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetBrickletXmcFlashConfigRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.config.write_to_slice(&mut target[0usize..4usize]);
             self.parameter_1.write_to_slice(&mut target[4usize..8usize]);
@@ -2332,7 +2367,8 @@ pub mod master {
         pub return_value: u32,
         pub return_data: [u8; 60usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetBrickletXmcFlashConfigResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetBrickletXmcFlashConfigResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let return_value = u32::from_le_byte_slice(&bytes[0usize..4usize]);
             let return_data = <[u8; 60usize]>::from_le_byte_slice(
@@ -2344,7 +2380,8 @@ pub mod master {
             64usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetBrickletXmcFlashConfigResponse {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for SetBrickletXmcFlashConfigResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.return_value.write_to_slice(&mut target[0usize..4usize]);
             self.return_data.write_to_slice(&mut target[4usize..64usize]);
@@ -2355,7 +2392,8 @@ pub mod master {
         pub enable_dynamic_baudrate: bool,
         pub minimum_dynamic_baudrate: u32,
     }
-    impl crate::byte_converter::FromByteSlice for SetSpitfpBaudrateConfigRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetSpitfpBaudrateConfigRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let enable_dynamic_baudrate = bool::from_le_byte_slice(
                 &bytes[0usize..1usize],
@@ -2372,7 +2410,7 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetSpitfpBaudrateConfigRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetSpitfpBaudrateConfigRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.enable_dynamic_baudrate.write_to_slice(&mut target[0usize..1usize]);
             self.minimum_dynamic_baudrate.write_to_slice(&mut target[1usize..5usize]);
@@ -2383,7 +2421,8 @@ pub mod master {
         pub enable_dynamic_baudrate: bool,
         pub minimum_dynamic_baudrate: u32,
     }
-    impl crate::byte_converter::FromByteSlice for GetSpitfpBaudrateConfigResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetSpitfpBaudrateConfigResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let enable_dynamic_baudrate = bool::from_le_byte_slice(
                 &bytes[0usize..1usize],
@@ -2400,7 +2439,7 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetSpitfpBaudrateConfigResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpBaudrateConfigResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.enable_dynamic_baudrate.write_to_slice(&mut target[0usize..1usize]);
             self.minimum_dynamic_baudrate.write_to_slice(&mut target[1usize..5usize]);
@@ -2431,12 +2470,12 @@ pub mod master {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for CommunicationMethod {
+    impl tinkerforge_base::byte_converter::ToBytes for CommunicationMethod {
         fn write_to_slice(self, target: &mut [u8]) {
             <CommunicationMethod as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for CommunicationMethod {
+    impl tinkerforge_base::byte_converter::FromByteSlice for CommunicationMethod {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -2465,7 +2504,7 @@ pub mod master {
         pub bricklet_port: char,
         pub baudrate: u32,
     }
-    impl crate::byte_converter::FromByteSlice for SetSpitfpBaudrateRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for SetSpitfpBaudrateRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let bricklet_port = char::from_le_byte_slice(&bytes[0usize..1usize]);
             let baudrate = u32::from_le_byte_slice(&bytes[1usize..5usize]);
@@ -2475,7 +2514,7 @@ pub mod master {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetSpitfpBaudrateRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetSpitfpBaudrateRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.bricklet_port.write_to_slice(&mut target[0usize..1usize]);
             self.baudrate.write_to_slice(&mut target[1usize..5usize]);
@@ -2488,7 +2527,8 @@ pub mod master {
         pub error_count_frame: u32,
         pub error_count_overflow: u32,
     }
-    impl crate::byte_converter::FromByteSlice for GetSpitfpErrorCountResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetSpitfpErrorCountResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let error_count_ack_checksum = u32::from_le_byte_slice(
                 &bytes[0usize..4usize],
@@ -2509,7 +2549,7 @@ pub mod master {
             16usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetSpitfpErrorCountResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpErrorCountResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.error_count_ack_checksum.write_to_slice(&mut target[0usize..4usize]);
             self.error_count_message_checksum
@@ -2526,7 +2566,8 @@ pub mod master {
         pub firmware_version_revision: u8,
         pub name: [char; 40usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetProtocol1BrickletNameResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetProtocol1BrickletNameResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let protocol_version = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let firmware_version_major = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -2547,7 +2588,7 @@ pub mod master {
             44usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetProtocol1BrickletNameResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetProtocol1BrickletNameResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.protocol_version.write_to_slice(&mut target[0usize..1usize]);
             self.firmware_version_major.write_to_slice(&mut target[1usize..2usize]);
@@ -2562,7 +2603,7 @@ pub mod master {
         pub offset: u8,
         pub chunk: [u8; 32usize],
     }
-    impl crate::byte_converter::FromByteSlice for WriteBrickletPluginRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WriteBrickletPluginRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let port = char::from_le_byte_slice(&bytes[0usize..1usize]);
             let offset = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -2573,7 +2614,7 @@ pub mod master {
             34usize
         }
     }
-    impl crate::byte_converter::ToBytes for WriteBrickletPluginRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for WriteBrickletPluginRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.port.write_to_slice(&mut target[0usize..1usize]);
             self.offset.write_to_slice(&mut target[1usize..2usize]);
@@ -2585,7 +2626,7 @@ pub mod master {
         pub port: char,
         pub offset: u8,
     }
-    impl crate::byte_converter::FromByteSlice for ReadBrickletPluginRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ReadBrickletPluginRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let port = char::from_le_byte_slice(&bytes[0usize..1usize]);
             let offset = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -2595,7 +2636,7 @@ pub mod master {
             2usize
         }
     }
-    impl crate::byte_converter::ToBytes for ReadBrickletPluginRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for ReadBrickletPluginRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.port.write_to_slice(&mut target[0usize..1usize]);
             self.offset.write_to_slice(&mut target[1usize..2usize]);
@@ -2614,7 +2655,7 @@ pub mod master {
         pub firmware_version_revision: u8,
         pub device_identifier: u16,
     }
-    impl crate::byte_converter::FromByteSlice for GetIdentityResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetIdentityResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let uid = <[char; 8usize]>::from_le_byte_slice(&bytes[0usize..8usize]);
             let connected_uid = <[char; 8usize]>::from_le_byte_slice(
@@ -2657,7 +2698,7 @@ pub mod master {
             25usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetIdentityResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetIdentityResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.uid.write_to_slice(&mut target[0usize..8usize]);
             self.connected_uid.write_to_slice(&mut target[8usize..16usize]);
@@ -2673,14 +2714,14 @@ pub mod master {
     }
     impl MasterBrick {
         pub fn new(
-            uid: crate::base58::Uid,
-            connection: crate::ip_connection::async_io::AsyncIpConnection,
+            uid: tinkerforge_base::base58::Uid,
+            connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection,
         ) -> MasterBrick {
             Self {
-                device: crate::device::Device::new(uid, connection, "Master"),
+                device: tinkerforge_base::device::Device::new(uid, connection, "Master"),
             }
         }
-        pub fn uid(&self) -> crate::base58::Uid {
+        pub fn uid(&self) -> tinkerforge_base::base58::Uid {
             self.device.uid()
         }
         /**
@@ -2693,7 +2734,7 @@ Step-Up Power Supply eingespeist werden.
 */
         pub async fn get_stack_voltage(
             &mut self,
-        ) -> Result<u16, crate::error::TinkerforgeError> {
+        ) -> Result<u16, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(1u8, &payload).await?;
             Ok(u16::from_le_byte_slice(&result.body()[0..2usize]))
@@ -2708,7 +2749,7 @@ Die Speisung kann z.B. über eine Step-Down oder Step-Up Power Supply erfolgen.
 */
         pub async fn get_stack_current(
             &mut self,
-        ) -> Result<u16, crate::error::TinkerforgeError> {
+        ) -> Result<u16, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(2u8, &payload).await?;
             Ok(u16::from_le_byte_slice(&result.body()[0..2usize]))
@@ -2737,9 +2778,12 @@ diese Funktion benötigt wird.
         pub async fn set_extension_type(
             &mut self,
             request: crate::bindings::master::SetExtensionTypeRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(3u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -2752,17 +2796,20 @@ Gibt den Typ der angegebenen Extension zurück, wie von :func:`Set Extension Typ
             &mut self,
             request: u8,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<
+            tinkerforge_base::byte_converter::ParsedOrRaw<
                 crate::bindings::master::ExtensionType,
                 u32,
             >,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(4u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::master::ExtensionType,
                     u32,
                 >::from_le_byte_slice(&result.body()[0..4usize]),
@@ -2774,7 +2821,7 @@ Chibi Extension verfügbar ist.
 */
         pub async fn is_chibi_present(
             &mut self,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(5u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
@@ -2789,9 +2836,12 @@ jedem Start ist daher nicht notwendig.
         pub async fn set_chibi_address(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(6u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -2802,7 +2852,7 @@ Gibt die Adresse zurück, wie von :func:`Set Chibi Address` gesetzt.
 */
         pub async fn get_chibi_address(
             &mut self,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(7u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
@@ -2819,9 +2869,12 @@ jedem Start ist daher nicht notwendig.
         pub async fn set_chibi_master_address(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(8u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -2832,7 +2885,7 @@ Gibt die Adresse zurück, wie von :func:`Set Chibi Master Address` gesetzt.
 */
         pub async fn get_chibi_master_address(
             &mut self,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(9u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
@@ -2858,9 +2911,12 @@ Setzen bei jedem Start ist daher nicht notwendig.
         pub async fn set_chibi_slave_address(
             &mut self,
             request: crate::bindings::master::SetChibiSlaveAddressRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 2usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(10u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -2873,9 +2929,12 @@ zurück, wie von :func:`Set Chibi Slave Address` gesetzt.
         pub async fn get_chibi_slave_address(
             &mut self,
             request: u8,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(11u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
@@ -2885,7 +2944,7 @@ wird bei jedem Empfang eines Paketes durchgeführt.
 */
         pub async fn get_chibi_signal_strength(
             &mut self,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(12u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
@@ -2900,7 +2959,7 @@ vorliegen.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetChibiErrorLogResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(13u8, &payload).await?;
@@ -2929,9 +2988,12 @@ jedem Start ist daher nicht notwendig.
         pub async fn set_chibi_frequency(
             &mut self,
             request: crate::bindings::master::ChibiFrequency,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(14u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -2943,16 +3005,16 @@ Gibt den Frequenzbereich zurück, wie von :func:`Set Chibi Frequency` gesetzt.
         pub async fn get_chibi_frequency(
             &mut self,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<
+            tinkerforge_base::byte_converter::ParsedOrRaw<
                 crate::bindings::master::ChibiFrequency,
                 u8,
             >,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(15u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::master::ChibiFrequency,
                     u8,
                 >::from_le_byte_slice(&result.body()[0..1usize]),
@@ -2978,9 +3040,12 @@ jedem Start ist daher nicht notwendig.
         pub async fn set_chibi_channel(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(16u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -2991,7 +3056,7 @@ Gibt den Kanal zurück, wie von :func:`Set Chibi Channel` gesetzt.
 */
         pub async fn get_chibi_channel(
             &mut self,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(17u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
@@ -3002,7 +3067,7 @@ RS485 Extension verfügbar ist.
 */
         pub async fn is_rs_485_present(
             &mut self,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(18u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
@@ -3020,9 +3085,12 @@ jedem Start ist daher nicht notwendig.
         pub async fn set_rs_485_address(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(19u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3033,7 +3101,7 @@ Gibt die Adresse zurück, wie von :func:`Set RS485 Address` gesetzt.
 */
         pub async fn get_rs_485_address(
             &mut self,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(20u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
@@ -3059,9 +3127,12 @@ Setzen bei jedem Start ist daher nicht notwendig.
         pub async fn set_rs_485_slave_address(
             &mut self,
             request: crate::bindings::master::SetRs485SlaveAddressRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 2usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(21u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3074,9 +3145,12 @@ zurück, wie von :func:`Set RS485 Slave Address` gesetzt.
         pub async fn get_rs_485_slave_address(
             &mut self,
             request: u8,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(22u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
@@ -3087,7 +3161,7 @@ zu groß ist oder es Störungen gibt.
 */
         pub async fn get_rs_485_error_log(
             &mut self,
-        ) -> Result<u16, crate::error::TinkerforgeError> {
+        ) -> Result<u16, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(23u8, &payload).await?;
             Ok(u16::from_le_byte_slice(&result.body()[0..2usize]))
@@ -3109,9 +3183,12 @@ bedeutet, der Master Brick muss nach einer Konfiguration neu gestartet werden.
         pub async fn set_rs_485_configuration(
             &mut self,
             request: crate::bindings::master::SetRs485ConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(24u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3124,7 +3201,7 @@ Gibt die Schnittstellenkonfiguration zurück, wie von :func:`Set RS485 Configura
             &mut self,
         ) -> Result<
             crate::bindings::master::GetRs485ConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(25u8, &payload).await?;
@@ -3140,7 +3217,7 @@ WIFI Extension verfügbar ist.
 */
         pub async fn is_wifi_present(
             &mut self,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(26u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
@@ -3178,9 +3255,12 @@ konfigurieren.
         pub async fn set_wifi_configuration(
             &mut self,
             request: crate::bindings::master::SetWifiConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 47usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(27u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3193,7 +3273,7 @@ Gibt die Konfiguration zurück, wie von :func:`Set Wifi Configuration` gesetzt.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifiConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(28u8, &payload).await?;
@@ -3253,9 +3333,12 @@ zu konfigurieren.
         pub async fn set_wifi_encryption(
             &mut self,
             request: crate::bindings::master::SetWifiEncryptionRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 59usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(29u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3273,7 +3356,7 @@ Gibt die Verschlüsselungseinstellungen zurück, wie von
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifiEncryptionResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(30u8, &payload).await?;
@@ -3304,7 +3387,7 @@ Mögliche Werte für *state* sind:
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifiStatusResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(31u8, &payload).await?;
@@ -3324,7 +3407,7 @@ Funktion aufgerufen wurde.
 */
         pub async fn refresh_wifi_status(
             &mut self,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(32u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -3354,9 +3437,12 @@ und Passwort zu konfigurieren.
         pub async fn set_wifi_certificate(
             &mut self,
             request: crate::bindings::master::SetWifiCertificateRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 35usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(33u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3371,10 +3457,13 @@ Gibt das Zertifikat für einen Index zurück, wie von
             request: u16,
         ) -> Result<
             crate::bindings::master::GetWifiCertificateResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 2usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(34u8, &payload).await?;
             Ok(
                 crate::bindings::master::GetWifiCertificateResponse::from_le_byte_slice(
@@ -3395,9 +3484,12 @@ Setzt den Stromsparmodus für die WIFI Extension. Mögliche Werte sind:
         pub async fn set_wifi_power_mode(
             &mut self,
             request: crate::bindings::master::WifiPowerMode,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(35u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3409,16 +3501,16 @@ Gibt den Stromsparmodus zurück, wie von :func:`Set Wifi Power Mode` gesetzt.
         pub async fn get_wifi_power_mode(
             &mut self,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<
+            tinkerforge_base::byte_converter::ParsedOrRaw<
                 crate::bindings::master::WifiPowerMode,
                 u8,
             >,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(36u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::master::WifiPowerMode,
                     u8,
                 >::from_le_byte_slice(&result.body()[0..1usize]),
@@ -3444,7 +3536,7 @@ Pausen gesendet werden.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifiBufferInfoResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(37u8, &payload).await?;
@@ -3468,9 +3560,12 @@ Setzt den Geltungsbereich der WIFI Extension. Mögliche Werte sind:
         pub async fn set_wifi_regulatory_domain(
             &mut self,
             request: crate::bindings::master::WifiDomain,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(38u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3482,13 +3577,16 @@ Gibt den Geltungsbereich zurück, wie von :func:`Set Wifi Regulatory Domain` ges
         pub async fn get_wifi_regulatory_domain(
             &mut self,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<crate::bindings::master::WifiDomain, u8>,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::byte_converter::ParsedOrRaw<
+                crate::bindings::master::WifiDomain,
+                u8,
+            >,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(39u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::master::WifiDomain,
                     u8,
                 >::from_le_byte_slice(&result.body()[0..1usize]),
@@ -3499,7 +3597,7 @@ Gibt die USB Spannung zurück. Funktioniert nicht mit Hardware Version 2.1 oder 
 */
         pub async fn get_usb_voltage(
             &mut self,
-        ) -> Result<u16, crate::error::TinkerforgeError> {
+        ) -> Result<u16, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(40u8, &payload).await?;
             Ok(u16::from_le_byte_slice(&result.body()[0..2usize]))
@@ -3518,9 +3616,12 @@ Funktion zusätzlich hinzugefügt.
         pub async fn set_long_wifi_key(
             &mut self,
             request: [char; 64usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(41u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3536,7 +3637,7 @@ Gibt den Verschlüsselungsschlüssel zurück, wie von
 */
         pub async fn get_long_wifi_key(
             &mut self,
-        ) -> Result<[char; 64usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(42u8, &payload).await?;
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
@@ -3551,9 +3652,12 @@ wieder her.
         pub async fn set_wifi_hostname(
             &mut self,
             request: [char; 16usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 16usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(43u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3567,7 +3671,7 @@ genutzt wird.
 */
         pub async fn get_wifi_hostname(
             &mut self,
-        ) -> Result<[char; 16usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 16usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(44u8, &payload).await?;
             Ok(<[char; 16usize]>::from_le_byte_slice(&result.body()[0..16usize]))
@@ -3582,9 +3686,12 @@ seit der letzten Auslösung geändert hat.
         pub async fn set_stack_current_callback_period(
             &mut self,
             request: u32,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(45u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3595,7 +3702,7 @@ Gibt die Periode zurück, wie von :func:`Set Stack Current Callback Period` gese
 */
         pub async fn get_stack_current_callback_period(
             &mut self,
-        ) -> Result<u32, crate::error::TinkerforgeError> {
+        ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(46u8, &payload).await?;
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
@@ -3610,9 +3717,12 @@ der letzten Auslösung geändert hat.
         pub async fn set_stack_voltage_callback_period(
             &mut self,
             request: u32,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(47u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3623,7 +3733,7 @@ Gibt die Periode zurück, wie von :func:`Set Stack Voltage Callback Period` gese
 */
         pub async fn get_stack_voltage_callback_period(
             &mut self,
-        ) -> Result<u32, crate::error::TinkerforgeError> {
+        ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(48u8, &payload).await?;
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
@@ -3638,9 +3748,12 @@ der letzten Auslösung geändert hat.
         pub async fn set_usb_voltage_callback_period(
             &mut self,
             request: u32,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(49u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3651,7 +3764,7 @@ Gibt die Periode zurück, wie von :func:`Set USB Voltage Callback Period` gesetz
 */
         pub async fn get_usb_voltage_callback_period(
             &mut self,
-        ) -> Result<u32, crate::error::TinkerforgeError> {
+        ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(50u8, &payload).await?;
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
@@ -3674,9 +3787,12 @@ Die folgenden Optionen sind möglich:
         pub async fn set_stack_current_callback_threshold(
             &mut self,
             request: crate::bindings::master::SetStackCurrentCallbackThresholdRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(51u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3689,7 +3805,7 @@ Gibt den Schwellwert zurück, wie von :func:`Set Stack Current Callback Threshol
             &mut self,
         ) -> Result<
             crate::bindings::master::GetStackCurrentCallbackThresholdResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(52u8, &payload).await?;
@@ -3717,9 +3833,12 @@ Die folgenden Optionen sind möglich:
         pub async fn set_stack_voltage_callback_threshold(
             &mut self,
             request: crate::bindings::master::SetStackVoltageCallbackThresholdRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(53u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3732,7 +3851,7 @@ Gibt den Schwellwert zurück, wie von :func:`Set Stack Voltage Callback Threshol
             &mut self,
         ) -> Result<
             crate::bindings::master::GetStackVoltageCallbackThresholdResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(54u8, &payload).await?;
@@ -3760,9 +3879,12 @@ Die folgenden Optionen sind möglich:
         pub async fn set_usb_voltage_callback_threshold(
             &mut self,
             request: crate::bindings::master::SetUsbVoltageCallbackThresholdRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(55u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3775,7 +3897,7 @@ Gibt den Schwellwert zurück, wie von :func:`Set USB Voltage Callback Threshold`
             &mut self,
         ) -> Result<
             crate::bindings::master::GetUsbVoltageCallbackThresholdResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(56u8, &payload).await?;
@@ -3803,9 +3925,12 @@ weiterhin erreicht bleiben.
         pub async fn set_debounce_period(
             &mut self,
             request: u32,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(57u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3816,7 +3941,7 @@ Gibt die Entprellperiode zurück, wie von :func:`Set Debounce Period` gesetzt.
 */
         pub async fn get_debounce_period(
             &mut self,
-        ) -> Result<u32, crate::error::TinkerforgeError> {
+        ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(58u8, &payload).await?;
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
@@ -3925,7 +4050,7 @@ Ethernet Extension verfügbar ist.
 */
         pub async fn is_ethernet_present(
             &mut self,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(65u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
@@ -3960,9 +4085,12 @@ konfigurieren.
         pub async fn set_ethernet_configuration(
             &mut self,
             request: crate::bindings::master::SetEthernetConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 15usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(66u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -3975,7 +4103,7 @@ Gibt die Konfiguration zurück, wie von :func:`Set Ethernet Configuration` geset
             &mut self,
         ) -> Result<
             crate::bindings::master::GetEthernetConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(67u8, &payload).await?;
@@ -4000,7 +4128,7 @@ Neustart empfangen/gesendet wurden.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetEthernetStatusResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(68u8, &payload).await?;
@@ -4022,9 +4150,12 @@ Der aktuelle Hostname kann mit :func:`Get Ethernet Status` herausgefunden werden
         pub async fn set_ethernet_hostname(
             &mut self,
             request: [char; 32usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 32usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(69u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4040,9 +4171,12 @@ Die MAC Adresse kann mit :func:`Get Ethernet Status` wieder ausgelesen werden.
         pub async fn set_ethernet_mac_address(
             &mut self,
             request: [u8; 6usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(70u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4068,9 +4202,12 @@ konfigurieren.
         pub async fn set_ethernet_websocket_configuration(
             &mut self,
             request: crate::bindings::master::SetEthernetWebsocketConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 3usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(71u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4083,7 +4220,7 @@ Gibt die Konfiguration zurück, wie von :func:`Set Ethernet Configuration` geset
             &mut self,
         ) -> Result<
             crate::bindings::master::GetEthernetWebsocketConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(72u8, &payload).await?;
@@ -4112,9 +4249,12 @@ Der Standardwert ist ein leerer String (Authentifizierung deaktiviert).
         pub async fn set_ethernet_authentication_secret(
             &mut self,
             request: [char; 64usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(73u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4126,7 +4266,7 @@ Gibt das Authentifizierungsgeheimnis zurück, wie von
 */
         pub async fn get_ethernet_authentication_secret(
             &mut self,
-        ) -> Result<[char; 64usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(74u8, &payload).await?;
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
@@ -4150,9 +4290,12 @@ Der Standardwert ist ein leerer String (Authentifizierung deaktiviert).
         pub async fn set_wifi_authentication_secret(
             &mut self,
             request: [char; 64usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(75u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4164,7 +4307,7 @@ Gibt das Authentifizierungsgeheimnis zurück, wie von
 */
         pub async fn get_wifi_authentication_secret(
             &mut self,
-        ) -> Result<[char; 64usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(76u8, &payload).await?;
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
@@ -4175,16 +4318,16 @@ Gibt den Typ der Verbingung zurück, über welche diese Funktion aufgerufen wurd
         pub async fn get_connection_type(
             &mut self,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<
+            tinkerforge_base::byte_converter::ParsedOrRaw<
                 crate::bindings::master::ConnectionType,
                 u8,
             >,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(77u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::master::ConnectionType,
                     u8,
                 >::from_le_byte_slice(&result.body()[0..1usize]),
@@ -4196,7 +4339,7 @@ WIFI Extension 2.0 verfügbar ist.
 */
         pub async fn is_wifi_2_present(
             &mut self,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(78u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
@@ -4216,7 +4359,7 @@ Extension 2.0 zu aktualisieren.
 */
         pub async fn start_wifi_2_bootloader(
             &mut self,
-        ) -> Result<i8, crate::error::TinkerforgeError> {
+        ) -> Result<i8, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(79u8, &payload).await?;
             Ok(i8::from_le_byte_slice(&result.body()[0..1usize]))
@@ -4235,9 +4378,12 @@ Extension 2.0 zu aktualisieren.
         pub async fn write_wifi_2_serial_port(
             &mut self,
             request: crate::bindings::master::WriteWifi2SerialPortRequest,
-        ) -> Result<i8, crate::error::TinkerforgeError> {
+        ) -> Result<i8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 61usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(80u8, &payload).await?;
             Ok(i8::from_le_byte_slice(&result.body()[0..1usize]))
         }
@@ -4257,10 +4403,13 @@ Extension 2.0 zu aktualisieren.
             request: u8,
         ) -> Result<
             crate::bindings::master::ReadWifi2SerialPortResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(81u8, &payload).await?;
             Ok(
                 crate::bindings::master::ReadWifi2SerialPortResponse::from_le_byte_slice(
@@ -4286,9 +4435,12 @@ konfigurieren.
         pub async fn set_wifi_2_authentication_secret(
             &mut self,
             request: [char; 64usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(82u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4300,7 +4452,7 @@ Gibt das WLAN-Authentifizierungsgeheimnis zurück, wie von
 */
         pub async fn get_wifi_2_authentication_secret(
             &mut self,
-        ) -> Result<[char; 64usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(83u8, &payload).await?;
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
@@ -4332,9 +4484,12 @@ konfigurieren.
         pub async fn set_wifi_2_configuration(
             &mut self,
             request: crate::bindings::master::SetWifi2ConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 9usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(84u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4347,7 +4502,7 @@ Gibt die allgemeine Konfiguration zurück, wie von :func:`Set Wifi2 Configuratio
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2ConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(85u8, &payload).await?;
@@ -4364,7 +4519,7 @@ Gibt den Client und Access Point Status der WIFI Extension 2.0 zurück.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2StatusResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(86u8, &payload).await?;
@@ -4407,9 +4562,12 @@ konfigurieren.
         pub async fn set_wifi_2_client_configuration(
             &mut self,
             request: crate::bindings::master::SetWifi2ClientConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 57usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(87u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4423,7 +4581,7 @@ Gibt die Client Konfiguration zurück, wie von
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2ClientConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(88u8, &payload).await?;
@@ -4447,9 +4605,12 @@ konfigurieren.
         pub async fn set_wifi_2_client_hostname(
             &mut self,
             request: [char; 32usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 32usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(89u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4460,7 +4621,7 @@ Gibt den Client Hostnamen zurück, wie von :func:`Set Wifi2 Client Hostname` ges
 */
         pub async fn get_wifi_2_client_hostname(
             &mut self,
-        ) -> Result<[char; 32usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 32usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(90u8, &payload).await?;
             Ok(<[char; 32usize]>::from_le_byte_slice(&result.body()[0..32usize]))
@@ -4478,9 +4639,12 @@ konfigurieren.
         pub async fn set_wifi_2_client_password(
             &mut self,
             request: [char; 64usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(91u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4495,7 +4659,7 @@ Gibt das Client-Passwort zurück, wie von :func:`Set Wifi2 Client Password` gese
 */
         pub async fn get_wifi_2_client_password(
             &mut self,
-        ) -> Result<[char; 64usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(92u8, &payload).await?;
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
@@ -4537,9 +4701,12 @@ konfigurieren.
         pub async fn set_wifi_2_ap_configuration(
             &mut self,
             request: crate::bindings::master::SetWifi2ApConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 54usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(93u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4553,7 +4720,7 @@ Gibt die Access-Point-Konfiguration zurück, wie von
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2ApConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(94u8, &payload).await?;
@@ -4577,9 +4744,12 @@ konfigurieren.
         pub async fn set_wifi_2_ap_password(
             &mut self,
             request: [char; 64usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(95u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4594,7 +4764,7 @@ Gibt das Access-Point-Passwort zurück, wie von :func:`Set Wifi2 AP Password` ge
 */
         pub async fn get_wifi_2_ap_password(
             &mut self,
-        ) -> Result<[char; 64usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(96u8, &payload).await?;
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
@@ -4610,7 +4780,7 @@ werden.
 */
         pub async fn save_wifi_2_configuration(
             &mut self,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(97u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
@@ -4622,7 +4792,7 @@ Gibt die aktuelle Version der WIFI Extension 2.0 Firmware zurück.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2FirmwareVersionResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(98u8, &payload).await?;
@@ -4637,7 +4807,7 @@ Aktiviert die grüne Status LED der WIFI Extension 2.0.
 */
         pub async fn enable_wifi_2_status_led(
             &mut self,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(99u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -4649,7 +4819,7 @@ Deaktiviert die grüne Status LED der WIFI Extension 2.0.
 */
         pub async fn disable_wifi_2_status_led(
             &mut self,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(100u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -4661,7 +4831,7 @@ Gibt *true* zurück falls die grüne Status LED der WIFI Extension 2.0 aktiviert
 */
         pub async fn is_wifi_2_status_led_enabled(
             &mut self,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(101u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
@@ -4705,9 +4875,12 @@ konfigurieren.
         pub async fn set_wifi_2_mesh_configuration(
             &mut self,
             request: crate::bindings::master::SetWifi2MeshConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 47usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(102u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4722,7 +4895,7 @@ Gibt das Mesh Konfiguration zurück, wie von :func:`Set Wifi2 Mesh Configuration
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2MeshConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(103u8, &payload).await?;
@@ -4752,9 +4925,12 @@ konfigurieren.
         pub async fn set_wifi_2_mesh_router_ssid(
             &mut self,
             request: [char; 32usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 32usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(104u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4767,7 +4943,7 @@ Gibt das Mesh-Router-SSID zurück, wie von :func:`Set Wifi2 Mesh Router SSID` ge
 */
         pub async fn get_wifi_2_mesh_router_ssid(
             &mut self,
-        ) -> Result<[char; 32usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 32usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(105u8, &payload).await?;
             Ok(<[char; 32usize]>::from_le_byte_slice(&result.body()[0..32usize]))
@@ -4788,9 +4964,12 @@ konfigurieren.
         pub async fn set_wifi_2_mesh_router_password(
             &mut self,
             request: [char; 64usize],
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(106u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4803,7 +4982,7 @@ Gibt das Mesh-Router-Password zurück, wie von :func:`Set Wifi2 Mesh Router Pass
 */
         pub async fn get_wifi_2_mesh_router_password(
             &mut self,
-        ) -> Result<[char; 64usize], crate::error::TinkerforgeError> {
+        ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(107u8, &payload).await?;
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
@@ -4817,7 +4996,7 @@ Gibt den allgemeinen Mesh-Status der WIFI Extension 2.0 zurück.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2MeshCommonStatusResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(108u8, &payload).await?;
@@ -4836,7 +5015,7 @@ Gibt den Mesh-Client-Status der WIFI Extension 2.0 zurück.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2MeshClientStatusResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(109u8, &payload).await?;
@@ -4855,7 +5034,7 @@ Gibt den Mesh-AP-Status der WIFI Extension 2.0 zurück.
             &mut self,
         ) -> Result<
             crate::bindings::master::GetWifi2MeshApStatusResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(110u8, &payload).await?;
@@ -4881,10 +5060,13 @@ Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
             request: crate::bindings::master::SetBrickletXmcFlashConfigRequest,
         ) -> Result<
             crate::bindings::master::SetBrickletXmcFlashConfigResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(111u8, &payload).await?;
             Ok(
                 crate::bindings::master::SetBrickletXmcFlashConfigResponse::from_le_byte_slice(
@@ -4906,9 +5088,12 @@ Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
         pub async fn set_bricklet_xmc_flash_data(
             &mut self,
             request: [u8; 64usize],
-        ) -> Result<u32, crate::error::TinkerforgeError> {
+        ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(112u8, &payload).await?;
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
@@ -4916,9 +5101,12 @@ Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
         pub async fn set_bricklets_enabled(
             &mut self,
             request: bool,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(113u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4929,7 +5117,7 @@ Gibt *true* zurück wenn die Bricklets aktiviert sind und *false* wenn sie deakt
 */
         pub async fn get_bricklets_enabled(
             &mut self,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(114u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
@@ -4958,9 +5146,12 @@ wie von :func:`Set SPITFP Baudrate` gesetzt statisch verwendet.
         pub async fn set_spitfp_baudrate_config(
             &mut self,
             request: crate::bindings::master::SetSpitfpBaudrateConfigRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(231u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -4973,7 +5164,7 @@ Gibt die Baudratenkonfiguration zurück, siehe :func:`Set SPITFP Baudrate Config
             &mut self,
         ) -> Result<
             crate::bindings::master::GetSpitfpBaudrateConfigResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(232u8, &payload).await?;
@@ -4994,9 +5185,12 @@ Im normalen Betrieb sollten alle Zähler fast immer auf 0 stehen bleiben.
         pub async fn get_send_timeout_count(
             &mut self,
             request: crate::bindings::master::CommunicationMethod,
-        ) -> Result<u32, crate::error::TinkerforgeError> {
+        ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(233u8, &payload).await?;
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
@@ -5017,9 +5211,12 @@ Baudrate nicht zu ändern.
         pub async fn set_spitfp_baudrate(
             &mut self,
             request: crate::bindings::master::SetSpitfpBaudrateRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(234u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -5032,9 +5229,12 @@ Gibt die Baudrate für einen Bricklet Port zurück, siehe
         pub async fn get_spitfp_baudrate(
             &mut self,
             request: char,
-        ) -> Result<u32, crate::error::TinkerforgeError> {
+        ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(235u8, &payload).await?;
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
@@ -5058,10 +5258,13 @@ ausgibt.
             request: char,
         ) -> Result<
             crate::bindings::master::GetSpitfpErrorCountResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(237u8, &payload).await?;
             Ok(
                 crate::bindings::master::GetSpitfpErrorCountResponse::from_le_byte_slice(
@@ -5080,7 +5283,7 @@ Der Standardzustand ist aktiviert.
 */
         pub async fn enable_status_led(
             &mut self,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(238u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -5098,7 +5301,7 @@ Der Standardzustand ist aktiviert.
 */
         pub async fn disable_status_led(
             &mut self,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(239u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -5110,7 +5313,7 @@ Gibt *true* zurück wenn die Status LED aktiviert ist, *false* sonst.
 */
         pub async fn is_status_led_enabled(
             &mut self,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(240u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
@@ -5127,10 +5330,13 @@ v1.x.y Plugins zu ermöglichen.
             request: char,
         ) -> Result<
             crate::bindings::master::GetProtocol1BrickletNameResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(241u8, &payload).await?;
             Ok(
                 crate::bindings::master::GetProtocol1BrickletNameResponse::from_le_byte_slice(
@@ -5148,7 +5354,7 @@ Indikation von Temperaturveränderungen.
 */
         pub async fn get_chip_temperature(
             &mut self,
-        ) -> Result<i16, crate::error::TinkerforgeError> {
+        ) -> Result<i16, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(242u8, &payload).await?;
             Ok(i16::from_le_byte_slice(&result.body()[0..2usize]))
@@ -5160,7 +5366,9 @@ innerhalb eines Stapels wird der gesamte Stapel zurück gesetzt.
 Nach dem Zurücksetzen ist es notwendig neue Geräteobjekte zu erzeugen,
 Funktionsaufrufe auf bestehende führt zu undefiniertem Verhalten.
 */
-        pub async fn reset(&mut self) -> Result<(), crate::error::TinkerforgeError> {
+        pub async fn reset(
+            &mut self,
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(243u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -5177,9 +5385,12 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         pub async fn write_bricklet_plugin(
             &mut self,
             request: crate::bindings::master::WriteBrickletPluginRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 34usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(246u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -5195,9 +5406,12 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         pub async fn read_bricklet_plugin(
             &mut self,
             request: crate::bindings::master::ReadBrickletPluginRequest,
-        ) -> Result<[u8; 32usize], crate::error::TinkerforgeError> {
+        ) -> Result<[u8; 32usize], tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 2usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(247u8, &payload).await?;
             Ok(<[u8; 32usize]>::from_le_byte_slice(&result.body()[0..32usize]))
         }
@@ -5215,7 +5429,7 @@ finden. |device_identifier_constant|
             &mut self,
         ) -> Result<
             crate::bindings::master::GetIdentityResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(255u8, &payload).await?;
@@ -5229,14 +5443,14 @@ finden. |device_identifier_constant|
 }
 pub mod lcd_128_x_64 {
     #[allow(unused_imports)]
-    use crate::byte_converter::{FromByteSlice, ToBytes};
+    use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
     #[allow(unused_imports)]
     use tokio_stream::StreamExt;
     #[allow(unused_imports)]
     use std::convert::TryInto;
     #[derive(Clone, Debug)]
     pub struct Lcd128X64Bricklet {
-        device: crate::device::Device,
+        device: tinkerforge_base::device::Device,
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct WritePixelsLowLevelRequest {
@@ -5248,7 +5462,7 @@ pub mod lcd_128_x_64 {
         pub pixels_chunk_offset: u16,
         pub pixels_chunk_data: [bool; 448usize],
     }
-    impl crate::byte_converter::FromByteSlice for WritePixelsLowLevelRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WritePixelsLowLevelRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let y_start = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5273,7 +5487,7 @@ pub mod lcd_128_x_64 {
             64usize
         }
     }
-    impl crate::byte_converter::ToBytes for WritePixelsLowLevelRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for WritePixelsLowLevelRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.x_start.write_to_slice(&mut target[0usize..1usize]);
             self.y_start.write_to_slice(&mut target[1usize..2usize]);
@@ -5291,7 +5505,7 @@ pub mod lcd_128_x_64 {
         pub x_end: u8,
         pub y_end: u8,
     }
-    impl crate::byte_converter::FromByteSlice for WritePixelsRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WritePixelsRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let y_start = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5308,7 +5522,7 @@ pub mod lcd_128_x_64 {
             4usize
         }
     }
-    impl crate::byte_converter::ToBytes for WritePixelsRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for WritePixelsRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.x_start.write_to_slice(&mut target[0usize..1usize]);
             self.y_start.write_to_slice(&mut target[1usize..2usize]);
@@ -5323,7 +5537,7 @@ pub mod lcd_128_x_64 {
         pub x_end: u8,
         pub y_end: u8,
     }
-    impl crate::byte_converter::FromByteSlice for ReadPixelsLowLevelRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ReadPixelsLowLevelRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let y_start = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5340,7 +5554,7 @@ pub mod lcd_128_x_64 {
             4usize
         }
     }
-    impl crate::byte_converter::ToBytes for ReadPixelsLowLevelRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for ReadPixelsLowLevelRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.x_start.write_to_slice(&mut target[0usize..1usize]);
             self.y_start.write_to_slice(&mut target[1usize..2usize]);
@@ -5354,7 +5568,7 @@ pub mod lcd_128_x_64 {
         pub pixels_chunk_offset: u16,
         pub pixels_chunk_data: [bool; 480usize],
     }
-    impl crate::byte_converter::FromByteSlice for ReadPixelsLowLevelResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ReadPixelsLowLevelResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let pixels_length = u16::from_le_byte_slice(&bytes[0usize..2usize]);
             let pixels_chunk_offset = u16::from_le_byte_slice(&bytes[2usize..4usize]);
@@ -5371,7 +5585,7 @@ pub mod lcd_128_x_64 {
             64usize
         }
     }
-    impl crate::byte_converter::ToBytes for ReadPixelsLowLevelResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for ReadPixelsLowLevelResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.pixels_length.write_to_slice(&mut target[0usize..2usize]);
             self.pixels_chunk_offset.write_to_slice(&mut target[2usize..4usize]);
@@ -5385,7 +5599,7 @@ pub mod lcd_128_x_64 {
         pub x_end: u8,
         pub y_end: u8,
     }
-    impl crate::byte_converter::FromByteSlice for ReadPixelsRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ReadPixelsRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let y_start = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5402,7 +5616,7 @@ pub mod lcd_128_x_64 {
             4usize
         }
     }
-    impl crate::byte_converter::ToBytes for ReadPixelsRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for ReadPixelsRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.x_start.write_to_slice(&mut target[0usize..1usize]);
             self.y_start.write_to_slice(&mut target[1usize..2usize]);
@@ -5417,7 +5631,8 @@ pub mod lcd_128_x_64 {
         pub invert: bool,
         pub automatic_draw: bool,
     }
-    impl crate::byte_converter::FromByteSlice for SetDisplayConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetDisplayConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let contrast = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let backlight = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5434,7 +5649,7 @@ pub mod lcd_128_x_64 {
             4usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetDisplayConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetDisplayConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.contrast.write_to_slice(&mut target[0usize..1usize]);
             self.backlight.write_to_slice(&mut target[1usize..2usize]);
@@ -5449,7 +5664,8 @@ pub mod lcd_128_x_64 {
         pub invert: bool,
         pub automatic_draw: bool,
     }
-    impl crate::byte_converter::FromByteSlice for GetDisplayConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetDisplayConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let contrast = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let backlight = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5466,7 +5682,7 @@ pub mod lcd_128_x_64 {
             4usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetDisplayConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetDisplayConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.contrast.write_to_slice(&mut target[0usize..1usize]);
             self.backlight.write_to_slice(&mut target[1usize..2usize]);
@@ -5480,7 +5696,7 @@ pub mod lcd_128_x_64 {
         pub position: u8,
         pub text: [char; 22usize],
     }
-    impl crate::byte_converter::FromByteSlice for WriteLineRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for WriteLineRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let line = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let position = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5491,7 +5707,7 @@ pub mod lcd_128_x_64 {
             24usize
         }
     }
-    impl crate::byte_converter::ToBytes for WriteLineRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for WriteLineRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.line.write_to_slice(&mut target[0usize..1usize]);
             self.position.write_to_slice(&mut target[1usize..2usize]);
@@ -5505,7 +5721,7 @@ pub mod lcd_128_x_64 {
         pub y: u16,
         pub age: u32,
     }
-    impl crate::byte_converter::FromByteSlice for GetTouchPositionResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetTouchPositionResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let pressure = u16::from_le_byte_slice(&bytes[0usize..2usize]);
             let x = u16::from_le_byte_slice(&bytes[2usize..4usize]);
@@ -5517,7 +5733,7 @@ pub mod lcd_128_x_64 {
             10usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetTouchPositionResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetTouchPositionResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.pressure.write_to_slice(&mut target[0usize..2usize]);
             self.x.write_to_slice(&mut target[2usize..4usize]);
@@ -5530,7 +5746,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for SetTouchPositionCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -5544,7 +5760,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for SetTouchPositionCallbackConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -5556,7 +5772,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetTouchPositionCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -5570,7 +5786,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for GetTouchPositionCallbackConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -5584,7 +5800,7 @@ pub mod lcd_128_x_64 {
         pub y: u16,
         pub age: u32,
     }
-    impl crate::byte_converter::FromByteSlice for TouchPositionCallback {
+    impl tinkerforge_base::byte_converter::FromByteSlice for TouchPositionCallback {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let pressure = u16::from_le_byte_slice(&bytes[0usize..2usize]);
             let x = u16::from_le_byte_slice(&bytes[2usize..4usize]);
@@ -5596,7 +5812,7 @@ pub mod lcd_128_x_64 {
             10usize
         }
     }
-    impl crate::byte_converter::ToBytes for TouchPositionCallback {
+    impl tinkerforge_base::byte_converter::ToBytes for TouchPositionCallback {
         fn write_to_slice(self, target: &mut [u8]) {
             self.pressure.write_to_slice(&mut target[0usize..2usize]);
             self.x.write_to_slice(&mut target[2usize..4usize]);
@@ -5621,12 +5837,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Gesture {
+    impl tinkerforge_base::byte_converter::ToBytes for Gesture {
         fn write_to_slice(self, target: &mut [u8]) {
             <Gesture as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Gesture {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Gesture {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -5648,7 +5864,7 @@ pub mod lcd_128_x_64 {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetTouchGestureResponse {
-        pub gesture: crate::byte_converter::ParsedOrRaw<
+        pub gesture: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::lcd_128_x_64::Gesture,
             u8,
         >,
@@ -5660,9 +5876,9 @@ pub mod lcd_128_x_64 {
         pub y_end: u16,
         pub age: u32,
     }
-    impl crate::byte_converter::FromByteSlice for GetTouchGestureResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetTouchGestureResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let gesture = crate::byte_converter::ParsedOrRaw::<
+            let gesture = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::lcd_128_x_64::Gesture,
                 u8,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -5688,7 +5904,7 @@ pub mod lcd_128_x_64 {
             19usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetTouchGestureResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetTouchGestureResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.gesture.write_to_slice(&mut target[0usize..1usize]);
             self.duration.write_to_slice(&mut target[1usize..5usize]);
@@ -5705,7 +5921,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for SetTouchGestureCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -5719,7 +5935,8 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetTouchGestureCallbackConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes
+    for SetTouchGestureCallbackConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
@@ -5730,7 +5947,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetTouchGestureCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -5744,7 +5961,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for GetTouchGestureCallbackConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -5753,7 +5970,7 @@ pub mod lcd_128_x_64 {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct TouchGestureCallback {
-        pub gesture: crate::byte_converter::ParsedOrRaw<
+        pub gesture: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::lcd_128_x_64::Gesture,
             u8,
         >,
@@ -5765,9 +5982,9 @@ pub mod lcd_128_x_64 {
         pub y_end: u16,
         pub age: u32,
     }
-    impl crate::byte_converter::FromByteSlice for TouchGestureCallback {
+    impl tinkerforge_base::byte_converter::FromByteSlice for TouchGestureCallback {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let gesture = crate::byte_converter::ParsedOrRaw::<
+            let gesture = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::lcd_128_x_64::Gesture,
                 u8,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -5793,7 +6010,7 @@ pub mod lcd_128_x_64 {
             19usize
         }
     }
-    impl crate::byte_converter::ToBytes for TouchGestureCallback {
+    impl tinkerforge_base::byte_converter::ToBytes for TouchGestureCallback {
         fn write_to_slice(self, target: &mut [u8]) {
             self.gesture.write_to_slice(&mut target[0usize..1usize]);
             self.duration.write_to_slice(&mut target[1usize..5usize]);
@@ -5818,12 +6035,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Color {
+    impl tinkerforge_base::byte_converter::ToBytes for Color {
         fn write_to_slice(self, target: &mut [u8]) {
             <Color as Into<bool>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Color {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Color {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             bool::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -5849,7 +6066,7 @@ pub mod lcd_128_x_64 {
         pub position_y_end: u8,
         pub color: crate::bindings::lcd_128_x_64::Color,
     }
-    impl crate::byte_converter::FromByteSlice for DrawLineRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for DrawLineRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let position_x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let position_y_start = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5870,7 +6087,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes for DrawLineRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for DrawLineRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.position_x_start.write_to_slice(&mut target[0usize..1usize]);
             self.position_y_start.write_to_slice(&mut target[1usize..2usize]);
@@ -5888,7 +6105,7 @@ pub mod lcd_128_x_64 {
         pub fill: bool,
         pub color: crate::bindings::lcd_128_x_64::Color,
     }
-    impl crate::byte_converter::FromByteSlice for DrawBoxRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for DrawBoxRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let position_x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let position_y_start = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -5911,7 +6128,7 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-    impl crate::byte_converter::ToBytes for DrawBoxRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for DrawBoxRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.position_x_start.write_to_slice(&mut target[0usize..1usize]);
             self.position_y_start.write_to_slice(&mut target[1usize..2usize]);
@@ -5950,12 +6167,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Font {
+    impl tinkerforge_base::byte_converter::ToBytes for Font {
         fn write_to_slice(self, target: &mut [u8]) {
             <Font as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Font {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Font {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -5989,7 +6206,7 @@ pub mod lcd_128_x_64 {
         pub color: crate::bindings::lcd_128_x_64::Color,
         pub text: [char; 22usize],
     }
-    impl crate::byte_converter::FromByteSlice for DrawTextRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for DrawTextRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let position_x = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let position_y = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -6012,7 +6229,7 @@ pub mod lcd_128_x_64 {
             26usize
         }
     }
-    impl crate::byte_converter::ToBytes for DrawTextRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for DrawTextRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.position_x.write_to_slice(&mut target[0usize..1usize]);
             self.position_y.write_to_slice(&mut target[1usize..2usize]);
@@ -6030,7 +6247,7 @@ pub mod lcd_128_x_64 {
         pub height: u8,
         pub text: [char; 16usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetGuiButtonRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for SetGuiButtonRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let position_x = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -6051,7 +6268,7 @@ pub mod lcd_128_x_64 {
             21usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetGuiButtonRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetGuiButtonRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.position_x.write_to_slice(&mut target[1usize..2usize]);
@@ -6070,7 +6287,7 @@ pub mod lcd_128_x_64 {
         pub height: u8,
         pub text: [char; 16usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetGuiButtonResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetGuiButtonResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let position_x = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -6091,7 +6308,7 @@ pub mod lcd_128_x_64 {
             21usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetGuiButtonResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetGuiButtonResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.active.write_to_slice(&mut target[0usize..1usize]);
             self.position_x.write_to_slice(&mut target[1usize..2usize]);
@@ -6106,7 +6323,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiButtonPressedCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -6120,7 +6337,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiButtonPressedCallbackConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -6132,7 +6349,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiButtonPressedCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -6146,7 +6363,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiButtonPressedCallbackConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -6158,7 +6375,7 @@ pub mod lcd_128_x_64 {
         pub index: u8,
         pub pressed: bool,
     }
-    impl crate::byte_converter::FromByteSlice for GuiButtonPressedCallback {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GuiButtonPressedCallback {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let pressed = bool::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -6168,7 +6385,7 @@ pub mod lcd_128_x_64 {
             2usize
         }
     }
-    impl crate::byte_converter::ToBytes for GuiButtonPressedCallback {
+    impl tinkerforge_base::byte_converter::ToBytes for GuiButtonPressedCallback {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.pressed.write_to_slice(&mut target[1usize..2usize]);
@@ -6187,12 +6404,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for Direction {
+    impl tinkerforge_base::byte_converter::ToBytes for Direction {
         fn write_to_slice(self, target: &mut [u8]) {
             <Direction as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for Direction {
+    impl tinkerforge_base::byte_converter::FromByteSlice for Direction {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -6219,7 +6436,7 @@ pub mod lcd_128_x_64 {
         pub direction: crate::bindings::lcd_128_x_64::Direction,
         pub value: u8,
     }
-    impl crate::byte_converter::FromByteSlice for SetGuiSliderRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for SetGuiSliderRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let position_x = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -6242,7 +6459,7 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetGuiSliderRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetGuiSliderRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.position_x.write_to_slice(&mut target[1usize..2usize]);
@@ -6258,19 +6475,19 @@ pub mod lcd_128_x_64 {
         pub position_x: u8,
         pub position_y: u8,
         pub length: u8,
-        pub direction: crate::byte_converter::ParsedOrRaw<
+        pub direction: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::lcd_128_x_64::Direction,
             u8,
         >,
         pub value: u8,
     }
-    impl crate::byte_converter::FromByteSlice for GetGuiSliderResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetGuiSliderResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let position_x = u8::from_le_byte_slice(&bytes[1usize..2usize]);
             let position_y = u8::from_le_byte_slice(&bytes[2usize..3usize]);
             let length = u8::from_le_byte_slice(&bytes[3usize..4usize]);
-            let direction = crate::byte_converter::ParsedOrRaw::<
+            let direction = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::lcd_128_x_64::Direction,
                 u8,
             >::from_le_byte_slice(&bytes[4usize..5usize]);
@@ -6288,7 +6505,7 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetGuiSliderResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetGuiSliderResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.active.write_to_slice(&mut target[0usize..1usize]);
             self.position_x.write_to_slice(&mut target[1usize..2usize]);
@@ -6303,7 +6520,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiSliderValueCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -6317,7 +6534,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiSliderValueCallbackConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -6329,7 +6546,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiSliderValueCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -6343,7 +6560,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiSliderValueCallbackConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -6355,7 +6572,7 @@ pub mod lcd_128_x_64 {
         pub index: u8,
         pub value: u8,
     }
-    impl crate::byte_converter::FromByteSlice for GuiSliderValueCallback {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GuiSliderValueCallback {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let value = u8::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -6365,7 +6582,7 @@ pub mod lcd_128_x_64 {
             2usize
         }
     }
-    impl crate::byte_converter::ToBytes for GuiSliderValueCallback {
+    impl tinkerforge_base::byte_converter::ToBytes for GuiSliderValueCallback {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.value.write_to_slice(&mut target[1usize..2usize]);
@@ -6386,12 +6603,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for ChangeTabOn {
+    impl tinkerforge_base::byte_converter::ToBytes for ChangeTabOn {
         fn write_to_slice(self, target: &mut [u8]) {
             <ChangeTabOn as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for ChangeTabOn {
+    impl tinkerforge_base::byte_converter::FromByteSlice for ChangeTabOn {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -6415,7 +6632,8 @@ pub mod lcd_128_x_64 {
         pub change_tab_config: crate::bindings::lcd_128_x_64::ChangeTabOn,
         pub clear_gui: bool,
     }
-    impl crate::byte_converter::FromByteSlice for SetGuiTabConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetGuiTabConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let change_tab_config = crate::bindings::lcd_128_x_64::ChangeTabOn::from_le_byte_slice(
                 &bytes[0usize..1usize],
@@ -6430,7 +6648,7 @@ pub mod lcd_128_x_64 {
             2usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetGuiTabConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.change_tab_config.write_to_slice(&mut target[0usize..1usize]);
             self.clear_gui.write_to_slice(&mut target[1usize..2usize]);
@@ -6438,15 +6656,16 @@ pub mod lcd_128_x_64 {
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiTabConfigurationResponse {
-        pub change_tab_config: crate::byte_converter::ParsedOrRaw<
+        pub change_tab_config: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::lcd_128_x_64::ChangeTabOn,
             u8,
         >,
         pub clear_gui: bool,
     }
-    impl crate::byte_converter::FromByteSlice for GetGuiTabConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetGuiTabConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let change_tab_config = crate::byte_converter::ParsedOrRaw::<
+            let change_tab_config = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::lcd_128_x_64::ChangeTabOn,
                 u8,
             >::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6460,7 +6679,7 @@ pub mod lcd_128_x_64 {
             2usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetGuiTabConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.change_tab_config.write_to_slice(&mut target[0usize..1usize]);
             self.clear_gui.write_to_slice(&mut target[1usize..2usize]);
@@ -6471,7 +6690,7 @@ pub mod lcd_128_x_64 {
         pub index: u8,
         pub text: [char; 5usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetGuiTabTextRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for SetGuiTabTextRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let text = <[char; 5usize]>::from_le_byte_slice(&bytes[1usize..6usize]);
@@ -6481,7 +6700,7 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetGuiTabTextRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabTextRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.text.write_to_slice(&mut target[1usize..6usize]);
@@ -6492,7 +6711,7 @@ pub mod lcd_128_x_64 {
         pub active: bool,
         pub text: [char; 5usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetGuiTabTextResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetGuiTabTextResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let text = <[char; 5usize]>::from_le_byte_slice(&bytes[1usize..6usize]);
@@ -6502,7 +6721,7 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetGuiTabTextResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabTextResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.active.write_to_slice(&mut target[0usize..1usize]);
             self.text.write_to_slice(&mut target[1usize..6usize]);
@@ -6513,7 +6732,7 @@ pub mod lcd_128_x_64 {
         pub index: u8,
         pub icon: [bool; 168usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetGuiTabIconRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice for SetGuiTabIconRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let icon = <[bool; 168usize]>::from_le_byte_slice(&bytes[1usize..22usize]);
@@ -6523,7 +6742,7 @@ pub mod lcd_128_x_64 {
             22usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetGuiTabIconRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabIconRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.icon.write_to_slice(&mut target[1usize..22usize]);
@@ -6534,7 +6753,7 @@ pub mod lcd_128_x_64 {
         pub active: bool,
         pub icon: [bool; 168usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetGuiTabIconResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetGuiTabIconResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
             let icon = <[bool; 168usize]>::from_le_byte_slice(&bytes[1usize..22usize]);
@@ -6544,7 +6763,7 @@ pub mod lcd_128_x_64 {
             22usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetGuiTabIconResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabIconResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.active.write_to_slice(&mut target[0usize..1usize]);
             self.icon.write_to_slice(&mut target[1usize..22usize]);
@@ -6555,7 +6774,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiTabSelectedCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -6569,7 +6788,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiTabSelectedCallbackConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -6581,7 +6800,7 @@ pub mod lcd_128_x_64 {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-    impl crate::byte_converter::FromByteSlice
+    impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiTabSelectedCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let period = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -6595,7 +6814,7 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-    impl crate::byte_converter::ToBytes
+    impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiTabSelectedCallbackConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.period.write_to_slice(&mut target[0usize..4usize]);
@@ -6617,12 +6836,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for GraphType {
+    impl tinkerforge_base::byte_converter::ToBytes for GraphType {
         fn write_to_slice(self, target: &mut [u8]) {
             <GraphType as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for GraphType {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GraphType {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -6652,7 +6871,8 @@ pub mod lcd_128_x_64 {
         pub text_x: [char; 4usize],
         pub text_y: [char; 4usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetGuiGraphConfigurationRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetGuiGraphConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let graph_type = crate::bindings::lcd_128_x_64::GraphType::from_le_byte_slice(
@@ -6679,7 +6899,7 @@ pub mod lcd_128_x_64 {
             14usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetGuiGraphConfigurationRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetGuiGraphConfigurationRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.graph_type.write_to_slice(&mut target[1usize..2usize]);
@@ -6694,7 +6914,7 @@ pub mod lcd_128_x_64 {
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiGraphConfigurationResponse {
         pub active: bool,
-        pub graph_type: crate::byte_converter::ParsedOrRaw<
+        pub graph_type: tinkerforge_base::byte_converter::ParsedOrRaw<
             crate::bindings::lcd_128_x_64::GraphType,
             u8,
         >,
@@ -6705,10 +6925,11 @@ pub mod lcd_128_x_64 {
         pub text_x: [char; 4usize],
         pub text_y: [char; 4usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetGuiGraphConfigurationResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetGuiGraphConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
-            let graph_type = crate::byte_converter::ParsedOrRaw::<
+            let graph_type = tinkerforge_base::byte_converter::ParsedOrRaw::<
                 crate::bindings::lcd_128_x_64::GraphType,
                 u8,
             >::from_le_byte_slice(&bytes[1usize..2usize]);
@@ -6733,7 +6954,7 @@ pub mod lcd_128_x_64 {
             14usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetGuiGraphConfigurationResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetGuiGraphConfigurationResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.active.write_to_slice(&mut target[0usize..1usize]);
             self.graph_type.write_to_slice(&mut target[1usize..2usize]);
@@ -6752,7 +6973,8 @@ pub mod lcd_128_x_64 {
         pub data_chunk_offset: u16,
         pub data_chunk_data: [u8; 59usize],
     }
-    impl crate::byte_converter::FromByteSlice for SetGuiGraphDataLowLevelRequest {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for SetGuiGraphDataLowLevelRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
             let data_length = u16::from_le_byte_slice(&bytes[1usize..3usize]);
@@ -6771,7 +6993,7 @@ pub mod lcd_128_x_64 {
             64usize
         }
     }
-    impl crate::byte_converter::ToBytes for SetGuiGraphDataLowLevelRequest {
+    impl tinkerforge_base::byte_converter::ToBytes for SetGuiGraphDataLowLevelRequest {
         fn write_to_slice(self, target: &mut [u8]) {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.data_length.write_to_slice(&mut target[1usize..3usize]);
@@ -6785,7 +7007,8 @@ pub mod lcd_128_x_64 {
         pub data_chunk_offset: u16,
         pub data_chunk_data: [u8; 59usize],
     }
-    impl crate::byte_converter::FromByteSlice for GetGuiGraphDataLowLevelResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetGuiGraphDataLowLevelResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let data_length = u16::from_le_byte_slice(&bytes[0usize..2usize]);
             let data_chunk_offset = u16::from_le_byte_slice(&bytes[2usize..4usize]);
@@ -6802,7 +7025,7 @@ pub mod lcd_128_x_64 {
             63usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetGuiGraphDataLowLevelResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetGuiGraphDataLowLevelResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.data_length.write_to_slice(&mut target[0usize..2usize]);
             self.data_chunk_offset.write_to_slice(&mut target[2usize..4usize]);
@@ -6826,12 +7049,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for TouchLedConfig {
+    impl tinkerforge_base::byte_converter::ToBytes for TouchLedConfig {
         fn write_to_slice(self, target: &mut [u8]) {
             <TouchLedConfig as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for TouchLedConfig {
+    impl tinkerforge_base::byte_converter::FromByteSlice for TouchLedConfig {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -6858,7 +7081,8 @@ pub mod lcd_128_x_64 {
         pub error_count_frame: u32,
         pub error_count_overflow: u32,
     }
-    impl crate::byte_converter::FromByteSlice for GetSpitfpErrorCountResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice
+    for GetSpitfpErrorCountResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let error_count_ack_checksum = u32::from_le_byte_slice(
                 &bytes[0usize..4usize],
@@ -6879,7 +7103,7 @@ pub mod lcd_128_x_64 {
             16usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetSpitfpErrorCountResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpErrorCountResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.error_count_ack_checksum.write_to_slice(&mut target[0usize..4usize]);
             self.error_count_message_checksum
@@ -6907,12 +7131,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for BootloaderMode {
+    impl tinkerforge_base::byte_converter::ToBytes for BootloaderMode {
         fn write_to_slice(self, target: &mut [u8]) {
             <BootloaderMode as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for BootloaderMode {
+    impl tinkerforge_base::byte_converter::FromByteSlice for BootloaderMode {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -6954,12 +7178,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for BootloaderStatus {
+    impl tinkerforge_base::byte_converter::ToBytes for BootloaderStatus {
         fn write_to_slice(self, target: &mut [u8]) {
             <BootloaderStatus as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for BootloaderStatus {
+    impl tinkerforge_base::byte_converter::FromByteSlice for BootloaderStatus {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -6998,12 +7222,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-    impl crate::byte_converter::ToBytes for StatusLedConfig {
+    impl tinkerforge_base::byte_converter::ToBytes for StatusLedConfig {
         fn write_to_slice(self, target: &mut [u8]) {
             <StatusLedConfig as Into<u8>>::into(self).write_to_slice(target);
         }
     }
-    impl crate::byte_converter::FromByteSlice for StatusLedConfig {
+    impl tinkerforge_base::byte_converter::FromByteSlice for StatusLedConfig {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
         }
@@ -7036,7 +7260,7 @@ pub mod lcd_128_x_64 {
         pub firmware_version_revision: u8,
         pub device_identifier: u16,
     }
-    impl crate::byte_converter::FromByteSlice for GetIdentityResponse {
+    impl tinkerforge_base::byte_converter::FromByteSlice for GetIdentityResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let uid = <[char; 8usize]>::from_le_byte_slice(&bytes[0usize..8usize]);
             let connected_uid = <[char; 8usize]>::from_le_byte_slice(
@@ -7079,7 +7303,7 @@ pub mod lcd_128_x_64 {
             25usize
         }
     }
-    impl crate::byte_converter::ToBytes for GetIdentityResponse {
+    impl tinkerforge_base::byte_converter::ToBytes for GetIdentityResponse {
         fn write_to_slice(self, target: &mut [u8]) {
             self.uid.write_to_slice(&mut target[0usize..8usize]);
             self.connected_uid.write_to_slice(&mut target[8usize..16usize]);
@@ -7095,14 +7319,18 @@ pub mod lcd_128_x_64 {
     }
     impl Lcd128X64Bricklet {
         pub fn new(
-            uid: crate::base58::Uid,
-            connection: crate::ip_connection::async_io::AsyncIpConnection,
+            uid: tinkerforge_base::base58::Uid,
+            connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection,
         ) -> Lcd128X64Bricklet {
             Self {
-                device: crate::device::Device::new(uid, connection, "LCD 128x64"),
+                device: tinkerforge_base::device::Device::new(
+                    uid,
+                    connection,
+                    "LCD 128x64",
+                ),
             }
         }
-        pub fn uid(&self) -> crate::base58::Uid {
+        pub fn uid(&self) -> tinkerforge_base::base58::Uid {
             self.device.uid()
         }
         /**
@@ -7126,9 +7354,12 @@ eingestellt werden.
         pub async fn write_pixels_low_level(
             &mut self,
             request: crate::bindings::lcd_128_x_64::WritePixelsLowLevelRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(1u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7155,9 +7386,12 @@ eingestellt werden.
         pub async fn write_pixels(
             &mut self,
             request: crate::bindings::lcd_128_x_64::WritePixelsRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(1u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7183,10 +7417,13 @@ eingestellt werden.
             request: crate::bindings::lcd_128_x_64::ReadPixelsLowLevelRequest,
         ) -> Result<
             crate::bindings::lcd_128_x_64::ReadPixelsLowLevelResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(2u8, &payload).await?;
             Ok(
                 crate::bindings::lcd_128_x_64::ReadPixelsLowLevelResponse::from_le_byte_slice(
@@ -7212,9 +7449,12 @@ eingestellt werden.
         pub async fn read_pixels(
             &mut self,
             request: crate::bindings::lcd_128_x_64::ReadPixelsRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(2u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7236,7 +7476,7 @@ eingestellt werden.
 */
         pub async fn clear_display(
             &mut self,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(3u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -7255,9 +7495,12 @@ internen Buffer geschrieben, der dann bei bei einem Aufruf von
         pub async fn set_display_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetDisplayConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(4u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7270,7 +7513,7 @@ Gibt die Konfiguration zurück, wie von :func:`Set Display Configuration` gesetz
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetDisplayConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(5u8, &payload).await?;
@@ -7308,9 +7551,12 @@ und mit unterschiedlichen Font-Größen gezeichnet werden.
         pub async fn write_line(
             &mut self,
             request: crate::bindings::lcd_128_x_64::WriteLineRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 24usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(6u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7332,9 +7578,12 @@ sollte dies nicht notwendig sein, außer bei hängenden Pixeln bedingt durch Feh
         pub async fn draw_buffered_frame(
             &mut self,
             request: bool,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(7u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7352,7 +7601,7 @@ Gibt die letzte gültige Touch-Position zurück:
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetTouchPositionResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(8u8, &payload).await?;
@@ -7377,9 +7626,12 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         pub async fn set_touch_position_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetTouchPositionCallbackConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(9u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7393,7 +7645,7 @@ Gibt die Callback-Konfiguration zurück, wie mittels
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetTouchPositionCallbackConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(10u8, &payload).await?;
@@ -7436,7 +7688,7 @@ der Geste her).
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetTouchGestureResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(12u8, &payload).await?;
@@ -7461,9 +7713,12 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         pub async fn set_touch_gesture_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetTouchGestureCallbackConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(13u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7477,7 +7732,7 @@ Gibt die Callback-Konfiguration zurück, wie mittels
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetTouchGestureCallbackConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(14u8, &payload).await?;
@@ -7509,9 +7764,12 @@ Zeichnet eine weiße oder schwarze Linie von (x, y)-start nach
         pub async fn draw_line(
             &mut self,
             request: crate::bindings::lcd_128_x_64::DrawLineRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(16u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7528,9 +7786,12 @@ gezeichnet.
         pub async fn draw_box(
             &mut self,
             request: crate::bindings::lcd_128_x_64::DrawBoxRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(17u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7547,9 +7808,12 @@ Der der Zeichensatz entspricht Codepage 437.
         pub async fn draw_text(
             &mut self,
             request: crate::bindings::lcd_128_x_64::DrawTextRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 26usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(18u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7580,9 +7844,12 @@ des Buttons mit per :func:`Write Pixels` gezeichnet werden.
         pub async fn set_gui_button(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiButtonRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 21usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(19u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7600,10 +7867,13 @@ oder nicht.
             request: u8,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiButtonResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(20u8, &payload).await?;
             Ok(
                 crate::bindings::lcd_128_x_64::GetGuiButtonResponse::from_le_byte_slice(
@@ -7619,9 +7889,12 @@ Index 255 kann genutzt werden um alle Buttons zu entfernen.
         pub async fn remove_gui_button(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(21u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7642,9 +7915,12 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         pub async fn set_gui_button_pressed_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiButtonPressedCallbackConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(22u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7658,7 +7934,7 @@ Gibt die Callback-Konfiguration zurück, wie mittels
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiButtonPressedCallbackConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(23u8, &payload).await?;
@@ -7676,9 +7952,12 @@ Der Zustand kann entweder gedrückt (true) oder losgelassen (false) sein.
         pub async fn get_gui_button_pressed(
             &mut self,
             request: u8,
-        ) -> Result<bool, crate::error::TinkerforgeError> {
+        ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(24u8, &payload).await?;
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
@@ -7726,9 +8005,12 @@ gezeichnet werden. Um einen Button zu entfernen kann die Funktion
         pub async fn set_gui_slider(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiSliderRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(26u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7746,10 +8028,13 @@ oder nicht.
             request: u8,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiSliderResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(27u8, &payload).await?;
             Ok(
                 crate::bindings::lcd_128_x_64::GetGuiSliderResponse::from_le_byte_slice(
@@ -7765,9 +8050,12 @@ Index 255 kann genutzt werden um alle Slider zu entfernen.
         pub async fn remove_gui_slider(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(28u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7788,9 +8076,12 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         pub async fn set_gui_slider_value_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiSliderValueCallbackConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(29u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7804,7 +8095,7 @@ Gibt die Callback-Konfiguration zurück, wie mittels
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiSliderValueCallbackConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(30u8, &payload).await?;
@@ -7820,9 +8111,12 @@ Gibt den aktuellen Wert des Slider mit dem gegebenen Index zurück.
         pub async fn get_gui_slider_value(
             &mut self,
             request: u8,
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(31u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
@@ -7852,9 +8146,12 @@ Graphen) gelöscht.
         pub async fn set_gui_tab_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiTabConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 2usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(33u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7867,7 +8164,7 @@ Gibt die Tab-Konfiguration zurück, wie von :func:`Set GUI Tab Configuration` ge
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiTabConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(34u8, &payload).await?;
@@ -7887,9 +8184,12 @@ Ein Text-Tab mit dem gleichen Index wie ein Icon-Tab überschreibt diesen.
         pub async fn set_gui_tab_text(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiTabTextRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(35u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7907,10 +8207,13 @@ oder nicht.
             request: u8,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiTabTextResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(36u8, &payload).await?;
             Ok(
                 crate::bindings::lcd_128_x_64::GetGuiTabTextResponse::from_le_byte_slice(
@@ -7930,9 +8233,12 @@ Ein Icon-Tab mit dem gleichen Index wie ein Text-Tab überschreibt diesen.
         pub async fn set_gui_tab_icon(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiTabIconRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 22usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(37u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7950,10 +8256,13 @@ oder nicht.
             request: u8,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiTabIconResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(38u8, &payload).await?;
             Ok(
                 crate::bindings::lcd_128_x_64::GetGuiTabIconResponse::from_le_byte_slice(
@@ -7969,9 +8278,12 @@ Index 255 kann genutzt werden um alle Tabs zu entfernen.
         pub async fn remove_gui_tab(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(39u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -7984,9 +8296,12 @@ ausgewählt gezeichnet)
         pub async fn set_gui_tab_selected(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(40u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8007,9 +8322,12 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         pub async fn set_gui_tab_selected_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiTabSelectedCallbackConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(41u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8023,7 +8341,7 @@ Gibt die Callback-Konfiguration zurück, wie mittels
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiTabSelectedCallbackConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(42u8, &payload).await?;
@@ -8039,7 +8357,7 @@ Wenn es keine Tabs gibt, wird -1 als Index zurückgegeben.
 */
         pub async fn get_gui_tab_selected(
             &mut self,
-        ) -> Result<i8, crate::error::TinkerforgeError> {
+        ) -> Result<i8, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(43u8, &payload).await?;
             Ok(i8::from_le_byte_slice(&result.body()[0..1usize]))
@@ -8081,9 +8399,12 @@ Funktion :func:`Remove GUI Graph` genutzt werden.
         pub async fn set_gui_graph_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiGraphConfigurationRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 14usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(45u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8101,10 +8422,13 @@ oder nicht.
             request: u8,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiGraphConfigurationResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(46u8, &payload).await?;
             Ok(
                 crate::bindings::lcd_128_x_64::GetGuiGraphConfigurationResponse::from_le_byte_slice(
@@ -8130,9 +8454,12 @@ Die gesetzten Werte müssen zwischen 0 und 255 skaliert werden. 0 wird unten und
         pub async fn set_gui_graph_data_low_level(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiGraphDataLowLevelRequest,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(47u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8156,9 +8483,12 @@ Die gesetzten Werte müssen zwischen 0 und 255 skaliert werden. 0 wird unten und
         pub async fn set_gui_graph_data(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(47u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8173,10 +8503,13 @@ Gibt die Datenpunkte des Graphen mit dem gegebenen Index zurück, wie von
             request: u8,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetGuiGraphDataLowLevelResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(48u8, &payload).await?;
             Ok(
                 crate::bindings::lcd_128_x_64::GetGuiGraphDataLowLevelResponse::from_le_byte_slice(
@@ -8191,9 +8524,12 @@ Gibt die Datenpunkte des Graphen mit dem gegebenen Index zurück, wie von
         pub async fn get_gui_graph_data(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(48u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8207,9 +8543,12 @@ Index 255 kann genutzt werden um alle Graphen zu entfernen.
         pub async fn remove_gui_graph(
             &mut self,
             request: u8,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(49u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8220,7 +8559,7 @@ Entfernt alle GUI-Elemente (Buttons, Slider, Graphen, Tabs).
 */
         pub async fn remove_all_gui(
             &mut self,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(50u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -8238,9 +8577,12 @@ Wenn das Bricklet sich im Bootloadermodus befindet ist die LED aus.
         pub async fn set_touch_led_config(
             &mut self,
             request: crate::bindings::lcd_128_x_64::TouchLedConfig,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(51u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8252,16 +8594,16 @@ Gibt die Konfiguration zurück, wie von :func:`Set Touch LED Config` gesetzt.
         pub async fn get_touch_led_config(
             &mut self,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<
+            tinkerforge_base::byte_converter::ParsedOrRaw<
                 crate::bindings::lcd_128_x_64::TouchLedConfig,
                 u8,
             >,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(52u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::lcd_128_x_64::TouchLedConfig,
                     u8,
                 >::from_le_byte_slice(&result.body()[0..1usize]),
@@ -8286,7 +8628,7 @@ ausgibt.
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetSpitfpErrorCountResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(234u8, &payload).await?;
@@ -8312,17 +8654,20 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
             &mut self,
             request: crate::bindings::lcd_128_x_64::BootloaderMode,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<
+            tinkerforge_base::byte_converter::ParsedOrRaw<
                 crate::bindings::lcd_128_x_64::BootloaderStatus,
                 u8,
             >,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(235u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::lcd_128_x_64::BootloaderStatus,
                     u8,
                 >::from_le_byte_slice(&result.body()[0..1usize]),
@@ -8334,16 +8679,16 @@ Gibt den aktuellen Bootloader-Modus zurück, siehe :func:`Set Bootloader Mode`.
         pub async fn get_bootloader_mode(
             &mut self,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<
+            tinkerforge_base::byte_converter::ParsedOrRaw<
                 crate::bindings::lcd_128_x_64::BootloaderMode,
                 u8,
             >,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(236u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::lcd_128_x_64::BootloaderMode,
                     u8,
                 >::from_le_byte_slice(&result.body()[0..1usize]),
@@ -8360,9 +8705,12 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         pub async fn set_write_firmware_pointer(
             &mut self,
             request: u32,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(237u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8381,9 +8729,12 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         pub async fn write_firmware(
             &mut self,
             request: [u8; 64usize],
-        ) -> Result<u8, crate::error::TinkerforgeError> {
+        ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             let result = self.device.get(238u8, &payload).await?;
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
@@ -8399,9 +8750,12 @@ Wenn das Bricklet sich im Bootlodermodus befindet ist die LED aus.
         pub async fn set_status_led_config(
             &mut self,
             request: crate::bindings::lcd_128_x_64::StatusLedConfig,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(239u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8413,16 +8767,16 @@ Gibt die Konfiguration zurück, wie von :func:`Set Status LED Config` gesetzt.
         pub async fn get_status_led_config(
             &mut self,
         ) -> Result<
-            crate::byte_converter::ParsedOrRaw<
+            tinkerforge_base::byte_converter::ParsedOrRaw<
                 crate::bindings::lcd_128_x_64::StatusLedConfig,
                 u8,
             >,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(240u8, &payload).await?;
             Ok(
-                crate::byte_converter::ParsedOrRaw::<
+                tinkerforge_base::byte_converter::ParsedOrRaw::<
                     crate::bindings::lcd_128_x_64::StatusLedConfig,
                     u8,
                 >::from_le_byte_slice(&result.body()[0..1usize]),
@@ -8438,7 +8792,7 @@ Indikation von Temperaturveränderungen.
 */
         pub async fn get_chip_temperature(
             &mut self,
-        ) -> Result<i16, crate::error::TinkerforgeError> {
+        ) -> Result<i16, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(242u8, &payload).await?;
             Ok(i16::from_le_byte_slice(&result.body()[0..2usize]))
@@ -8450,7 +8804,9 @@ Neustart sind alle Konfiguration verloren.
 Nach dem Zurücksetzen ist es notwendig neue Objekte zu erzeugen,
 Funktionsaufrufe auf bestehenden führen zu undefiniertem Verhalten.
 */
-        pub async fn reset(&mut self) -> Result<(), crate::error::TinkerforgeError> {
+        pub async fn reset(
+            &mut self,
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             self.device
                 .set(243u8, &payload, Some(std::time::Duration::from_secs(20)))
@@ -8468,9 +8824,12 @@ der UID.
         pub async fn write_uid(
             &mut self,
             request: u32,
-        ) -> Result<(), crate::error::TinkerforgeError> {
+        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
-            crate::byte_converter::ToBytes::write_to_slice(request, &mut payload);
+            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
+                request,
+                &mut payload,
+            );
             self.device
                 .set(248u8, &payload, Some(std::time::Duration::from_secs(20)))
                 .await?;
@@ -8481,7 +8840,9 @@ Gibt die aktuelle UID als Integer zurück. Dieser Integer
 kann als Base58 encodiert werden um an den üblichen
 UID-String zu gelangen.
 */
-        pub async fn read_uid(&mut self) -> Result<u32, crate::error::TinkerforgeError> {
+        pub async fn read_uid(
+            &mut self,
+        ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let payload = [0; 0usize];
             let result = self.device.get(249u8, &payload).await?;
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
@@ -8502,7 +8863,7 @@ finden. |device_identifier_constant|
             &mut self,
         ) -> Result<
             crate::bindings::lcd_128_x_64::GetIdentityResponse,
-            crate::error::TinkerforgeError,
+            tinkerforge_base::error::TinkerforgeError,
         > {
             let payload = [0; 0usize];
             let result = self.device.get(255u8, &payload).await?;

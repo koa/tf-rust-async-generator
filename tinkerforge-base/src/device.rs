@@ -27,7 +27,7 @@ lazy_static! {
 const DEFAULT_TIMEOUT: Duration = Duration::from_secs(5);
 
 #[derive(Clone, Debug)]
-pub(crate) struct Device {
+pub struct Device {
     pub internal_uid: Uid,
     pub connection: AsyncIpConnection,
     #[cfg(feature = "prometheus")]
@@ -67,7 +67,7 @@ impl std::fmt::Display for SetResponseExpectedError {
 }
 
 impl Device {
-    pub(crate) fn new(internal_uid: Uid, connection: AsyncIpConnection, #[allow(unused)] device_display_name: &'static str) -> Device {
+    pub fn new(internal_uid: Uid, connection: AsyncIpConnection, #[allow(unused)] device_display_name: &'static str) -> Device {
         Device {
             internal_uid,
             connection,
@@ -75,11 +75,11 @@ impl Device {
             device_display_name,
         }
     }
-    pub(crate) fn uid(&self) -> Uid {
+    pub fn uid(&self) -> Uid {
         self.internal_uid
     }
 
-    pub(crate) async fn set(
+    pub async fn set(
         &mut self,
         function_id: u8,
         payload: &[u8],
@@ -93,11 +93,11 @@ impl Device {
         result
     }
 
-    pub(crate) async fn get_callback_receiver<DI>(&mut self, function_id: u8) -> impl Stream<Item = PacketData> {
-        self.connection.callback_stream::<DI>(self.internal_uid, function_id).await
+    pub async fn get_callback_receiver(&mut self, function_id: u8) -> impl Stream<Item = PacketData> {
+        self.connection.callback_stream(self.internal_uid, function_id).await
     }
 
-    pub(crate) async fn get(&mut self, function_id: u8, payload: &[u8]) -> Result<PacketData, TinkerforgeError> {
+    pub async fn get(&mut self, function_id: u8, payload: &[u8]) -> Result<PacketData, TinkerforgeError> {
         #[cfg(feature = "prometheus")]
         let timer = REQUEST_TIMING.with_label_values(&[self.device_display_name, function_id.to_string().as_str(), "get"]).start_timer();
         let result = self.connection.get(self.internal_uid, function_id, payload, DEFAULT_TIMEOUT).await;
