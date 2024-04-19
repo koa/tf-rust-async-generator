@@ -1,0 +1,17 @@
+[package]
+name = "test-compile"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tinkerforge-base = {path = "../tinkerforge-base"}
+tokio = { version = "1.37.0", features = ["net", "io-util", "rt-multi-thread", "macros", "sync"] }
+tokio-stream = { version = "0.1.15", features = ["sync"] }
+futures-core = "0.3.30"
+anyhow = "1.0.82"
+
+[build-dependencies]
+tinkerforge-generator = {path = "../tinkerforge-generator"}
+prettyplease = "0.2.17"

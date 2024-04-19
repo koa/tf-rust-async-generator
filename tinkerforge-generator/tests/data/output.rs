@@ -2714,11 +2714,15 @@ pub mod master {
     }
     impl MasterBrick {
         pub fn new(
-            uid: tinkerforge_base::base58::Uid,
+            uid: impl Into<tinkerforge_base::base58::Uid>,
             connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection,
         ) -> MasterBrick {
             Self {
-                device: tinkerforge_base::device::Device::new(uid, connection, "Master"),
+                device: tinkerforge_base::device::Device::new(
+                    uid.into(),
+                    connection,
+                    "Master",
+                ),
             }
         }
         pub fn uid(&self) -> tinkerforge_base::base58::Uid {
@@ -7319,12 +7323,12 @@ pub mod lcd_128_x_64 {
     }
     impl Lcd128X64Bricklet {
         pub fn new(
-            uid: tinkerforge_base::base58::Uid,
+            uid: impl Into<tinkerforge_base::base58::Uid>,
             connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection,
         ) -> Lcd128X64Bricklet {
             Self {
                 device: tinkerforge_base::device::Device::new(
-                    uid,
+                    uid.into(),
                     connection,
                     "LCD 128x64",
                 ),

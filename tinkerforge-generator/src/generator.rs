@@ -111,9 +111,9 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
      ));
          let mut device_impl: ItemImpl = parse_quote!(
          impl #device_struct_name {
-             pub fn new(uid: tinkerforge_base::base58::Uid, connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection) -> #device_struct_name {
+             pub fn new(uid: impl Into<tinkerforge_base::base58::Uid>, connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection) -> #device_struct_name {
                  Self{
-                     device: tinkerforge_base::device::Device::new(uid,connection,#raw_package_name)
+                     device: tinkerforge_base::device::Device::new(uid.into(),connection,#raw_package_name)
                  }
              }
              pub fn uid(&self)->tinkerforge_base::base58::Uid{

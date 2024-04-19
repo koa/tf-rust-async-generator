@@ -45,12 +45,18 @@ impl From<Uid> for u32 {
 impl FromStr for Uid {
     type Err = Base58Error;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    fn  from_str(s: &str) -> Result<Self, Self::Err> {
         if s == "0" {
             Ok(Uid(0))
         } else {
             Ok(Self(s.base58_to_u32()?))
         }
+    }
+}
+
+impl From<&str> for Uid {
+    fn from(value: &str) -> Self {
+        value.parse().expect("Cannot parse UID")
     }
 }
 

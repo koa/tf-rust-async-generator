@@ -1,3 +1,3 @@
 [workspace]
 resolver = "2"
-members = ["tinkerforge-base", "tinkerforge-generator"]
+members = [ "tinkerforge-base", "tinkerforge-generator","test-compile"]
