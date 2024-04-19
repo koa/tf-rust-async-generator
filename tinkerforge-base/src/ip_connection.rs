@@ -4,10 +4,13 @@ use std::{
     str::{self, FromStr},
 };
 
+use tokio_stream::wrappers::errors::BroadcastStreamRecvError;
+
 use crate::{
     base58::{Base58Error, Uid},
     byte_converter::{FromByteSlice, ToBytes},
 };
+use crate::ip_connection::async_io::PacketData;
 
 pub mod async_io {
     use std::{
@@ -20,6 +23,7 @@ pub mod async_io {
         },
         time::Duration,
     };
+
 
     use log::{debug, error, info, warn};
     use tokio::{
@@ -36,6 +40,7 @@ pub mod async_io {
         Stream,
         StreamExt, wrappers::{BroadcastStream, errors::BroadcastStreamRecvError},
     };
+    use tokio_util::either::Either;
 
     use crate::{
         base58::{Base58Error, Uid},
@@ -49,8 +54,8 @@ pub mod async_io {
         inner: Arc<Mutex<InnerAsyncIpConnection>>,
     }
 
-    impl AsyncIpConnection  {
-        pub async fn enumerate(&mut self) -> Result<Box<dyn Stream<Item = EnumerateResponse> + Unpin + Send>, TinkerforgeError> {
+    impl AsyncIpConnection {
+        pub async fn enumerate(&mut self) -> Result<impl Stream<Item=EnumerateResponse> , TinkerforgeError> {
             self.inner.borrow_mut().lock().await.enumerate().await
         }
         pub async fn disconnect_probe(&mut self) -> Result<(), TinkerforgeError> {
@@ -77,7 +82,7 @@ pub mod async_io {
         ) -> Result<PacketData, TinkerforgeError> {
             self.inner.borrow_mut().lock().await.get(uid, function_id, payload, timeout).await
         }
-        pub async fn callback_stream(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item = PacketData> {
+        pub async fn callback_stream(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item=PacketData> {
             self.inner.borrow_mut().lock().await.callback_stream(uid, function_id).await
         }
         pub async fn new<T: ToSocketAddrs + Debug + Clone + Send + 'static>(addr: T) -> Result<Self, TinkerforgeError> {
@@ -144,7 +149,7 @@ pub mod async_io {
                 running_clone.store(false, Ordering::Relaxed);
                 info!("Terminated receiver thread");
             })
-            .abort_handle();
+                .abort_handle();
             Ok(Self { write_stream, abort_handle, seq_num: 1, receiver, running })
         }
 
@@ -155,19 +160,17 @@ pub mod async_io {
             socket2::SockRef::from(&socket).set_tcp_keepalive(&ka)?;
             Ok(())
         }
-        pub async fn enumerate(&mut self) -> Result<Box<dyn Stream<Item = EnumerateResponse> + Unpin + Send>, TinkerforgeError> {
+        pub async fn enumerate(&mut self) -> Result<impl Stream<Item=EnumerateResponse>, TinkerforgeError> {
             if !self.running.as_ref().load(Ordering::Relaxed) {
-                return Ok(Box::new(empty()));
+                return Ok(Either::Left(empty()));
             }
             let request = Request::Set { uid: Uid::zero(), function_id: 254, payload: &[] };
-            let stream = BroadcastStream::new(self.receiver.resubscribe()).map_while(Self::while_some).filter_map(|p| match p {
-                Ok(p) if p.header.function_id == 253 => Result::<EnumerateResponse, Base58Error>::from_le_byte_slice(&p.body).ok(),
-                _ => None,
-            });
+            let stream = BroadcastStream::new(self.receiver.resubscribe()).map_while(Self::while_some).filter_map(EnumerateResponse::extract_enumeration_packet);
             let seq = self.next_seq();
             self.send_packet(&request, seq, true).await?;
-            Ok(Box::new(stream))
+            Ok(Either::Right(stream))
         }
+
         pub async fn disconnect_probe(&mut self) -> Result<(), TinkerforgeError> {
             let request = Request::Set { uid: Uid::zero(), function_id: 128, payload: &[] };
             let seq = self.next_seq();
@@ -250,7 +253,7 @@ pub mod async_io {
                 Err(e) => Some(Err(e)),
             }
         }
-        pub async fn callback_stream(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item = PacketData> {
+        pub async fn callback_stream(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item=PacketData> {
             BroadcastStream::new(self.receiver.resubscribe())
                 .map_while(move |result| match result {
                     Ok(Some(p)) => {
@@ -468,7 +471,7 @@ impl ToBytes for Version {
 /// Devices send `EnumerateResponse`s when they are connected, disconnected or when an enumeration was
 /// triggered by the user using the [`Enumerate`](crate::ip_connection::async_io::AsyncIpConnection::enumerate()) method.
 #[derive(Copy, Clone, Debug)]
-pub struct EnumerateResponse{
+pub struct EnumerateResponse {
     /// The UID of the device.
     pub uid: Uid,
     /// UID where the device is connected to.
@@ -490,6 +493,15 @@ pub struct EnumerateResponse{
     pub enumeration_type: EnumerationType,
 }
 
+impl EnumerateResponse {
+    pub fn extract_enumeration_packet(p: Result<PacketData, BroadcastStreamRecvError>) -> Option<EnumerateResponse> {
+        match p {
+            Ok(p) if p.header().function_id == 253 => Result::<EnumerateResponse, Base58Error>::from_le_byte_slice(p.body()).ok(),
+            _ => None,
+        }
+    }
+}
+
 
 impl FromByteSlice for Result<EnumerateResponse, Base58Error> {
     fn from_le_byte_slice(bytes: &[u8]) -> Result<EnumerateResponse, Base58Error> {
@@ -505,7 +517,7 @@ impl FromByteSlice for Result<EnumerateResponse, Base58Error> {
             position: bytes[16] as char,
             hardware_version: Version::from_le_byte_slice(&bytes[17..20]),
             firmware_version: Version::from_le_byte_slice(&bytes[20..23]),
-            device_identifier:  u16::from_le_byte_slice(&bytes[23..25]),
+            device_identifier: u16::from_le_byte_slice(&bytes[23..25]),
             enumeration_type: EnumerationType::from(bytes[25]),
         })
     }
