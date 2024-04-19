@@ -216,7 +216,7 @@ pub fn u32_to_base58(mut id: u32) -> Box<str> {
     while id > 0 {
         let digit = id % radix;
         buffer[ptr] = ALPHABET[digit as usize];
-        id = id / radix;
+        id /= radix;
         ptr += 1;
     }
     buffer[..ptr].iter().rev().collect::<String>().into_boxed_str()
