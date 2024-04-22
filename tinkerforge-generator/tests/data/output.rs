@@ -29,8 +29,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ExtensionType {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <ExtensionType as Into<u32>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <ExtensionType as Into<u32>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for ExtensionType {
@@ -72,9 +72,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetExtensionTypeRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.extension.write_to_slice(&mut target[0usize..1usize]);
-            self.exttype.write_to_slice(&mut target[1usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.extension).write_to_slice(&mut target[0usize..1usize]);
+            (&self.exttype).write_to_slice(&mut target[1usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -94,9 +95,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetChibiSlaveAddressRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.num.write_to_slice(&mut target[0usize..1usize]);
-            self.address.write_to_slice(&mut target[1usize..2usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.num).write_to_slice(&mut target[0usize..1usize]);
+            (&self.address).write_to_slice(&mut target[1usize..2usize]);
+            return 2usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -124,11 +126,12 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetChibiErrorLogResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.underrun.write_to_slice(&mut target[0usize..2usize]);
-            self.crc_error.write_to_slice(&mut target[2usize..4usize]);
-            self.no_ack.write_to_slice(&mut target[4usize..6usize]);
-            self.overflow.write_to_slice(&mut target[6usize..8usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.underrun).write_to_slice(&mut target[0usize..2usize]);
+            (&self.crc_error).write_to_slice(&mut target[2usize..4usize]);
+            (&self.no_ack).write_to_slice(&mut target[4usize..6usize]);
+            (&self.overflow).write_to_slice(&mut target[6usize..8usize]);
+            return 8usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -149,8 +152,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ChibiFrequency {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <ChibiFrequency as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <ChibiFrequency as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for ChibiFrequency {
@@ -190,9 +193,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetRs485SlaveAddressRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.num.write_to_slice(&mut target[0usize..1usize]);
-            self.address.write_to_slice(&mut target[1usize..2usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.num).write_to_slice(&mut target[0usize..1usize]);
+            (&self.address).write_to_slice(&mut target[1usize..2usize]);
+            return 2usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -211,8 +215,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Rs485Parity {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Rs485Parity as Into<char>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Rs485Parity as Into<char>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Rs485Parity {
@@ -255,10 +259,11 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetRs485ConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.speed.write_to_slice(&mut target[0usize..4usize]);
-            self.parity.write_to_slice(&mut target[4usize..5usize]);
-            self.stopbits.write_to_slice(&mut target[5usize..6usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.speed).write_to_slice(&mut target[0usize..4usize]);
+            (&self.parity).write_to_slice(&mut target[4usize..5usize]);
+            (&self.stopbits).write_to_slice(&mut target[5usize..6usize]);
+            return 6usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -286,10 +291,11 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetRs485ConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.speed.write_to_slice(&mut target[0usize..4usize]);
-            self.parity.write_to_slice(&mut target[4usize..5usize]);
-            self.stopbits.write_to_slice(&mut target[5usize..6usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.speed).write_to_slice(&mut target[0usize..4usize]);
+            (&self.parity).write_to_slice(&mut target[4usize..5usize]);
+            (&self.stopbits).write_to_slice(&mut target[5usize..6usize]);
+            return 6usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -314,8 +320,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WifiConnection {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <WifiConnection as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <WifiConnection as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiConnection {
@@ -376,13 +382,14 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetWifiConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.ssid.write_to_slice(&mut target[0usize..32usize]);
-            self.connection.write_to_slice(&mut target[32usize..33usize]);
-            self.ip.write_to_slice(&mut target[33usize..37usize]);
-            self.subnet_mask.write_to_slice(&mut target[37usize..41usize]);
-            self.gateway.write_to_slice(&mut target[41usize..45usize]);
-            self.port.write_to_slice(&mut target[45usize..47usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.ssid).write_to_slice(&mut target[0usize..32usize]);
+            (&self.connection).write_to_slice(&mut target[32usize..33usize]);
+            (&self.ip).write_to_slice(&mut target[33usize..37usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[37usize..41usize]);
+            (&self.gateway).write_to_slice(&mut target[41usize..45usize]);
+            (&self.port).write_to_slice(&mut target[45usize..47usize]);
+            return 47usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -425,13 +432,14 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.ssid.write_to_slice(&mut target[0usize..32usize]);
-            self.connection.write_to_slice(&mut target[32usize..33usize]);
-            self.ip.write_to_slice(&mut target[33usize..37usize]);
-            self.subnet_mask.write_to_slice(&mut target[37usize..41usize]);
-            self.gateway.write_to_slice(&mut target[41usize..45usize]);
-            self.port.write_to_slice(&mut target[45usize..47usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.ssid).write_to_slice(&mut target[0usize..32usize]);
+            (&self.connection).write_to_slice(&mut target[32usize..33usize]);
+            (&self.ip).write_to_slice(&mut target[33usize..37usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[37usize..41usize]);
+            (&self.gateway).write_to_slice(&mut target[41usize..45usize]);
+            (&self.port).write_to_slice(&mut target[45usize..47usize]);
+            return 47usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -452,8 +460,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WifiEncryption {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <WifiEncryption as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <WifiEncryption as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiEncryption {
@@ -504,8 +512,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WifiEapOption {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <WifiEapOption as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <WifiEapOption as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiEapOption {
@@ -575,14 +583,16 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetWifiEncryptionRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.encryption.write_to_slice(&mut target[0usize..1usize]);
-            self.key.write_to_slice(&mut target[1usize..51usize]);
-            self.key_index.write_to_slice(&mut target[51usize..52usize]);
-            self.eap_options.write_to_slice(&mut target[52usize..53usize]);
-            self.ca_certificate_length.write_to_slice(&mut target[53usize..55usize]);
-            self.client_certificate_length.write_to_slice(&mut target[55usize..57usize]);
-            self.private_key_length.write_to_slice(&mut target[57usize..59usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.encryption).write_to_slice(&mut target[0usize..1usize]);
+            (&self.key).write_to_slice(&mut target[1usize..51usize]);
+            (&self.key_index).write_to_slice(&mut target[51usize..52usize]);
+            (&self.eap_options).write_to_slice(&mut target[52usize..53usize]);
+            (&self.ca_certificate_length).write_to_slice(&mut target[53usize..55usize]);
+            (&self.client_certificate_length)
+                .write_to_slice(&mut target[55usize..57usize]);
+            (&self.private_key_length).write_to_slice(&mut target[57usize..59usize]);
+            return 59usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -635,14 +645,16 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiEncryptionResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.encryption.write_to_slice(&mut target[0usize..1usize]);
-            self.key.write_to_slice(&mut target[1usize..51usize]);
-            self.key_index.write_to_slice(&mut target[51usize..52usize]);
-            self.eap_options.write_to_slice(&mut target[52usize..53usize]);
-            self.ca_certificate_length.write_to_slice(&mut target[53usize..55usize]);
-            self.client_certificate_length.write_to_slice(&mut target[55usize..57usize]);
-            self.private_key_length.write_to_slice(&mut target[57usize..59usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.encryption).write_to_slice(&mut target[0usize..1usize]);
+            (&self.key).write_to_slice(&mut target[1usize..51usize]);
+            (&self.key_index).write_to_slice(&mut target[51usize..52usize]);
+            (&self.eap_options).write_to_slice(&mut target[52usize..53usize]);
+            (&self.ca_certificate_length).write_to_slice(&mut target[53usize..55usize]);
+            (&self.client_certificate_length)
+                .write_to_slice(&mut target[55usize..57usize]);
+            (&self.private_key_length).write_to_slice(&mut target[57usize..59usize]);
+            return 59usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -665,8 +677,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WifiState {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <WifiState as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <WifiState as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiState {
@@ -741,17 +753,18 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiStatusResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.mac_address.write_to_slice(&mut target[0usize..6usize]);
-            self.bssid.write_to_slice(&mut target[6usize..12usize]);
-            self.channel.write_to_slice(&mut target[12usize..13usize]);
-            self.rssi.write_to_slice(&mut target[13usize..15usize]);
-            self.ip.write_to_slice(&mut target[15usize..19usize]);
-            self.subnet_mask.write_to_slice(&mut target[19usize..23usize]);
-            self.gateway.write_to_slice(&mut target[23usize..27usize]);
-            self.rx_count.write_to_slice(&mut target[27usize..31usize]);
-            self.tx_count.write_to_slice(&mut target[31usize..35usize]);
-            self.state.write_to_slice(&mut target[35usize..36usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.mac_address).write_to_slice(&mut target[0usize..6usize]);
+            (&self.bssid).write_to_slice(&mut target[6usize..12usize]);
+            (&self.channel).write_to_slice(&mut target[12usize..13usize]);
+            (&self.rssi).write_to_slice(&mut target[13usize..15usize]);
+            (&self.ip).write_to_slice(&mut target[15usize..19usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[19usize..23usize]);
+            (&self.gateway).write_to_slice(&mut target[23usize..27usize]);
+            (&self.rx_count).write_to_slice(&mut target[27usize..31usize]);
+            (&self.tx_count).write_to_slice(&mut target[31usize..35usize]);
+            (&self.state).write_to_slice(&mut target[35usize..36usize]);
+            return 36usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -772,10 +785,11 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetWifiCertificateRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..2usize]);
-            self.data.write_to_slice(&mut target[2usize..34usize]);
-            self.data_length.write_to_slice(&mut target[34usize..35usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..2usize]);
+            (&self.data).write_to_slice(&mut target[2usize..34usize]);
+            (&self.data_length).write_to_slice(&mut target[34usize..35usize]);
+            return 35usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -794,9 +808,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiCertificateResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.data.write_to_slice(&mut target[0usize..32usize]);
-            self.data_length.write_to_slice(&mut target[32usize..33usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.data).write_to_slice(&mut target[0usize..32usize]);
+            (&self.data_length).write_to_slice(&mut target[32usize..33usize]);
+            return 33usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -813,8 +828,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WifiPowerMode {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <WifiPowerMode as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <WifiPowerMode as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiPowerMode {
@@ -857,10 +872,11 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiBufferInfoResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.overflow.write_to_slice(&mut target[0usize..4usize]);
-            self.low_watermark.write_to_slice(&mut target[4usize..6usize]);
-            self.used.write_to_slice(&mut target[6usize..8usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.overflow).write_to_slice(&mut target[0usize..4usize]);
+            (&self.low_watermark).write_to_slice(&mut target[4usize..6usize]);
+            (&self.used).write_to_slice(&mut target[6usize..8usize]);
+            return 8usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -879,8 +895,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WifiDomain {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <WifiDomain as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <WifiDomain as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiDomain {
@@ -922,8 +938,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ThresholdOption {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <ThresholdOption as Into<char>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <ThresholdOption as Into<char>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for ThresholdOption {
@@ -969,10 +985,11 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetStackCurrentCallbackThresholdRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.option.write_to_slice(&mut target[0usize..1usize]);
-            self.min.write_to_slice(&mut target[1usize..3usize]);
-            self.max.write_to_slice(&mut target[3usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.option).write_to_slice(&mut target[0usize..1usize]);
+            (&self.min).write_to_slice(&mut target[1usize..3usize]);
+            (&self.max).write_to_slice(&mut target[3usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1001,10 +1018,11 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetStackCurrentCallbackThresholdResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.option.write_to_slice(&mut target[0usize..1usize]);
-            self.min.write_to_slice(&mut target[1usize..3usize]);
-            self.max.write_to_slice(&mut target[3usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.option).write_to_slice(&mut target[0usize..1usize]);
+            (&self.min).write_to_slice(&mut target[1usize..3usize]);
+            (&self.max).write_to_slice(&mut target[3usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1029,10 +1047,11 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetStackVoltageCallbackThresholdRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.option.write_to_slice(&mut target[0usize..1usize]);
-            self.min.write_to_slice(&mut target[1usize..3usize]);
-            self.max.write_to_slice(&mut target[3usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.option).write_to_slice(&mut target[0usize..1usize]);
+            (&self.min).write_to_slice(&mut target[1usize..3usize]);
+            (&self.max).write_to_slice(&mut target[3usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1061,10 +1080,11 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetStackVoltageCallbackThresholdResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.option.write_to_slice(&mut target[0usize..1usize]);
-            self.min.write_to_slice(&mut target[1usize..3usize]);
-            self.max.write_to_slice(&mut target[3usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.option).write_to_slice(&mut target[0usize..1usize]);
+            (&self.min).write_to_slice(&mut target[1usize..3usize]);
+            (&self.max).write_to_slice(&mut target[3usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1089,10 +1109,11 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetUsbVoltageCallbackThresholdRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.option.write_to_slice(&mut target[0usize..1usize]);
-            self.min.write_to_slice(&mut target[1usize..3usize]);
-            self.max.write_to_slice(&mut target[3usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.option).write_to_slice(&mut target[0usize..1usize]);
+            (&self.min).write_to_slice(&mut target[1usize..3usize]);
+            (&self.max).write_to_slice(&mut target[3usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1121,10 +1142,11 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetUsbVoltageCallbackThresholdResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.option.write_to_slice(&mut target[0usize..1usize]);
-            self.min.write_to_slice(&mut target[1usize..3usize]);
-            self.max.write_to_slice(&mut target[3usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.option).write_to_slice(&mut target[0usize..1usize]);
+            (&self.min).write_to_slice(&mut target[1usize..3usize]);
+            (&self.max).write_to_slice(&mut target[3usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1141,8 +1163,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for EthernetConnection {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <EthernetConnection as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <EthernetConnection as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for EthernetConnection {
@@ -1194,12 +1216,13 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetEthernetConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.connection.write_to_slice(&mut target[0usize..1usize]);
-            self.ip.write_to_slice(&mut target[1usize..5usize]);
-            self.subnet_mask.write_to_slice(&mut target[5usize..9usize]);
-            self.gateway.write_to_slice(&mut target[9usize..13usize]);
-            self.port.write_to_slice(&mut target[13usize..15usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.connection).write_to_slice(&mut target[0usize..1usize]);
+            (&self.ip).write_to_slice(&mut target[1usize..5usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[5usize..9usize]);
+            (&self.gateway).write_to_slice(&mut target[9usize..13usize]);
+            (&self.port).write_to_slice(&mut target[13usize..15usize]);
+            return 15usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1237,12 +1260,13 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetEthernetConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.connection.write_to_slice(&mut target[0usize..1usize]);
-            self.ip.write_to_slice(&mut target[1usize..5usize]);
-            self.subnet_mask.write_to_slice(&mut target[5usize..9usize]);
-            self.gateway.write_to_slice(&mut target[9usize..13usize]);
-            self.port.write_to_slice(&mut target[13usize..15usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.connection).write_to_slice(&mut target[0usize..1usize]);
+            (&self.ip).write_to_slice(&mut target[1usize..5usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[5usize..9usize]);
+            (&self.gateway).write_to_slice(&mut target[9usize..13usize]);
+            (&self.port).write_to_slice(&mut target[13usize..15usize]);
+            return 15usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1283,14 +1307,15 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetEthernetStatusResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.mac_address.write_to_slice(&mut target[0usize..6usize]);
-            self.ip.write_to_slice(&mut target[6usize..10usize]);
-            self.subnet_mask.write_to_slice(&mut target[10usize..14usize]);
-            self.gateway.write_to_slice(&mut target[14usize..18usize]);
-            self.rx_count.write_to_slice(&mut target[18usize..22usize]);
-            self.tx_count.write_to_slice(&mut target[22usize..26usize]);
-            self.hostname.write_to_slice(&mut target[26usize..58usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.mac_address).write_to_slice(&mut target[0usize..6usize]);
+            (&self.ip).write_to_slice(&mut target[6usize..10usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[10usize..14usize]);
+            (&self.gateway).write_to_slice(&mut target[14usize..18usize]);
+            (&self.rx_count).write_to_slice(&mut target[18usize..22usize]);
+            (&self.tx_count).write_to_slice(&mut target[22usize..26usize]);
+            (&self.hostname).write_to_slice(&mut target[26usize..58usize]);
+            return 58usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1311,9 +1336,10 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetEthernetWebsocketConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.sockets.write_to_slice(&mut target[0usize..1usize]);
-            self.port.write_to_slice(&mut target[1usize..3usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.sockets).write_to_slice(&mut target[0usize..1usize]);
+            (&self.port).write_to_slice(&mut target[1usize..3usize]);
+            return 3usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1334,9 +1360,10 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetEthernetWebsocketConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.sockets.write_to_slice(&mut target[0usize..1usize]);
-            self.port.write_to_slice(&mut target[1usize..3usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.sockets).write_to_slice(&mut target[0usize..1usize]);
+            (&self.port).write_to_slice(&mut target[1usize..3usize]);
+            return 3usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1365,8 +1392,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ConnectionType {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <ConnectionType as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <ConnectionType as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for ConnectionType {
@@ -1410,9 +1437,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WriteWifi2SerialPortRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.data.write_to_slice(&mut target[0usize..60usize]);
-            self.length.write_to_slice(&mut target[60usize..61usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.data).write_to_slice(&mut target[0usize..60usize]);
+            (&self.length).write_to_slice(&mut target[60usize..61usize]);
+            return 61usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1432,9 +1460,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ReadWifi2SerialPortResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.data.write_to_slice(&mut target[0usize..60usize]);
-            self.result.write_to_slice(&mut target[60usize..61usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.data).write_to_slice(&mut target[0usize..60usize]);
+            (&self.result).write_to_slice(&mut target[60usize..61usize]);
+            return 61usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1453,8 +1482,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Wifi2PhyMode {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Wifi2PhyMode as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Wifi2PhyMode as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2PhyMode {
@@ -1510,13 +1539,14 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetWifi2ConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.port.write_to_slice(&mut target[0usize..2usize]);
-            self.websocket_port.write_to_slice(&mut target[2usize..4usize]);
-            self.website_port.write_to_slice(&mut target[4usize..6usize]);
-            self.phy_mode.write_to_slice(&mut target[6usize..7usize]);
-            self.sleep_mode.write_to_slice(&mut target[7usize..8usize]);
-            self.website.write_to_slice(&mut target[8usize..9usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.port).write_to_slice(&mut target[0usize..2usize]);
+            (&self.websocket_port).write_to_slice(&mut target[2usize..4usize]);
+            (&self.website_port).write_to_slice(&mut target[4usize..6usize]);
+            (&self.phy_mode).write_to_slice(&mut target[6usize..7usize]);
+            (&self.sleep_mode).write_to_slice(&mut target[7usize..8usize]);
+            (&self.website).write_to_slice(&mut target[8usize..9usize]);
+            return 9usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1557,13 +1587,14 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2ConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.port.write_to_slice(&mut target[0usize..2usize]);
-            self.websocket_port.write_to_slice(&mut target[2usize..4usize]);
-            self.website_port.write_to_slice(&mut target[4usize..6usize]);
-            self.phy_mode.write_to_slice(&mut target[6usize..7usize]);
-            self.sleep_mode.write_to_slice(&mut target[7usize..8usize]);
-            self.website.write_to_slice(&mut target[8usize..9usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.port).write_to_slice(&mut target[0usize..2usize]);
+            (&self.websocket_port).write_to_slice(&mut target[2usize..4usize]);
+            (&self.website_port).write_to_slice(&mut target[4usize..6usize]);
+            (&self.phy_mode).write_to_slice(&mut target[6usize..7usize]);
+            (&self.sleep_mode).write_to_slice(&mut target[7usize..8usize]);
+            (&self.website).write_to_slice(&mut target[8usize..9usize]);
+            return 9usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1590,8 +1621,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Wifi2ClientStatus {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Wifi2ClientStatus as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Wifi2ClientStatus as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2ClientStatus {
@@ -1699,24 +1730,25 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2StatusResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.client_enabled.write_to_slice(&mut target[0usize..1usize]);
-            self.client_status.write_to_slice(&mut target[1usize..2usize]);
-            self.client_ip.write_to_slice(&mut target[2usize..6usize]);
-            self.client_subnet_mask.write_to_slice(&mut target[6usize..10usize]);
-            self.client_gateway.write_to_slice(&mut target[10usize..14usize]);
-            self.client_mac_address.write_to_slice(&mut target[14usize..20usize]);
-            self.client_rx_count.write_to_slice(&mut target[20usize..24usize]);
-            self.client_tx_count.write_to_slice(&mut target[24usize..28usize]);
-            self.client_rssi.write_to_slice(&mut target[28usize..29usize]);
-            self.ap_enabled.write_to_slice(&mut target[29usize..30usize]);
-            self.ap_ip.write_to_slice(&mut target[30usize..34usize]);
-            self.ap_subnet_mask.write_to_slice(&mut target[34usize..38usize]);
-            self.ap_gateway.write_to_slice(&mut target[38usize..42usize]);
-            self.ap_mac_address.write_to_slice(&mut target[42usize..48usize]);
-            self.ap_rx_count.write_to_slice(&mut target[48usize..52usize]);
-            self.ap_tx_count.write_to_slice(&mut target[52usize..56usize]);
-            self.ap_connected_count.write_to_slice(&mut target[56usize..57usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.client_enabled).write_to_slice(&mut target[0usize..1usize]);
+            (&self.client_status).write_to_slice(&mut target[1usize..2usize]);
+            (&self.client_ip).write_to_slice(&mut target[2usize..6usize]);
+            (&self.client_subnet_mask).write_to_slice(&mut target[6usize..10usize]);
+            (&self.client_gateway).write_to_slice(&mut target[10usize..14usize]);
+            (&self.client_mac_address).write_to_slice(&mut target[14usize..20usize]);
+            (&self.client_rx_count).write_to_slice(&mut target[20usize..24usize]);
+            (&self.client_tx_count).write_to_slice(&mut target[24usize..28usize]);
+            (&self.client_rssi).write_to_slice(&mut target[28usize..29usize]);
+            (&self.ap_enabled).write_to_slice(&mut target[29usize..30usize]);
+            (&self.ap_ip).write_to_slice(&mut target[30usize..34usize]);
+            (&self.ap_subnet_mask).write_to_slice(&mut target[34usize..38usize]);
+            (&self.ap_gateway).write_to_slice(&mut target[38usize..42usize]);
+            (&self.ap_mac_address).write_to_slice(&mut target[42usize..48usize]);
+            (&self.ap_rx_count).write_to_slice(&mut target[48usize..52usize]);
+            (&self.ap_tx_count).write_to_slice(&mut target[52usize..56usize]);
+            (&self.ap_connected_count).write_to_slice(&mut target[56usize..57usize]);
+            return 57usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1759,14 +1791,15 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetWifi2ClientConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.enable.write_to_slice(&mut target[0usize..1usize]);
-            self.ssid.write_to_slice(&mut target[1usize..33usize]);
-            self.ip.write_to_slice(&mut target[33usize..37usize]);
-            self.subnet_mask.write_to_slice(&mut target[37usize..41usize]);
-            self.gateway.write_to_slice(&mut target[41usize..45usize]);
-            self.mac_address.write_to_slice(&mut target[45usize..51usize]);
-            self.bssid.write_to_slice(&mut target[51usize..57usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.enable).write_to_slice(&mut target[0usize..1usize]);
+            (&self.ssid).write_to_slice(&mut target[1usize..33usize]);
+            (&self.ip).write_to_slice(&mut target[33usize..37usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[37usize..41usize]);
+            (&self.gateway).write_to_slice(&mut target[41usize..45usize]);
+            (&self.mac_address).write_to_slice(&mut target[45usize..51usize]);
+            (&self.bssid).write_to_slice(&mut target[51usize..57usize]);
+            return 57usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1809,14 +1842,15 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetWifi2ClientConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.enable.write_to_slice(&mut target[0usize..1usize]);
-            self.ssid.write_to_slice(&mut target[1usize..33usize]);
-            self.ip.write_to_slice(&mut target[33usize..37usize]);
-            self.subnet_mask.write_to_slice(&mut target[37usize..41usize]);
-            self.gateway.write_to_slice(&mut target[41usize..45usize]);
-            self.mac_address.write_to_slice(&mut target[45usize..51usize]);
-            self.bssid.write_to_slice(&mut target[51usize..57usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.enable).write_to_slice(&mut target[0usize..1usize]);
+            (&self.ssid).write_to_slice(&mut target[1usize..33usize]);
+            (&self.ip).write_to_slice(&mut target[33usize..37usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[37usize..41usize]);
+            (&self.gateway).write_to_slice(&mut target[41usize..45usize]);
+            (&self.mac_address).write_to_slice(&mut target[45usize..51usize]);
+            (&self.bssid).write_to_slice(&mut target[51usize..57usize]);
+            return 57usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1839,8 +1873,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Wifi2ApEncryption {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Wifi2ApEncryption as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Wifi2ApEncryption as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2ApEncryption {
@@ -1911,16 +1945,17 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetWifi2ApConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.enable.write_to_slice(&mut target[0usize..1usize]);
-            self.ssid.write_to_slice(&mut target[1usize..33usize]);
-            self.ip.write_to_slice(&mut target[33usize..37usize]);
-            self.subnet_mask.write_to_slice(&mut target[37usize..41usize]);
-            self.gateway.write_to_slice(&mut target[41usize..45usize]);
-            self.encryption.write_to_slice(&mut target[45usize..46usize]);
-            self.hidden.write_to_slice(&mut target[46usize..47usize]);
-            self.channel.write_to_slice(&mut target[47usize..48usize]);
-            self.mac_address.write_to_slice(&mut target[48usize..54usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.enable).write_to_slice(&mut target[0usize..1usize]);
+            (&self.ssid).write_to_slice(&mut target[1usize..33usize]);
+            (&self.ip).write_to_slice(&mut target[33usize..37usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[37usize..41usize]);
+            (&self.gateway).write_to_slice(&mut target[41usize..45usize]);
+            (&self.encryption).write_to_slice(&mut target[45usize..46usize]);
+            (&self.hidden).write_to_slice(&mut target[46usize..47usize]);
+            (&self.channel).write_to_slice(&mut target[47usize..48usize]);
+            (&self.mac_address).write_to_slice(&mut target[48usize..54usize]);
+            return 54usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1974,16 +2009,17 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2ApConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.enable.write_to_slice(&mut target[0usize..1usize]);
-            self.ssid.write_to_slice(&mut target[1usize..33usize]);
-            self.ip.write_to_slice(&mut target[33usize..37usize]);
-            self.subnet_mask.write_to_slice(&mut target[37usize..41usize]);
-            self.gateway.write_to_slice(&mut target[41usize..45usize]);
-            self.encryption.write_to_slice(&mut target[45usize..46usize]);
-            self.hidden.write_to_slice(&mut target[46usize..47usize]);
-            self.channel.write_to_slice(&mut target[47usize..48usize]);
-            self.mac_address.write_to_slice(&mut target[48usize..54usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.enable).write_to_slice(&mut target[0usize..1usize]);
+            (&self.ssid).write_to_slice(&mut target[1usize..33usize]);
+            (&self.ip).write_to_slice(&mut target[33usize..37usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[37usize..41usize]);
+            (&self.gateway).write_to_slice(&mut target[41usize..45usize]);
+            (&self.encryption).write_to_slice(&mut target[45usize..46usize]);
+            (&self.hidden).write_to_slice(&mut target[46usize..47usize]);
+            (&self.channel).write_to_slice(&mut target[47usize..48usize]);
+            (&self.mac_address).write_to_slice(&mut target[48usize..54usize]);
+            return 54usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2011,10 +2047,12 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2FirmwareVersionResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.firmware_version_major.write_to_slice(&mut target[0usize..1usize]);
-            self.firmware_version_minor.write_to_slice(&mut target[1usize..2usize]);
-            self.firmware_version_revision.write_to_slice(&mut target[2usize..3usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.firmware_version_major).write_to_slice(&mut target[0usize..1usize]);
+            (&self.firmware_version_minor).write_to_slice(&mut target[1usize..2usize]);
+            (&self.firmware_version_revision)
+                .write_to_slice(&mut target[2usize..3usize]);
+            return 3usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2068,16 +2106,17 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetWifi2MeshConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.enable.write_to_slice(&mut target[0usize..1usize]);
-            self.root_ip.write_to_slice(&mut target[1usize..5usize]);
-            self.root_subnet_mask.write_to_slice(&mut target[5usize..9usize]);
-            self.root_gateway.write_to_slice(&mut target[9usize..13usize]);
-            self.router_bssid.write_to_slice(&mut target[13usize..19usize]);
-            self.group_id.write_to_slice(&mut target[19usize..25usize]);
-            self.group_ssid_prefix.write_to_slice(&mut target[25usize..41usize]);
-            self.gateway_ip.write_to_slice(&mut target[41usize..45usize]);
-            self.gateway_port.write_to_slice(&mut target[45usize..47usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.enable).write_to_slice(&mut target[0usize..1usize]);
+            (&self.root_ip).write_to_slice(&mut target[1usize..5usize]);
+            (&self.root_subnet_mask).write_to_slice(&mut target[5usize..9usize]);
+            (&self.root_gateway).write_to_slice(&mut target[9usize..13usize]);
+            (&self.router_bssid).write_to_slice(&mut target[13usize..19usize]);
+            (&self.group_id).write_to_slice(&mut target[19usize..25usize]);
+            (&self.group_ssid_prefix).write_to_slice(&mut target[25usize..41usize]);
+            (&self.gateway_ip).write_to_slice(&mut target[41usize..45usize]);
+            (&self.gateway_port).write_to_slice(&mut target[45usize..47usize]);
+            return 47usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2132,16 +2171,17 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetWifi2MeshConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.enable.write_to_slice(&mut target[0usize..1usize]);
-            self.root_ip.write_to_slice(&mut target[1usize..5usize]);
-            self.root_subnet_mask.write_to_slice(&mut target[5usize..9usize]);
-            self.root_gateway.write_to_slice(&mut target[9usize..13usize]);
-            self.router_bssid.write_to_slice(&mut target[13usize..19usize]);
-            self.group_id.write_to_slice(&mut target[19usize..25usize]);
-            self.group_ssid_prefix.write_to_slice(&mut target[25usize..41usize]);
-            self.gateway_ip.write_to_slice(&mut target[41usize..45usize]);
-            self.gateway_port.write_to_slice(&mut target[45usize..47usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.enable).write_to_slice(&mut target[0usize..1usize]);
+            (&self.root_ip).write_to_slice(&mut target[1usize..5usize]);
+            (&self.root_subnet_mask).write_to_slice(&mut target[5usize..9usize]);
+            (&self.root_gateway).write_to_slice(&mut target[9usize..13usize]);
+            (&self.router_bssid).write_to_slice(&mut target[13usize..19usize]);
+            (&self.group_id).write_to_slice(&mut target[19usize..25usize]);
+            (&self.group_ssid_prefix).write_to_slice(&mut target[25usize..41usize]);
+            (&self.gateway_ip).write_to_slice(&mut target[41usize..45usize]);
+            (&self.gateway_port).write_to_slice(&mut target[45usize..47usize]);
+            return 47usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -2170,8 +2210,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Wifi2MeshStatus {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Wifi2MeshStatus as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Wifi2MeshStatus as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2MeshStatus {
@@ -2236,13 +2276,14 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshCommonStatusResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.status.write_to_slice(&mut target[0usize..1usize]);
-            self.root_node.write_to_slice(&mut target[1usize..2usize]);
-            self.root_candidate.write_to_slice(&mut target[2usize..3usize]);
-            self.connected_nodes.write_to_slice(&mut target[3usize..5usize]);
-            self.rx_count.write_to_slice(&mut target[5usize..9usize]);
-            self.tx_count.write_to_slice(&mut target[9usize..13usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.status).write_to_slice(&mut target[0usize..1usize]);
+            (&self.root_node).write_to_slice(&mut target[1usize..2usize]);
+            (&self.root_candidate).write_to_slice(&mut target[2usize..3usize]);
+            (&self.connected_nodes).write_to_slice(&mut target[3usize..5usize]);
+            (&self.rx_count).write_to_slice(&mut target[5usize..9usize]);
+            (&self.tx_count).write_to_slice(&mut target[9usize..13usize]);
+            return 13usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2280,12 +2321,13 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshClientStatusResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.hostname.write_to_slice(&mut target[0usize..32usize]);
-            self.ip.write_to_slice(&mut target[32usize..36usize]);
-            self.subnet_mask.write_to_slice(&mut target[36usize..40usize]);
-            self.gateway.write_to_slice(&mut target[40usize..44usize]);
-            self.mac_address.write_to_slice(&mut target[44usize..50usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.hostname).write_to_slice(&mut target[0usize..32usize]);
+            (&self.ip).write_to_slice(&mut target[32usize..36usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[36usize..40usize]);
+            (&self.gateway).write_to_slice(&mut target[40usize..44usize]);
+            (&self.mac_address).write_to_slice(&mut target[44usize..50usize]);
+            return 50usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2321,12 +2363,13 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshApStatusResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.ssid.write_to_slice(&mut target[0usize..32usize]);
-            self.ip.write_to_slice(&mut target[32usize..36usize]);
-            self.subnet_mask.write_to_slice(&mut target[36usize..40usize]);
-            self.gateway.write_to_slice(&mut target[40usize..44usize]);
-            self.mac_address.write_to_slice(&mut target[44usize..50usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.ssid).write_to_slice(&mut target[0usize..32usize]);
+            (&self.ip).write_to_slice(&mut target[32usize..36usize]);
+            (&self.subnet_mask).write_to_slice(&mut target[36usize..40usize]);
+            (&self.gateway).write_to_slice(&mut target[40usize..44usize]);
+            (&self.mac_address).write_to_slice(&mut target[44usize..50usize]);
+            return 50usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2355,11 +2398,12 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetBrickletXmcFlashConfigRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.config.write_to_slice(&mut target[0usize..4usize]);
-            self.parameter_1.write_to_slice(&mut target[4usize..8usize]);
-            self.parameter_2.write_to_slice(&mut target[8usize..12usize]);
-            self.data.write_to_slice(&mut target[12usize..64usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.config).write_to_slice(&mut target[0usize..4usize]);
+            (&self.parameter_1).write_to_slice(&mut target[4usize..8usize]);
+            (&self.parameter_2).write_to_slice(&mut target[8usize..12usize]);
+            (&self.data).write_to_slice(&mut target[12usize..64usize]);
+            return 64usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2382,9 +2426,10 @@ pub mod master {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetBrickletXmcFlashConfigResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.return_value.write_to_slice(&mut target[0usize..4usize]);
-            self.return_data.write_to_slice(&mut target[4usize..64usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.return_value).write_to_slice(&mut target[0usize..4usize]);
+            (&self.return_data).write_to_slice(&mut target[4usize..64usize]);
+            return 64usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2411,9 +2456,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetSpitfpBaudrateConfigRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.enable_dynamic_baudrate.write_to_slice(&mut target[0usize..1usize]);
-            self.minimum_dynamic_baudrate.write_to_slice(&mut target[1usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.enable_dynamic_baudrate).write_to_slice(&mut target[0usize..1usize]);
+            (&self.minimum_dynamic_baudrate).write_to_slice(&mut target[1usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2440,9 +2486,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpBaudrateConfigResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.enable_dynamic_baudrate.write_to_slice(&mut target[0usize..1usize]);
-            self.minimum_dynamic_baudrate.write_to_slice(&mut target[1usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.enable_dynamic_baudrate).write_to_slice(&mut target[0usize..1usize]);
+            (&self.minimum_dynamic_baudrate).write_to_slice(&mut target[1usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -2471,8 +2518,8 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for CommunicationMethod {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <CommunicationMethod as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <CommunicationMethod as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for CommunicationMethod {
@@ -2515,9 +2562,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetSpitfpBaudrateRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.bricklet_port.write_to_slice(&mut target[0usize..1usize]);
-            self.baudrate.write_to_slice(&mut target[1usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.bricklet_port).write_to_slice(&mut target[0usize..1usize]);
+            (&self.baudrate).write_to_slice(&mut target[1usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2550,12 +2598,13 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpErrorCountResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.error_count_ack_checksum.write_to_slice(&mut target[0usize..4usize]);
-            self.error_count_message_checksum
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.error_count_ack_checksum).write_to_slice(&mut target[0usize..4usize]);
+            (&self.error_count_message_checksum)
                 .write_to_slice(&mut target[4usize..8usize]);
-            self.error_count_frame.write_to_slice(&mut target[8usize..12usize]);
-            self.error_count_overflow.write_to_slice(&mut target[12usize..16usize]);
+            (&self.error_count_frame).write_to_slice(&mut target[8usize..12usize]);
+            (&self.error_count_overflow).write_to_slice(&mut target[12usize..16usize]);
+            return 16usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2589,12 +2638,14 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetProtocol1BrickletNameResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.protocol_version.write_to_slice(&mut target[0usize..1usize]);
-            self.firmware_version_major.write_to_slice(&mut target[1usize..2usize]);
-            self.firmware_version_minor.write_to_slice(&mut target[2usize..3usize]);
-            self.firmware_version_revision.write_to_slice(&mut target[3usize..4usize]);
-            self.name.write_to_slice(&mut target[4usize..44usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.protocol_version).write_to_slice(&mut target[0usize..1usize]);
+            (&self.firmware_version_major).write_to_slice(&mut target[1usize..2usize]);
+            (&self.firmware_version_minor).write_to_slice(&mut target[2usize..3usize]);
+            (&self.firmware_version_revision)
+                .write_to_slice(&mut target[3usize..4usize]);
+            (&self.name).write_to_slice(&mut target[4usize..44usize]);
+            return 44usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2615,10 +2666,11 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WriteBrickletPluginRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.port.write_to_slice(&mut target[0usize..1usize]);
-            self.offset.write_to_slice(&mut target[1usize..2usize]);
-            self.chunk.write_to_slice(&mut target[2usize..34usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.port).write_to_slice(&mut target[0usize..1usize]);
+            (&self.offset).write_to_slice(&mut target[1usize..2usize]);
+            (&self.chunk).write_to_slice(&mut target[2usize..34usize]);
+            return 34usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2637,9 +2689,10 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ReadBrickletPluginRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.port.write_to_slice(&mut target[0usize..1usize]);
-            self.offset.write_to_slice(&mut target[1usize..2usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.port).write_to_slice(&mut target[0usize..1usize]);
+            (&self.offset).write_to_slice(&mut target[1usize..2usize]);
+            return 2usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2699,17 +2752,20 @@ pub mod master {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetIdentityResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.uid.write_to_slice(&mut target[0usize..8usize]);
-            self.connected_uid.write_to_slice(&mut target[8usize..16usize]);
-            self.position.write_to_slice(&mut target[16usize..17usize]);
-            self.hardware_version_major.write_to_slice(&mut target[17usize..18usize]);
-            self.hardware_version_minor.write_to_slice(&mut target[18usize..19usize]);
-            self.hardware_version_revision.write_to_slice(&mut target[19usize..20usize]);
-            self.firmware_version_major.write_to_slice(&mut target[20usize..21usize]);
-            self.firmware_version_minor.write_to_slice(&mut target[21usize..22usize]);
-            self.firmware_version_revision.write_to_slice(&mut target[22usize..23usize]);
-            self.device_identifier.write_to_slice(&mut target[23usize..25usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.uid).write_to_slice(&mut target[0usize..8usize]);
+            (&self.connected_uid).write_to_slice(&mut target[8usize..16usize]);
+            (&self.position).write_to_slice(&mut target[16usize..17usize]);
+            (&self.hardware_version_major).write_to_slice(&mut target[17usize..18usize]);
+            (&self.hardware_version_minor).write_to_slice(&mut target[18usize..19usize]);
+            (&self.hardware_version_revision)
+                .write_to_slice(&mut target[19usize..20usize]);
+            (&self.firmware_version_major).write_to_slice(&mut target[20usize..21usize]);
+            (&self.firmware_version_minor).write_to_slice(&mut target[21usize..22usize]);
+            (&self.firmware_version_revision)
+                .write_to_slice(&mut target[22usize..23usize]);
+            (&self.device_identifier).write_to_slice(&mut target[23usize..25usize]);
+            return 25usize;
         }
     }
     impl MasterBrick {
@@ -2785,7 +2841,7 @@ diese Funktion benötigt wird.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -2808,7 +2864,7 @@ Gibt den Typ der angegebenen Extension zurück, wie von :func:`Set Extension Typ
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(4u8, &payload).await?;
@@ -2843,7 +2899,7 @@ jedem Start ist daher nicht notwendig.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -2876,7 +2932,7 @@ jedem Start ist daher nicht notwendig.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -2918,7 +2974,7 @@ Setzen bei jedem Start ist daher nicht notwendig.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 2usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -2936,7 +2992,7 @@ zurück, wie von :func:`Set Chibi Slave Address` gesetzt.
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(11u8, &payload).await?;
@@ -2995,7 +3051,7 @@ jedem Start ist daher nicht notwendig.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3047,7 +3103,7 @@ jedem Start ist daher nicht notwendig.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3092,7 +3148,7 @@ jedem Start ist daher nicht notwendig.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3134,7 +3190,7 @@ Setzen bei jedem Start ist daher nicht notwendig.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 2usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3152,7 +3208,7 @@ zurück, wie von :func:`Set RS485 Slave Address` gesetzt.
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(22u8, &payload).await?;
@@ -3190,7 +3246,7 @@ bedeutet, der Master Brick muss nach einer Konfiguration neu gestartet werden.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3262,7 +3318,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 47usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3340,7 +3396,7 @@ zu konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 59usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3444,7 +3500,7 @@ und Passwort zu konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 35usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3465,7 +3521,7 @@ Gibt das Zertifikat für einen Index zurück, wie von
         > {
             let mut payload = [0; 2usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(34u8, &payload).await?;
@@ -3491,7 +3547,7 @@ Setzt den Stromsparmodus für die WIFI Extension. Mögliche Werte sind:
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3567,7 +3623,7 @@ Setzt den Geltungsbereich der WIFI Extension. Mögliche Werte sind:
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3623,7 +3679,7 @@ Funktion zusätzlich hinzugefügt.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3659,7 +3715,7 @@ wieder her.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 16usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3693,7 +3749,7 @@ seit der letzten Auslösung geändert hat.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3724,7 +3780,7 @@ der letzten Auslösung geändert hat.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3755,7 +3811,7 @@ der letzten Auslösung geändert hat.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3794,7 +3850,7 @@ Die folgenden Optionen sind möglich:
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3840,7 +3896,7 @@ Die folgenden Optionen sind möglich:
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3886,7 +3942,7 @@ Die folgenden Optionen sind möglich:
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -3932,7 +3988,7 @@ weiterhin erreicht bleiben.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4092,7 +4148,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 15usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4157,7 +4213,7 @@ Der aktuelle Hostname kann mit :func:`Get Ethernet Status` herausgefunden werden
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 32usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4178,7 +4234,7 @@ Die MAC Adresse kann mit :func:`Get Ethernet Status` wieder ausgelesen werden.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4209,7 +4265,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 3usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4256,7 +4312,7 @@ Der Standardwert ist ein leerer String (Authentifizierung deaktiviert).
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4297,7 +4353,7 @@ Der Standardwert ist ein leerer String (Authentifizierung deaktiviert).
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4385,7 +4441,7 @@ Extension 2.0 zu aktualisieren.
         ) -> Result<i8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 61usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(80u8, &payload).await?;
@@ -4411,7 +4467,7 @@ Extension 2.0 zu aktualisieren.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(81u8, &payload).await?;
@@ -4442,7 +4498,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4491,7 +4547,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 9usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4569,7 +4625,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 57usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4612,7 +4668,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 32usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4646,7 +4702,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4708,7 +4764,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 54usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4751,7 +4807,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4882,7 +4938,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 47usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4932,7 +4988,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 32usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -4971,7 +5027,7 @@ konfigurieren.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -5068,7 +5124,7 @@ Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
         > {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(111u8, &payload).await?;
@@ -5095,7 +5151,7 @@ Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
         ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(112u8, &payload).await?;
@@ -5108,7 +5164,7 @@ Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -5153,7 +5209,7 @@ wie von :func:`Set SPITFP Baudrate` gesetzt statisch verwendet.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -5192,7 +5248,7 @@ Im normalen Betrieb sollten alle Zähler fast immer auf 0 stehen bleiben.
         ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(233u8, &payload).await?;
@@ -5218,7 +5274,7 @@ Baudrate nicht zu ändern.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -5236,7 +5292,7 @@ Gibt die Baudrate für einen Bricklet Port zurück, siehe
         ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(235u8, &payload).await?;
@@ -5266,7 +5322,7 @@ ausgibt.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(237u8, &payload).await?;
@@ -5338,7 +5394,7 @@ v1.x.y Plugins zu ermöglichen.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(241u8, &payload).await?;
@@ -5392,7 +5448,7 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 34usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -5413,7 +5469,7 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         ) -> Result<[u8; 32usize], tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 2usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(247u8, &payload).await?;
@@ -5492,46 +5548,15 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WritePixelsLowLevelRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.x_start.write_to_slice(&mut target[0usize..1usize]);
-            self.y_start.write_to_slice(&mut target[1usize..2usize]);
-            self.x_end.write_to_slice(&mut target[2usize..3usize]);
-            self.y_end.write_to_slice(&mut target[3usize..4usize]);
-            self.pixels_length.write_to_slice(&mut target[4usize..6usize]);
-            self.pixels_chunk_offset.write_to_slice(&mut target[6usize..8usize]);
-            self.pixels_chunk_data.write_to_slice(&mut target[8usize..64usize]);
-        }
-    }
-    #[derive(Copy, Clone, PartialEq, Debug)]
-    pub struct WritePixelsRequest {
-        pub x_start: u8,
-        pub y_start: u8,
-        pub x_end: u8,
-        pub y_end: u8,
-    }
-    impl tinkerforge_base::byte_converter::FromByteSlice for WritePixelsRequest {
-        fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
-            let y_start = u8::from_le_byte_slice(&bytes[1usize..2usize]);
-            let x_end = u8::from_le_byte_slice(&bytes[2usize..3usize]);
-            let y_end = u8::from_le_byte_slice(&bytes[3usize..4usize]);
-            Self {
-                x_start,
-                y_start,
-                x_end,
-                y_end,
-            }
-        }
-        fn bytes_expected() -> usize {
-            4usize
-        }
-    }
-    impl tinkerforge_base::byte_converter::ToBytes for WritePixelsRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.x_start.write_to_slice(&mut target[0usize..1usize]);
-            self.y_start.write_to_slice(&mut target[1usize..2usize]);
-            self.x_end.write_to_slice(&mut target[2usize..3usize]);
-            self.y_end.write_to_slice(&mut target[3usize..4usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.x_start).write_to_slice(&mut target[0usize..1usize]);
+            (&self.y_start).write_to_slice(&mut target[1usize..2usize]);
+            (&self.x_end).write_to_slice(&mut target[2usize..3usize]);
+            (&self.y_end).write_to_slice(&mut target[3usize..4usize]);
+            (&self.pixels_length).write_to_slice(&mut target[4usize..6usize]);
+            (&self.pixels_chunk_offset).write_to_slice(&mut target[6usize..8usize]);
+            (&self.pixels_chunk_data).write_to_slice(&mut target[8usize..64usize]);
+            return 64usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5559,11 +5584,12 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ReadPixelsLowLevelRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.x_start.write_to_slice(&mut target[0usize..1usize]);
-            self.y_start.write_to_slice(&mut target[1usize..2usize]);
-            self.x_end.write_to_slice(&mut target[2usize..3usize]);
-            self.y_end.write_to_slice(&mut target[3usize..4usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.x_start).write_to_slice(&mut target[0usize..1usize]);
+            (&self.y_start).write_to_slice(&mut target[1usize..2usize]);
+            (&self.x_end).write_to_slice(&mut target[2usize..3usize]);
+            (&self.y_end).write_to_slice(&mut target[3usize..4usize]);
+            return 4usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5590,42 +5616,11 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ReadPixelsLowLevelResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.pixels_length.write_to_slice(&mut target[0usize..2usize]);
-            self.pixels_chunk_offset.write_to_slice(&mut target[2usize..4usize]);
-            self.pixels_chunk_data.write_to_slice(&mut target[4usize..64usize]);
-        }
-    }
-    #[derive(Copy, Clone, PartialEq, Debug)]
-    pub struct ReadPixelsRequest {
-        pub x_start: u8,
-        pub y_start: u8,
-        pub x_end: u8,
-        pub y_end: u8,
-    }
-    impl tinkerforge_base::byte_converter::FromByteSlice for ReadPixelsRequest {
-        fn from_le_byte_slice(bytes: &[u8]) -> Self {
-            let x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
-            let y_start = u8::from_le_byte_slice(&bytes[1usize..2usize]);
-            let x_end = u8::from_le_byte_slice(&bytes[2usize..3usize]);
-            let y_end = u8::from_le_byte_slice(&bytes[3usize..4usize]);
-            Self {
-                x_start,
-                y_start,
-                x_end,
-                y_end,
-            }
-        }
-        fn bytes_expected() -> usize {
-            4usize
-        }
-    }
-    impl tinkerforge_base::byte_converter::ToBytes for ReadPixelsRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.x_start.write_to_slice(&mut target[0usize..1usize]);
-            self.y_start.write_to_slice(&mut target[1usize..2usize]);
-            self.x_end.write_to_slice(&mut target[2usize..3usize]);
-            self.y_end.write_to_slice(&mut target[3usize..4usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.pixels_length).write_to_slice(&mut target[0usize..2usize]);
+            (&self.pixels_chunk_offset).write_to_slice(&mut target[2usize..4usize]);
+            (&self.pixels_chunk_data).write_to_slice(&mut target[4usize..64usize]);
+            return 64usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5654,11 +5649,12 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetDisplayConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.contrast.write_to_slice(&mut target[0usize..1usize]);
-            self.backlight.write_to_slice(&mut target[1usize..2usize]);
-            self.invert.write_to_slice(&mut target[2usize..3usize]);
-            self.automatic_draw.write_to_slice(&mut target[3usize..4usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.contrast).write_to_slice(&mut target[0usize..1usize]);
+            (&self.backlight).write_to_slice(&mut target[1usize..2usize]);
+            (&self.invert).write_to_slice(&mut target[2usize..3usize]);
+            (&self.automatic_draw).write_to_slice(&mut target[3usize..4usize]);
+            return 4usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5687,11 +5683,12 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetDisplayConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.contrast.write_to_slice(&mut target[0usize..1usize]);
-            self.backlight.write_to_slice(&mut target[1usize..2usize]);
-            self.invert.write_to_slice(&mut target[2usize..3usize]);
-            self.automatic_draw.write_to_slice(&mut target[3usize..4usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.contrast).write_to_slice(&mut target[0usize..1usize]);
+            (&self.backlight).write_to_slice(&mut target[1usize..2usize]);
+            (&self.invert).write_to_slice(&mut target[2usize..3usize]);
+            (&self.automatic_draw).write_to_slice(&mut target[3usize..4usize]);
+            return 4usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5712,10 +5709,11 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for WriteLineRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.line.write_to_slice(&mut target[0usize..1usize]);
-            self.position.write_to_slice(&mut target[1usize..2usize]);
-            self.text.write_to_slice(&mut target[2usize..24usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.line).write_to_slice(&mut target[0usize..1usize]);
+            (&self.position).write_to_slice(&mut target[1usize..2usize]);
+            (&self.text).write_to_slice(&mut target[2usize..24usize]);
+            return 24usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5738,11 +5736,12 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetTouchPositionResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.pressure.write_to_slice(&mut target[0usize..2usize]);
-            self.x.write_to_slice(&mut target[2usize..4usize]);
-            self.y.write_to_slice(&mut target[4usize..6usize]);
-            self.age.write_to_slice(&mut target[6usize..10usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.pressure).write_to_slice(&mut target[0usize..2usize]);
+            (&self.x).write_to_slice(&mut target[2usize..4usize]);
+            (&self.y).write_to_slice(&mut target[4usize..6usize]);
+            (&self.age).write_to_slice(&mut target[6usize..10usize]);
+            return 10usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5766,9 +5765,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetTouchPositionCallbackConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5792,9 +5792,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetTouchPositionCallbackConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5817,11 +5818,12 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for TouchPositionCallback {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.pressure.write_to_slice(&mut target[0usize..2usize]);
-            self.x.write_to_slice(&mut target[2usize..4usize]);
-            self.y.write_to_slice(&mut target[4usize..6usize]);
-            self.age.write_to_slice(&mut target[6usize..10usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.pressure).write_to_slice(&mut target[0usize..2usize]);
+            (&self.x).write_to_slice(&mut target[2usize..4usize]);
+            (&self.y).write_to_slice(&mut target[4usize..6usize]);
+            (&self.age).write_to_slice(&mut target[6usize..10usize]);
+            return 10usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -5842,8 +5844,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Gesture {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Gesture as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Gesture as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Gesture {
@@ -5909,15 +5911,16 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetTouchGestureResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.gesture.write_to_slice(&mut target[0usize..1usize]);
-            self.duration.write_to_slice(&mut target[1usize..5usize]);
-            self.pressure_max.write_to_slice(&mut target[5usize..7usize]);
-            self.x_start.write_to_slice(&mut target[7usize..9usize]);
-            self.y_start.write_to_slice(&mut target[9usize..11usize]);
-            self.x_end.write_to_slice(&mut target[11usize..13usize]);
-            self.y_end.write_to_slice(&mut target[13usize..15usize]);
-            self.age.write_to_slice(&mut target[15usize..19usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.gesture).write_to_slice(&mut target[0usize..1usize]);
+            (&self.duration).write_to_slice(&mut target[1usize..5usize]);
+            (&self.pressure_max).write_to_slice(&mut target[5usize..7usize]);
+            (&self.x_start).write_to_slice(&mut target[7usize..9usize]);
+            (&self.y_start).write_to_slice(&mut target[9usize..11usize]);
+            (&self.x_end).write_to_slice(&mut target[11usize..13usize]);
+            (&self.y_end).write_to_slice(&mut target[13usize..15usize]);
+            (&self.age).write_to_slice(&mut target[15usize..19usize]);
+            return 19usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5941,9 +5944,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetTouchGestureCallbackConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5967,9 +5971,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetTouchGestureCallbackConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6015,15 +6020,16 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for TouchGestureCallback {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.gesture.write_to_slice(&mut target[0usize..1usize]);
-            self.duration.write_to_slice(&mut target[1usize..5usize]);
-            self.pressure_max.write_to_slice(&mut target[5usize..7usize]);
-            self.x_start.write_to_slice(&mut target[7usize..9usize]);
-            self.y_start.write_to_slice(&mut target[9usize..11usize]);
-            self.x_end.write_to_slice(&mut target[11usize..13usize]);
-            self.y_end.write_to_slice(&mut target[13usize..15usize]);
-            self.age.write_to_slice(&mut target[15usize..19usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.gesture).write_to_slice(&mut target[0usize..1usize]);
+            (&self.duration).write_to_slice(&mut target[1usize..5usize]);
+            (&self.pressure_max).write_to_slice(&mut target[5usize..7usize]);
+            (&self.x_start).write_to_slice(&mut target[7usize..9usize]);
+            (&self.y_start).write_to_slice(&mut target[9usize..11usize]);
+            (&self.x_end).write_to_slice(&mut target[11usize..13usize]);
+            (&self.y_end).write_to_slice(&mut target[13usize..15usize]);
+            (&self.age).write_to_slice(&mut target[15usize..19usize]);
+            return 19usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6040,8 +6046,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Color {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Color as Into<bool>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Color as Into<bool>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Color {
@@ -6092,12 +6098,13 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for DrawLineRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.position_x_start.write_to_slice(&mut target[0usize..1usize]);
-            self.position_y_start.write_to_slice(&mut target[1usize..2usize]);
-            self.position_x_end.write_to_slice(&mut target[2usize..3usize]);
-            self.position_y_end.write_to_slice(&mut target[3usize..4usize]);
-            self.color.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.position_x_start).write_to_slice(&mut target[0usize..1usize]);
+            (&self.position_y_start).write_to_slice(&mut target[1usize..2usize]);
+            (&self.position_x_end).write_to_slice(&mut target[2usize..3usize]);
+            (&self.position_y_end).write_to_slice(&mut target[3usize..4usize]);
+            (&self.color).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6133,13 +6140,14 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for DrawBoxRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.position_x_start.write_to_slice(&mut target[0usize..1usize]);
-            self.position_y_start.write_to_slice(&mut target[1usize..2usize]);
-            self.position_x_end.write_to_slice(&mut target[2usize..3usize]);
-            self.position_y_end.write_to_slice(&mut target[3usize..4usize]);
-            self.fill.write_to_slice(&mut target[4usize..5usize]);
-            self.color.write_to_slice(&mut target[5usize..6usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.position_x_start).write_to_slice(&mut target[0usize..1usize]);
+            (&self.position_y_start).write_to_slice(&mut target[1usize..2usize]);
+            (&self.position_x_end).write_to_slice(&mut target[2usize..3usize]);
+            (&self.position_y_end).write_to_slice(&mut target[3usize..4usize]);
+            (&self.fill).write_to_slice(&mut target[4usize..5usize]);
+            (&self.color).write_to_slice(&mut target[5usize..6usize]);
+            return 6usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6172,8 +6180,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Font {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Font as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Font as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Font {
@@ -6234,12 +6242,13 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for DrawTextRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.position_x.write_to_slice(&mut target[0usize..1usize]);
-            self.position_y.write_to_slice(&mut target[1usize..2usize]);
-            self.font.write_to_slice(&mut target[2usize..3usize]);
-            self.color.write_to_slice(&mut target[3usize..4usize]);
-            self.text.write_to_slice(&mut target[4usize..26usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.position_x).write_to_slice(&mut target[0usize..1usize]);
+            (&self.position_y).write_to_slice(&mut target[1usize..2usize]);
+            (&self.font).write_to_slice(&mut target[2usize..3usize]);
+            (&self.color).write_to_slice(&mut target[3usize..4usize]);
+            (&self.text).write_to_slice(&mut target[4usize..26usize]);
+            return 26usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6273,13 +6282,14 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiButtonRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..1usize]);
-            self.position_x.write_to_slice(&mut target[1usize..2usize]);
-            self.position_y.write_to_slice(&mut target[2usize..3usize]);
-            self.width.write_to_slice(&mut target[3usize..4usize]);
-            self.height.write_to_slice(&mut target[4usize..5usize]);
-            self.text.write_to_slice(&mut target[5usize..21usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..1usize]);
+            (&self.position_x).write_to_slice(&mut target[1usize..2usize]);
+            (&self.position_y).write_to_slice(&mut target[2usize..3usize]);
+            (&self.width).write_to_slice(&mut target[3usize..4usize]);
+            (&self.height).write_to_slice(&mut target[4usize..5usize]);
+            (&self.text).write_to_slice(&mut target[5usize..21usize]);
+            return 21usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6313,13 +6323,14 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiButtonResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.active.write_to_slice(&mut target[0usize..1usize]);
-            self.position_x.write_to_slice(&mut target[1usize..2usize]);
-            self.position_y.write_to_slice(&mut target[2usize..3usize]);
-            self.width.write_to_slice(&mut target[3usize..4usize]);
-            self.height.write_to_slice(&mut target[4usize..5usize]);
-            self.text.write_to_slice(&mut target[5usize..21usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.active).write_to_slice(&mut target[0usize..1usize]);
+            (&self.position_x).write_to_slice(&mut target[1usize..2usize]);
+            (&self.position_y).write_to_slice(&mut target[2usize..3usize]);
+            (&self.width).write_to_slice(&mut target[3usize..4usize]);
+            (&self.height).write_to_slice(&mut target[4usize..5usize]);
+            (&self.text).write_to_slice(&mut target[5usize..21usize]);
+            return 21usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6343,9 +6354,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiButtonPressedCallbackConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6369,9 +6381,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiButtonPressedCallbackConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6390,9 +6403,10 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GuiButtonPressedCallback {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..1usize]);
-            self.pressed.write_to_slice(&mut target[1usize..2usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..1usize]);
+            (&self.pressed).write_to_slice(&mut target[1usize..2usize]);
+            return 2usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6409,8 +6423,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for Direction {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <Direction as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <Direction as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for Direction {
@@ -6464,13 +6478,14 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiSliderRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..1usize]);
-            self.position_x.write_to_slice(&mut target[1usize..2usize]);
-            self.position_y.write_to_slice(&mut target[2usize..3usize]);
-            self.length.write_to_slice(&mut target[3usize..4usize]);
-            self.direction.write_to_slice(&mut target[4usize..5usize]);
-            self.value.write_to_slice(&mut target[5usize..6usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..1usize]);
+            (&self.position_x).write_to_slice(&mut target[1usize..2usize]);
+            (&self.position_y).write_to_slice(&mut target[2usize..3usize]);
+            (&self.length).write_to_slice(&mut target[3usize..4usize]);
+            (&self.direction).write_to_slice(&mut target[4usize..5usize]);
+            (&self.value).write_to_slice(&mut target[5usize..6usize]);
+            return 6usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6510,13 +6525,14 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiSliderResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.active.write_to_slice(&mut target[0usize..1usize]);
-            self.position_x.write_to_slice(&mut target[1usize..2usize]);
-            self.position_y.write_to_slice(&mut target[2usize..3usize]);
-            self.length.write_to_slice(&mut target[3usize..4usize]);
-            self.direction.write_to_slice(&mut target[4usize..5usize]);
-            self.value.write_to_slice(&mut target[5usize..6usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.active).write_to_slice(&mut target[0usize..1usize]);
+            (&self.position_x).write_to_slice(&mut target[1usize..2usize]);
+            (&self.position_y).write_to_slice(&mut target[2usize..3usize]);
+            (&self.length).write_to_slice(&mut target[3usize..4usize]);
+            (&self.direction).write_to_slice(&mut target[4usize..5usize]);
+            (&self.value).write_to_slice(&mut target[5usize..6usize]);
+            return 6usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6540,9 +6556,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiSliderValueCallbackConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6566,9 +6583,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiSliderValueCallbackConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6587,9 +6605,10 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GuiSliderValueCallback {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..1usize]);
-            self.value.write_to_slice(&mut target[1usize..2usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..1usize]);
+            (&self.value).write_to_slice(&mut target[1usize..2usize]);
+            return 2usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6608,8 +6627,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for ChangeTabOn {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <ChangeTabOn as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <ChangeTabOn as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for ChangeTabOn {
@@ -6653,9 +6672,10 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.change_tab_config.write_to_slice(&mut target[0usize..1usize]);
-            self.clear_gui.write_to_slice(&mut target[1usize..2usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.change_tab_config).write_to_slice(&mut target[0usize..1usize]);
+            (&self.clear_gui).write_to_slice(&mut target[1usize..2usize]);
+            return 2usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6684,9 +6704,10 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.change_tab_config.write_to_slice(&mut target[0usize..1usize]);
-            self.clear_gui.write_to_slice(&mut target[1usize..2usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.change_tab_config).write_to_slice(&mut target[0usize..1usize]);
+            (&self.clear_gui).write_to_slice(&mut target[1usize..2usize]);
+            return 2usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6705,9 +6726,10 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabTextRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..1usize]);
-            self.text.write_to_slice(&mut target[1usize..6usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..1usize]);
+            (&self.text).write_to_slice(&mut target[1usize..6usize]);
+            return 6usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6726,9 +6748,10 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabTextResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.active.write_to_slice(&mut target[0usize..1usize]);
-            self.text.write_to_slice(&mut target[1usize..6usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.active).write_to_slice(&mut target[0usize..1usize]);
+            (&self.text).write_to_slice(&mut target[1usize..6usize]);
+            return 6usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6747,9 +6770,10 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabIconRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..1usize]);
-            self.icon.write_to_slice(&mut target[1usize..22usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..1usize]);
+            (&self.icon).write_to_slice(&mut target[1usize..22usize]);
+            return 22usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6768,9 +6792,10 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabIconResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.active.write_to_slice(&mut target[0usize..1usize]);
-            self.icon.write_to_slice(&mut target[1usize..22usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.active).write_to_slice(&mut target[0usize..1usize]);
+            (&self.icon).write_to_slice(&mut target[1usize..22usize]);
+            return 22usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6794,9 +6819,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiTabSelectedCallbackConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6820,9 +6846,10 @@ pub mod lcd_128_x_64 {
     }
     impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiTabSelectedCallbackConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.period.write_to_slice(&mut target[0usize..4usize]);
-            self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.period).write_to_slice(&mut target[0usize..4usize]);
+            (&self.value_has_to_change).write_to_slice(&mut target[4usize..5usize]);
+            return 5usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6841,8 +6868,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GraphType {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <GraphType as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <GraphType as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for GraphType {
@@ -6904,15 +6931,16 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiGraphConfigurationRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..1usize]);
-            self.graph_type.write_to_slice(&mut target[1usize..2usize]);
-            self.position_x.write_to_slice(&mut target[2usize..3usize]);
-            self.position_y.write_to_slice(&mut target[3usize..4usize]);
-            self.width.write_to_slice(&mut target[4usize..5usize]);
-            self.height.write_to_slice(&mut target[5usize..6usize]);
-            self.text_x.write_to_slice(&mut target[6usize..10usize]);
-            self.text_y.write_to_slice(&mut target[10usize..14usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..1usize]);
+            (&self.graph_type).write_to_slice(&mut target[1usize..2usize]);
+            (&self.position_x).write_to_slice(&mut target[2usize..3usize]);
+            (&self.position_y).write_to_slice(&mut target[3usize..4usize]);
+            (&self.width).write_to_slice(&mut target[4usize..5usize]);
+            (&self.height).write_to_slice(&mut target[5usize..6usize]);
+            (&self.text_x).write_to_slice(&mut target[6usize..10usize]);
+            (&self.text_y).write_to_slice(&mut target[10usize..14usize]);
+            return 14usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6959,15 +6987,16 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiGraphConfigurationResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.active.write_to_slice(&mut target[0usize..1usize]);
-            self.graph_type.write_to_slice(&mut target[1usize..2usize]);
-            self.position_x.write_to_slice(&mut target[2usize..3usize]);
-            self.position_y.write_to_slice(&mut target[3usize..4usize]);
-            self.width.write_to_slice(&mut target[4usize..5usize]);
-            self.height.write_to_slice(&mut target[5usize..6usize]);
-            self.text_x.write_to_slice(&mut target[6usize..10usize]);
-            self.text_y.write_to_slice(&mut target[10usize..14usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.active).write_to_slice(&mut target[0usize..1usize]);
+            (&self.graph_type).write_to_slice(&mut target[1usize..2usize]);
+            (&self.position_x).write_to_slice(&mut target[2usize..3usize]);
+            (&self.position_y).write_to_slice(&mut target[3usize..4usize]);
+            (&self.width).write_to_slice(&mut target[4usize..5usize]);
+            (&self.height).write_to_slice(&mut target[5usize..6usize]);
+            (&self.text_x).write_to_slice(&mut target[6usize..10usize]);
+            (&self.text_y).write_to_slice(&mut target[10usize..14usize]);
+            return 14usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6998,11 +7027,12 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiGraphDataLowLevelRequest {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.index.write_to_slice(&mut target[0usize..1usize]);
-            self.data_length.write_to_slice(&mut target[1usize..3usize]);
-            self.data_chunk_offset.write_to_slice(&mut target[3usize..5usize]);
-            self.data_chunk_data.write_to_slice(&mut target[5usize..64usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.index).write_to_slice(&mut target[0usize..1usize]);
+            (&self.data_length).write_to_slice(&mut target[1usize..3usize]);
+            (&self.data_chunk_offset).write_to_slice(&mut target[3usize..5usize]);
+            (&self.data_chunk_data).write_to_slice(&mut target[5usize..64usize]);
+            return 64usize;
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -7030,10 +7060,11 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiGraphDataLowLevelResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.data_length.write_to_slice(&mut target[0usize..2usize]);
-            self.data_chunk_offset.write_to_slice(&mut target[2usize..4usize]);
-            self.data_chunk_data.write_to_slice(&mut target[4usize..63usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.data_length).write_to_slice(&mut target[0usize..2usize]);
+            (&self.data_chunk_offset).write_to_slice(&mut target[2usize..4usize]);
+            (&self.data_chunk_data).write_to_slice(&mut target[4usize..63usize]);
+            return 63usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -7054,8 +7085,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for TouchLedConfig {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <TouchLedConfig as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <TouchLedConfig as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for TouchLedConfig {
@@ -7108,12 +7139,13 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpErrorCountResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.error_count_ack_checksum.write_to_slice(&mut target[0usize..4usize]);
-            self.error_count_message_checksum
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.error_count_ack_checksum).write_to_slice(&mut target[0usize..4usize]);
+            (&self.error_count_message_checksum)
                 .write_to_slice(&mut target[4usize..8usize]);
-            self.error_count_frame.write_to_slice(&mut target[8usize..12usize]);
-            self.error_count_overflow.write_to_slice(&mut target[12usize..16usize]);
+            (&self.error_count_frame).write_to_slice(&mut target[8usize..12usize]);
+            (&self.error_count_overflow).write_to_slice(&mut target[12usize..16usize]);
+            return 16usize;
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -7136,8 +7168,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for BootloaderMode {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <BootloaderMode as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <BootloaderMode as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for BootloaderMode {
@@ -7183,8 +7215,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for BootloaderStatus {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <BootloaderStatus as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <BootloaderStatus as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for BootloaderStatus {
@@ -7227,8 +7259,8 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for StatusLedConfig {
-        fn write_to_slice(self, target: &mut [u8]) {
-            <StatusLedConfig as Into<u8>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            <StatusLedConfig as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
     impl tinkerforge_base::byte_converter::FromByteSlice for StatusLedConfig {
@@ -7308,17 +7340,20 @@ pub mod lcd_128_x_64 {
         }
     }
     impl tinkerforge_base::byte_converter::ToBytes for GetIdentityResponse {
-        fn write_to_slice(self, target: &mut [u8]) {
-            self.uid.write_to_slice(&mut target[0usize..8usize]);
-            self.connected_uid.write_to_slice(&mut target[8usize..16usize]);
-            self.position.write_to_slice(&mut target[16usize..17usize]);
-            self.hardware_version_major.write_to_slice(&mut target[17usize..18usize]);
-            self.hardware_version_minor.write_to_slice(&mut target[18usize..19usize]);
-            self.hardware_version_revision.write_to_slice(&mut target[19usize..20usize]);
-            self.firmware_version_major.write_to_slice(&mut target[20usize..21usize]);
-            self.firmware_version_minor.write_to_slice(&mut target[21usize..22usize]);
-            self.firmware_version_revision.write_to_slice(&mut target[22usize..23usize]);
-            self.device_identifier.write_to_slice(&mut target[23usize..25usize]);
+        fn write_to_slice(&self, target: &mut [u8]) -> usize {
+            (&self.uid).write_to_slice(&mut target[0usize..8usize]);
+            (&self.connected_uid).write_to_slice(&mut target[8usize..16usize]);
+            (&self.position).write_to_slice(&mut target[16usize..17usize]);
+            (&self.hardware_version_major).write_to_slice(&mut target[17usize..18usize]);
+            (&self.hardware_version_minor).write_to_slice(&mut target[18usize..19usize]);
+            (&self.hardware_version_revision)
+                .write_to_slice(&mut target[19usize..20usize]);
+            (&self.firmware_version_major).write_to_slice(&mut target[20usize..21usize]);
+            (&self.firmware_version_minor).write_to_slice(&mut target[21usize..22usize]);
+            (&self.firmware_version_revision)
+                .write_to_slice(&mut target[22usize..23usize]);
+            (&self.device_identifier).write_to_slice(&mut target[23usize..25usize]);
+            return 25usize;
         }
     }
     impl Lcd128X64Bricklet {
@@ -7361,39 +7396,7 @@ eingestellt werden.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
-                &mut payload,
-            );
-            self.device
-                .set(1u8, &payload, Some(std::time::Duration::from_secs(20)))
-                .await?;
-            Ok(())
-        }
-        /**
-Schreibt Pixel in das angegebene Fenster.
-
-Die Pixel werden zeilenweise von oben nach unten geschrieben
-und die Zeilen werden jeweils von links nach rechts geschrieben.
-
-Wenn Automatic Draw aktiviert ist (Standard), dann werden die Pixel direkt auf
-den Display geschrieben. Nur Pixel die sich wirklich verändert haben werden
-auf dem Display aktualisiert.
-
-Wenn Automatic Draw deaktiviert ist, dann werden die Pixel in einen internen
-Buffer geschrieben der dann durch einen Aufruf von :func:`Draw Buffered Frame`
-auf dem Display angezeigt werden kann. Dadurch kann Flicker vermieden werden,
-wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
-
-Automatic Draw kann über die :func:`Set Display Configuration` Funktion
-eingestellt werden.
-*/
-        pub async fn write_pixels(
-            &mut self,
-            request: crate::bindings::lcd_128_x_64::WritePixelsRequest,
-        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
-            let mut payload = [0; 4usize];
-            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7425,7 +7428,7 @@ eingestellt werden.
         > {
             let mut payload = [0; 4usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(2u8, &payload).await?;
@@ -7434,35 +7437,6 @@ eingestellt werden.
                     result.body(),
                 ),
             )
-        }
-        /**
-Liest Pixel aus dem angegebenen Fenster.
-
-Die Pixel werden zeilenweise von oben nach unten
-und die Zeilen werden jeweils von links nach rechts gelesen.
-
-Wenn Automatic Draw aktiviert ist (Standard), dann werden die Pixel direkt vom
-Display gelesen.
-
-Wenn Automatic Draw deaktiviert ist, dann werden die Pixel aus einen internen
-Buffer gelesen (siehe :func:`Draw Buffered Frame`).
-
-Automatic Draw kann über die :func:`Set Display Configuration` Funktion
-eingestellt werden.
-*/
-        pub async fn read_pixels(
-            &mut self,
-            request: crate::bindings::lcd_128_x_64::ReadPixelsRequest,
-        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
-            let mut payload = [0; 4usize];
-            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
-                &mut payload,
-            );
-            self.device
-                .set(2u8, &payload, Some(std::time::Duration::from_secs(20)))
-                .await?;
-            Ok(())
         }
         /**
 Löscht den kompletten aktuellen Inhalt des Displays.
@@ -7502,7 +7476,7 @@ internen Buffer geschrieben, der dann bei bei einem Aufruf von
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7558,7 +7532,7 @@ und mit unterschiedlichen Font-Größen gezeichnet werden.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 24usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7585,7 +7559,7 @@ sollte dies nicht notwendig sein, außer bei hängenden Pixeln bedingt durch Feh
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7633,7 +7607,7 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7720,7 +7694,7 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7771,7 +7745,7 @@ Zeichnet eine weiße oder schwarze Linie von (x, y)-start nach
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7793,7 +7767,7 @@ gezeichnet.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7815,7 +7789,7 @@ Der der Zeichensatz entspricht Codepage 437.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 26usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7851,7 +7825,7 @@ des Buttons mit per :func:`Write Pixels` gezeichnet werden.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 21usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7875,7 +7849,7 @@ oder nicht.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(20u8, &payload).await?;
@@ -7896,7 +7870,7 @@ Index 255 kann genutzt werden um alle Buttons zu entfernen.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7922,7 +7896,7 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -7959,7 +7933,7 @@ Der Zustand kann entweder gedrückt (true) oder losgelassen (false) sein.
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(24u8, &payload).await?;
@@ -8012,7 +7986,7 @@ gezeichnet werden. Um einen Button zu entfernen kann die Funktion
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8036,7 +8010,7 @@ oder nicht.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(27u8, &payload).await?;
@@ -8057,7 +8031,7 @@ Index 255 kann genutzt werden um alle Slider zu entfernen.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8083,7 +8057,7 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8118,7 +8092,7 @@ Gibt den aktuellen Wert des Slider mit dem gegebenen Index zurück.
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(31u8, &payload).await?;
@@ -8153,7 +8127,7 @@ Graphen) gelöscht.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 2usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8191,7 +8165,7 @@ Ein Text-Tab mit dem gleichen Index wie ein Icon-Tab überschreibt diesen.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 6usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8215,7 +8189,7 @@ oder nicht.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(36u8, &payload).await?;
@@ -8240,7 +8214,7 @@ Ein Icon-Tab mit dem gleichen Index wie ein Text-Tab überschreibt diesen.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 22usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8264,7 +8238,7 @@ oder nicht.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(38u8, &payload).await?;
@@ -8285,7 +8259,7 @@ Index 255 kann genutzt werden um alle Tabs zu entfernen.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8303,7 +8277,7 @@ ausgewählt gezeichnet)
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8329,7 +8303,7 @@ festen Periode ausgelöst unabhängig von den Änderungen des Werts.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 5usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8406,7 +8380,7 @@ Funktion :func:`Remove GUI Graph` genutzt werden.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 14usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8430,7 +8404,7 @@ oder nicht.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(46u8, &payload).await?;
@@ -8461,36 +8435,7 @@ Die gesetzten Werte müssen zwischen 0 und 255 skaliert werden. 0 wird unten und
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
-                &mut payload,
-            );
-            self.device
-                .set(47u8, &payload, Some(std::time::Duration::from_secs(20)))
-                .await?;
-            Ok(())
-        }
-        /**
-Setzt die Datenpukte für den Graph mit dem gegebenen Index. Der Graph muss mit
-:func:`Set GUI Graph Configuration` konfiguriert werden bevor die ersten Daten
-gesetzt werden können.
-
-Der Graph zeigt die ersten n Werte der gesetzten Daten an, wobei n die Breite (width)
-ist die mit :func:`Set GUI Graph Configuration` gesetzt wurde. Wenn weniger als
-n Werte gesetzt werden, werden die restlichen Datenpunkte als 0 angezeigt.
-
-Die maximale Anzahl an Datenpunkte die gesetzt werden kann ist 118 (dies entspricht
-auch der maximalen Breite des Graphen).
-
-Die gesetzten Werte müssen zwischen 0 und 255 skaliert werden. 0 wird unten und
-255 wird oben im Graph gezeichnet.
-*/
-        pub async fn set_gui_graph_data(
-            &mut self,
-            request: u8,
-        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
-            let mut payload = [0; 1usize];
-            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8511,7 +8456,7 @@ Gibt die Datenpunkte des Graphen mit dem gegebenen Index zurück, wie von
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(48u8, &payload).await?;
@@ -8520,24 +8465,6 @@ Gibt die Datenpunkte des Graphen mit dem gegebenen Index zurück, wie von
                     result.body(),
                 ),
             )
-        }
-        /**
-Gibt die Datenpunkte des Graphen mit dem gegebenen Index zurück, wie von
-:func:`Set GUI Graph Data` gesetzt.
-*/
-        pub async fn get_gui_graph_data(
-            &mut self,
-            request: u8,
-        ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
-            let mut payload = [0; 1usize];
-            tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
-                &mut payload,
-            );
-            self.device
-                .set(48u8, &payload, Some(std::time::Duration::from_secs(20)))
-                .await?;
-            Ok(())
         }
         /**
 Entfernt den Graph mit dem gegebenen Index.
@@ -8550,7 +8477,7 @@ Index 255 kann genutzt werden um alle Graphen zu entfernen.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8584,7 +8511,7 @@ Wenn das Bricklet sich im Bootloadermodus befindet ist die LED aus.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8666,7 +8593,7 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         > {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(235u8, &payload).await?;
@@ -8712,7 +8639,7 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8736,7 +8663,7 @@ normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 64usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             let result = self.device.get(238u8, &payload).await?;
@@ -8757,7 +8684,7 @@ Wenn das Bricklet sich im Bootlodermodus befindet ist die LED aus.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 1usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device
@@ -8831,7 +8758,7 @@ der UID.
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
             let mut payload = [0; 4usize];
             tinkerforge_base::byte_converter::ToBytes::write_to_slice(
-                request,
+                &request,
                 &mut payload,
             );
             self.device

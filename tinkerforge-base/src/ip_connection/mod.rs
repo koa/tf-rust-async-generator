@@ -50,12 +50,13 @@ impl FromByteSlice for PacketHeader {
 }
 
 impl ToBytes for PacketHeader {
-    fn write_to_slice(self, target: &mut [u8]) {
+    fn write_to_slice(&self, target: &mut [u8])->usize {
         self.uid.write_to_slice(&mut target[0..4]);
         target[4] = self.length;
         target[5] = self.function_id;
         target[6] = self.sequence_number << 4 | (self.response_expected as u8) << 3;
         target[7] = self.error_code << 6;
+        8
     }
 }
 
@@ -117,10 +118,11 @@ impl FromByteSlice for Version {
 }
 
 impl ToBytes for Version {
-    fn write_to_slice(self, target: &mut [u8]) {
+    fn write_to_slice(&self, target: &mut [u8])->usize {
         target[0] = self.major;
         target[1] = self.minor;
         target[2] = self.patch;
+        3
     }
 }
 

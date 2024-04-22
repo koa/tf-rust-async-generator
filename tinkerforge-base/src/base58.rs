@@ -77,8 +77,9 @@ impl Debug for Uid {
 }
 
 impl ToBytes for Uid {
-    fn write_to_slice(self, target: &mut [u8]) {
+    fn write_to_slice(&self, target: &mut [u8])->usize {
         LittleEndian::write_u32(target, self.0);
+        4
     }
 }
 

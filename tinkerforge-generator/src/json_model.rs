@@ -65,7 +65,7 @@ pub struct JsonPacketDescription {
     pub elements: Box<[JsonElement]>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug,Copy, Clone, Eq, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum JsonLevel {
     Normal,

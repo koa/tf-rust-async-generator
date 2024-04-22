@@ -18,10 +18,7 @@ use syn::{
     punctuated::Punctuated, Stmt, token::{Comma, PathSep, Pub}, Type, TypePath, Variant, Visibility,
 };
 
-use crate::json_model::{
-    JsonAnyDefaultValue, JsonCategory, JsonConstantGroup, JsonContent, JsonDirection, JsonElement, JsonLocale, JsonPacketDescription,
-    JsonPacketType,
-};
+use crate::json_model::{JsonAnyDefaultValue, JsonCategory, JsonConstantGroup, JsonContent, JsonDirection, JsonElement, JsonLevel, JsonLocale, JsonPacketDescription, JsonPacketType};
 
 pub fn parse_json() {
     let file = process_directory(current_dir().expect("Cannot access current directory").join("bindings"));
@@ -42,74 +39,74 @@ pub fn process_directory(bindings_dir: PathBuf) -> File {
 }
 
 pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File {
-     let mut bindings_content = Vec::new();
+    let mut bindings_content = Vec::new();
 
-     let mut device_variants: Punctuated<Variant, Comma> = Default::default();
-     let mut device_encode_arms = Vec::new();
-     let mut device_parse_arms = Vec::new();
-     let mut device_name_arms = Vec::new();
+    let mut device_variants: Punctuated<Variant, Comma> = Default::default();
+    let mut device_encode_arms = Vec::new();
+    let mut device_parse_arms = Vec::new();
+    let mut device_name_arms = Vec::new();
 
-     for tf_device in file_contents {
-         if tf_device.device_identifier < 1 {
-             println!("Invalid device identifier: {tf_device:#?}");
-             continue;
-         }
-         let device_id: u16 = tf_device.device_identifier as u16;
-         let raw_package_name = tf_device.name;
-         println!("Device: {raw_package_name}");
+    for tf_device in file_contents {
+        if tf_device.device_identifier < 1 {
+            println!("Invalid device identifier: {tf_device:#?}");
+            continue;
+        }
+        let device_id: u16 = tf_device.device_identifier as u16;
+        let raw_package_name = tf_device.name;
+        println!("Device: {raw_package_name}");
 
-         if raw_package_name.as_ref() == "Unknown" {
-             // probleme mit doppelten einträgen in der config
-             continue;
-         }
+        if raw_package_name.as_ref() == "Unknown" {
+            // probleme mit doppelten einträgen in der config
+            continue;
+        }
 
-         let package_name = raw_package_name.to_string().to_case(Case::Snake);
-         let package_ident = create_ident(&package_name);
-         let package_path = parse_quote!(crate::bindings::#package_ident);
+        let package_name = raw_package_name.to_string().to_case(Case::Snake);
+        let package_ident = create_ident(&package_name);
+        let package_path = parse_quote!(crate::bindings::#package_ident);
 
-         let device_name_prefix = raw_package_name.to_string().to_case(Case::UpperCamel);
-         let device_st = match tf_device.category {
-             JsonCategory::Brick => {
-                 format!("{}Brick", device_name_prefix)
-             }
-             JsonCategory::Bricklet => {
-                 format!("{}Bricklet", device_name_prefix)
-             }
-             JsonCategory::TNG => {
-                 format!("{}TNG", device_name_prefix)
-             }
-         };
-         let device_struct_name = Ident::new(&device_st, Span::call_site());
+        let device_name_prefix = raw_package_name.to_string().to_case(Case::UpperCamel);
+        let device_st = match tf_device.category {
+            JsonCategory::Brick => {
+                format!("{}Brick", device_name_prefix)
+            }
+            JsonCategory::Bricklet => {
+                format!("{}Bricklet", device_name_prefix)
+            }
+            JsonCategory::TNG => {
+                format!("{}TNG", device_name_prefix)
+            }
+        };
+        let device_struct_name = Ident::new(&device_st, Span::call_site());
 
-         device_variants.push(parse_quote!(#device_struct_name));
-         device_encode_arms.push(parse_quote!(DeviceIdentifier::#device_struct_name =>#device_id));
-         device_parse_arms.push(parse_quote!(#device_id => Ok(DeviceIdentifier::#device_struct_name)));
-         device_name_arms.push(parse_quote!(DeviceIdentifier::#device_struct_name =>#raw_package_name));
+        device_variants.push(parse_quote!(#device_struct_name));
+        device_encode_arms.push(parse_quote!(DeviceIdentifier::#device_struct_name =>#device_id));
+        device_parse_arms.push(parse_quote!(#device_id => Ok(DeviceIdentifier::#device_struct_name)));
+        device_name_arms.push(parse_quote!(DeviceIdentifier::#device_struct_name =>#raw_package_name));
 
-         let mut items = Vec::new();
-         items.push(parse_quote!(
+        let mut items = Vec::new();
+        items.push(parse_quote!(
          #[allow(unused_imports)]
          use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
      ));
-         items.push(parse_quote!(
+        items.push(parse_quote!(
          #[allow(unused_imports)]
          use tokio_stream::StreamExt;
      ));
-         items.push(parse_quote!(
+        items.push(parse_quote!(
          #[allow(unused_imports)]
          use std::convert::TryInto;
      ));
 
-         println!("Name: {raw_package_name}");
-         println!("Package: {package_name}");
-         //println!("Tf Device: {tf_device:#?}");
-         items.push(parse_quote!(
+        println!("Name: {raw_package_name}");
+        println!("Package: {package_name}");
+        //println!("Tf Device: {tf_device:#?}");
+        items.push(parse_quote!(
          #[derive(Clone, Debug)]
          pub struct #device_struct_name {
              device: tinkerforge_base::device::Device,
          }
      ));
-         let mut device_impl: ItemImpl = parse_quote!(
+        let mut device_impl: ItemImpl = parse_quote!(
          impl #device_struct_name {
              pub fn new(uid: impl Into<tinkerforge_base::base58::Uid>, connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection) -> #device_struct_name {
                  Self{
@@ -121,59 +118,50 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
              }
          }
      );
-         let mut already_declared_constants = HashSet::new();
-         for packet_description in tf_device.packets.iter() {
-             let function =
-                 generate_packet_element_item_json(&mut items, packet_description, &package_path, &mut already_declared_constants);
-             device_impl.items.push(ImplItem::Fn(function));
+        let mut already_declared_constants = HashSet::new();
+        for packet_description in tf_device.packets.iter() {
+            if packet_description.level == JsonLevel::High { continue; }
+            let function =
+                generate_packet_element_item(&mut items, packet_description, &package_path, &mut already_declared_constants);
+            device_impl.items.push(ImplItem::Fn(function));
+        }
+        items.push(Item::Impl(device_impl));
+        bindings_content.push(Item::Mod(ItemMod {
+            attrs: vec![],
+            vis: Visibility::Public(Default::default()),
+            unsafety: None,
+            mod_token: Default::default(),
+            ident: package_ident,
+            content: Some((Default::default(), items)),
+            semi: None,
+        }));
+    }
+    device_parse_arms.push(parse_quote!(_ => Err(())));
 
-             /*for element in packet_description.elements.iter() {
-             for extra in element.extra.iter() {
-                 if let Some(constant_group) = &extra.constant_group {
-                     if already_declared_constants.insert(constant_group.name.as_ref()) {
-                         process_constant_group_json(&mut items, element, constant_group);
-                     }
-                 }
-             }
-         }*/
-         }
-         items.push(Item::Impl(device_impl));
-         bindings_content.push(Item::Mod(ItemMod {
-             attrs: vec![],
-             vis: Visibility::Public(Default::default()),
-             unsafety: None,
-             mod_token: Default::default(),
-             ident: package_ident,
-             content: Some((Default::default(), items)),
-             semi: None,
-         }));
-     }
-     device_parse_arms.push(parse_quote!(_ => Err(())));
-
-     bindings_content.push(Item::Enum(parse_quote!(
+    bindings_content.push(Item::Enum(parse_quote!(
      #[derive(Copy,Clone,Eq,PartialEq,Debug,Ord, PartialOrd)]
      pub enum DeviceIdentifier{
          #device_variants
      }
  )));
-     let name_match = match_self(device_name_arms);
-     bindings_content.push(Item::Impl(parse_quote!(
+    let name_match = match_self(device_name_arms);
+    bindings_content.push(Item::Impl(parse_quote!(
      impl DeviceIdentifier {
          pub fn name(self) -> &'static str {
              #name_match
          }
      }
  )));
-     let encode_match = match_self(device_encode_arms);
-     bindings_content.push(Item::Impl(parse_quote!(
+    let encode_match = match_self(device_encode_arms);
+    bindings_content.push(Item::Impl(parse_quote!(
      impl Into<u16> for DeviceIdentifier {
          fn into(self) -> u16 {
              #encode_match
          }
      }
  )));
-     let parse_match = match_self(device_parse_arms);
-     bindings_content.push(Item::Impl(parse_quote!(
+    let parse_match = match_self(device_parse_arms);
+    bindings_content.push(Item::Impl(parse_quote!(
      impl std::convert::TryInto<DeviceIdentifier> for u16 {
          type Error = ();
          fn try_into(self) -> Result<DeviceIdentifier, Self::Error> {
@@ -182,9 +170,9 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
      }
  )));
 
-     let file = File { shebang: None, attrs: vec![], items: bindings_content };
-     file
- }
+    let file = File { shebang: None, attrs: vec![], items: bindings_content };
+    file
+}
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum TfValueType {
@@ -318,7 +306,7 @@ impl TfValueType {
     }
 }
 
-fn generate_packet_element_item_json(
+fn generate_packet_element_item(
     items: &mut Vec<Item>,
     packet_entry: &JsonPacketDescription,
     base_path: &Path,
@@ -329,73 +317,14 @@ fn generate_packet_element_item_json(
     let function_id = packet_entry.function_id;
     let doc = &packet_entry.doc;
 
-    println!("Packet: {packet_name}");
     let doc_de = doc.text.0.get(&JsonLocale::De).map(|v| v.as_ref()).unwrap_or_default();
+    println!("Packet: {packet_name}");
 
-    let (mut in_fields, mut out_fields) = parse_packet_elements_json(packet_entry, base_path, items, already_declared_constants);
+    let (mut in_fields, mut out_fields) = parse_packet_elements(packet_entry, base_path, items, already_declared_constants);
     match packet_type {
-        JsonPacketType::Function => {
-            let (request_type, request_size): (Option<Type>, usize) = if in_fields.is_empty() {
-                (None, 0)
-            } else if in_fields.len() == 1 {
-                let (first_field, length) = in_fields.remove(0);
-                (Some(first_field.ty), length)
-            } else {
-                let name = format!("{packet_name}Request");
-                let struct_name: Ident = create_ident(&name);
-                let size = append_data_object(items, &in_fields, &struct_name);
-                (Some(parse_quote!(#base_path::#struct_name)), size)
-            };
-            let (response_type, response_line): (Type, Option<Stmt>) = if out_fields.is_empty() {
-                (parse_quote!(()), None)
-            } else if out_fields.len() == 1 {
-                let (first_field, length) = out_fields.remove(0);
-                let length_literal: Lit = parse_quote!(#length);
-                let method_ident = parse_quote!(from_le_byte_slice);
-                let args = parse_quote!((&result.body()[0..#length_literal]));
-                let read_method_call = static_method_call(&first_field.ty, method_ident, args);
-                (first_field.ty, Some(Stmt::Expr(parse_quote!(Ok(#read_method_call)), None)))
-            } else {
-                let name = format!("{packet_name}Response");
-                let struct_name: Ident = create_ident(&name);
-                append_data_object(items, &out_fields, &struct_name);
-                (
-                    parse_quote!(#base_path::#struct_name),
-                    Some(Stmt::Expr(parse_quote!(Ok(#base_path::#struct_name::from_le_byte_slice(result.body()))), None)),
-                )
-            };
-            let function_name = create_ident(&packet_entry.name.as_ref().to_case(Case::Snake));
-            let mut function_statements = Vec::new();
-            if request_type.is_some() {
-                function_statements.push(parse_quote!(let mut payload = [0; #request_size];));
-                function_statements.push(parse_quote!(tinkerforge_base::byte_converter::ToBytes::write_to_slice(request,&mut payload);))
-            } else {
-                function_statements.push(parse_quote!(let payload = [0; #request_size];));
-            }
-
-            if let Some(response_line) = response_line {
-                function_statements.push(parse_quote!(let result = self.device.get(#function_id, &payload).await?;));
-                function_statements.push(response_line);
-            } else {
-                function_statements
-                    .push(parse_quote!(self.device.set(#function_id, &payload,Some(std::time::Duration::from_secs(20))).await?;));
-                function_statements.push(Stmt::Expr(parse_quote!(Ok(())), None));
-            }
-            let function_block = Block { brace_token: Default::default(), stmts: function_statements };
-            if let Some(request_type) = request_type {
-                parse_quote!(
-                #[doc = #doc_de]
-                pub async fn #function_name(&mut self, request: #request_type) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
-                    #function_block
-            )
-            } else {
-                parse_quote!(
-                #[doc = #doc_de]
-                pub async fn #function_name(&mut self) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
-                    #function_block
-            )
-            }
-        }
+        JsonPacketType::Function =>
+            generate_element_function(items, packet_entry, base_path, &packet_name, &mut in_fields, &mut out_fields)
+        ,
         JsonPacketType::Callback => {
             let function_name = create_ident(&format!("{}_stream", packet_entry.name.as_ref().to_case(Case::Snake)));
             if out_fields.is_empty() {
@@ -446,7 +375,74 @@ fn generate_packet_element_item_json(
     }
 }
 
-fn parse_packet_elements_json(
+fn generate_element_function(items: &mut Vec<Item>, packet_entry: &JsonPacketDescription, base_path: &Path, packet_name: &String, in_fields: &mut Vec<(Field, usize)>, out_fields: &mut Vec<(Field, usize)>) -> ImplItemFn {
+    let function_id = packet_entry.function_id;
+    let doc = &packet_entry.doc;
+    let doc_de = doc.text.0.get(&JsonLocale::De).map(|v| v.as_ref()).unwrap_or_default();
+
+    let (request_type, request_size): (Option<Type>, usize) = if in_fields.is_empty() {
+        (None, 0)
+    } else if in_fields.len() == 1 {
+        let (first_field, length) = in_fields.remove(0);
+        (Some(first_field.ty), length)
+    } else {
+        let name = format!("{packet_name}Request");
+        let struct_name: Ident = create_ident(&name);
+        let size = append_data_object(items, &in_fields, &struct_name);
+        (Some(parse_quote!(#base_path::#struct_name)), size)
+    };
+    let (response_type, response_line): (Type, Option<Stmt>) = if out_fields.is_empty() {
+        (parse_quote!(()), None)
+    } else if out_fields.len() == 1 {
+        let (first_field, length) = out_fields.remove(0);
+        let length_literal: Lit = parse_quote!(#length);
+        let method_ident = parse_quote!(from_le_byte_slice);
+        let args = parse_quote!((&result.body()[0..#length_literal]));
+        let read_method_call = static_method_call(&first_field.ty, method_ident, args);
+        (first_field.ty, Some(Stmt::Expr(parse_quote!(Ok(#read_method_call)), None)))
+    } else {
+        let name = format!("{packet_name}Response");
+        let struct_name: Ident = create_ident(&name);
+        append_data_object(items, &out_fields, &struct_name);
+        (
+            parse_quote!(#base_path::#struct_name),
+            Some(Stmt::Expr(parse_quote!(Ok(#base_path::#struct_name::from_le_byte_slice(result.body()))), None)),
+        )
+    };
+    let function_name = create_ident(&packet_entry.name.as_ref().to_case(Case::Snake));
+    let mut function_statements = Vec::new();
+    if request_type.is_some() {
+        function_statements.push(parse_quote!(let mut payload = [0; #request_size];));
+        function_statements.push(parse_quote!(tinkerforge_base::byte_converter::ToBytes::write_to_slice(&request,&mut payload);))
+    } else {
+        function_statements.push(parse_quote!(let payload = [0; #request_size];));
+    }
+
+    if let Some(response_line) = response_line {
+        function_statements.push(parse_quote!(let result = self.device.get(#function_id, &payload).await?;));
+        function_statements.push(response_line);
+    } else {
+        function_statements
+            .push(parse_quote!(self.device.set(#function_id, &payload,Some(std::time::Duration::from_secs(20))).await?;));
+        function_statements.push(Stmt::Expr(parse_quote!(Ok(())), None));
+    }
+    let function_block = Block { brace_token: Default::default(), stmts: function_statements };
+    if let Some(request_type) = request_type {
+        parse_quote!(
+                #[doc = #doc_de]
+                pub async fn #function_name(&mut self, request: #request_type) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
+                    #function_block
+            )
+    } else {
+        parse_quote!(
+                #[doc = #doc_de]
+                pub async fn #function_name(&mut self) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
+                    #function_block
+            )
+    }
+}
+
+fn parse_packet_elements(
     packet_entry: &JsonPacketDescription,
     base_path: &Path,
     constant_items: &mut Vec<Item>,
@@ -485,7 +481,7 @@ fn parse_packet_elements_json(
                     };
                     found_types.push(if let Some(constant_group) = &extra_entry.constant_group {
                         if already_declared_constants.insert(constant_group.name.clone()) {
-                            process_constant_group_json(constant_items, element_entry, constant_group);
+                            process_constant_group(constant_items, element_entry, constant_group);
                         }
                         let constant_type_name = Some(create_ident(&constant_group.name.as_ref().to_case(Case::UpperCamel)));
                         (
@@ -529,7 +525,7 @@ fn parse_packet_elements_json(
     (in_fields, out_fields)
 }
 
-fn process_constant_group_json(items: &mut Vec<Item>, element: &JsonElement, group: &JsonConstantGroup) {
+fn process_constant_group(items: &mut Vec<Item>, element: &JsonElement, group: &JsonConstantGroup) {
     let camel_name = group.name.as_ref().to_case(Case::UpperCamel);
     println!("Constant group: {}", group.name);
 
@@ -579,8 +575,8 @@ fn process_constant_group_json(items: &mut Vec<Item>, element: &JsonElement, gro
 )));
     items.push(parse_quote!(
     impl tinkerforge_base::byte_converter::ToBytes for #enum_name_ident {
-        fn write_to_slice(self,target: &mut [u8]){
-            <#enum_name_ident as Into<#ty>>::into(self).write_to_slice(target);
+        fn write_to_slice(&self,target: &mut [u8])->usize{
+            <#enum_name_ident as Into<#ty>>::into(*self).write_to_slice(target)
         }
     }
 ));
@@ -639,7 +635,7 @@ fn append_data_object(items: &mut Vec<Item>, fields: &[(Field, usize)], struct_n
                 static_method_call(&field.ty, parse_quote!(from_le_byte_slice), parse_quote!((&bytes[#offset_before..#offset_after])));
             reader_statements.push(parse_quote!(let #field_name = #read_method_call;));
             initialization_fields.push(parse_quote!(#field_name));
-            writer_statements.push(parse_quote!(self.#field_name.write_to_slice(&mut target[#offset_before..#offset_after]);));
+            writer_statements.push(parse_quote!((&self.#field_name).write_to_slice(&mut target[#offset_before..#offset_after]);));
             struct_fields.push(field.clone());
         }
     }
@@ -662,10 +658,11 @@ fn append_data_object(items: &mut Vec<Item>, fields: &[(Field, usize)], struct_n
      #total_size
    }
 }));
+    writer_statements.push(parse_quote!(return #total_size;));
     let write_fields = Block { brace_token: Default::default(), stmts: writer_statements };
     items.push(parse_quote!(
      impl tinkerforge_base::byte_converter::ToBytes for #struct_name {
-        fn write_to_slice(self, target: &mut [u8])
+        fn write_to_slice(&self, target: &mut [u8])->usize
             #write_fields
     }
 ));
