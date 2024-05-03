@@ -1,12 +1,8 @@
 //! Parses Base58 encoded brick and bricklet uids.
 use std::{
-    fmt::{
-        Debug,
-        Display,
-        Formatter
-    },
     error::Error,
-    str::FromStr
+    fmt::{Debug, Display, Formatter},
+    str::FromStr,
 };
 
 use byteorder::{ByteOrder, LittleEndian};
@@ -14,7 +10,8 @@ use const_str::to_char_array;
 
 use crate::byte_converter::{FromByteSlice, ToBytes};
 
-const ALPHABET: [char; 58] = to_char_array!("123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ");
+const ALPHABET: [char; 58] =
+    to_char_array!("123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ");
 
 const ERROR_INVALID_CHAR: &str = "UID contains an invalid character";
 const ERROR_TOO_BIG: &str = "UID is too big to fit into a u64";
@@ -45,7 +42,7 @@ impl From<Uid> for u32 {
 impl FromStr for Uid {
     type Err = Base58Error;
 
-    fn  from_str(s: &str) -> Result<Self, Self::Err> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s == "0" {
             Ok(Uid(0))
         } else {
@@ -77,7 +74,7 @@ impl Debug for Uid {
 }
 
 impl ToBytes for Uid {
-    fn write_to_slice(&self, target: &mut [u8])->usize {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
         LittleEndian::write_u32(target, self.0);
         4
     }
@@ -178,7 +175,12 @@ impl Base58 for str {
     fn base58_to_u32(&self) -> Result<u32, Base58Error> {
         let mut result_u64: u64 = 0;
         for character in self.chars() {
-            match ALPHABET.iter().enumerate().find(|(_, c)| **c == character).map(|(i, _)| i) {
+            match ALPHABET
+                .iter()
+                .enumerate()
+                .find(|(_, c)| **c == character)
+                .map(|(i, _)| i)
+            {
                 None => return Err(Base58Error::InvalidCharacter),
                 Some(i) => {
                     result_u64 = result_u64
@@ -226,7 +228,11 @@ pub fn u32_to_base58(mut id: u32) -> Box<str> {
         id /= radix;
         ptr += 1;
     }
-    buffer[..ptr].iter().rev().collect::<String>().into_boxed_str()
+    buffer[..ptr]
+        .iter()
+        .rev()
+        .collect::<String>()
+        .into_boxed_str()
 }
 
 #[cfg(test)]
@@ -236,7 +242,12 @@ mod test {
     #[test]
     fn test_parse_address() {
         assert_eq!(130221, "EHc".base58_to_u32().unwrap());
-        assert_eq!(130221, "111111111111111111111111111111111111111111111111EHc".base58_to_u32().unwrap());
+        assert_eq!(
+            130221,
+            "111111111111111111111111111111111111111111111111EHc"
+                .base58_to_u32()
+                .unwrap()
+        );
         assert_eq!(u32::MAX, "7xwQ9g".base58_to_u32().unwrap());
     }
 

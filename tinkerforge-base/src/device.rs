@@ -42,7 +42,11 @@ impl std::error::Error for GetResponseExpectedError {}
 
 impl std::fmt::Display for GetResponseExpectedError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Can not get response expected: Invalid function id {}", self.0)
+        write!(
+            f,
+            "Can not get response expected: Invalid function id {}",
+            self.0
+        )
     }
 }
 
@@ -60,14 +64,25 @@ impl std::error::Error for SetResponseExpectedError {}
 impl std::fmt::Display for SetResponseExpectedError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            SetResponseExpectedError::InvalidFunctionId(fid) => write!(f, "Can not set response expected: Invalid function id {}", fid),
-            SetResponseExpectedError::IsAlwaysTrue(_fid) => write!(f, "Can not set response expected: function always responds."),
+            SetResponseExpectedError::InvalidFunctionId(fid) => write!(
+                f,
+                "Can not set response expected: Invalid function id {}",
+                fid
+            ),
+            SetResponseExpectedError::IsAlwaysTrue(_fid) => write!(
+                f,
+                "Can not set response expected: function always responds."
+            ),
         }
     }
 }
 
 impl Device {
-    pub fn new(internal_uid: Uid, connection: AsyncIpConnection, #[allow(unused)] device_display_name: &'static str) -> Device {
+    pub fn new(
+        internal_uid: Uid,
+        connection: AsyncIpConnection,
+        #[allow(unused)] device_display_name: &'static str,
+    ) -> Device {
         Device {
             internal_uid,
             connection,
@@ -86,21 +101,48 @@ impl Device {
         timeout: Option<Duration>,
     ) -> Result<Option<PacketData>, TinkerforgeError> {
         #[cfg(feature = "prometheus")]
-        let timer = REQUEST_TIMING.with_label_values(&[self.device_display_name, function_id.to_string().as_str(), "set"]).start_timer();
-        let result = self.connection.set(self.internal_uid, function_id, payload, timeout).await;
+        let timer = REQUEST_TIMING
+            .with_label_values(&[
+                self.device_display_name,
+                function_id.to_string().as_str(),
+                "set",
+            ])
+            .start_timer();
+        let result = self
+            .connection
+            .set(self.internal_uid, function_id, payload, timeout)
+            .await;
         #[cfg(feature = "prometheus")]
         drop(timer);
         result
     }
 
-    pub async fn get_callback_receiver(&mut self, function_id: u8) -> impl Stream<Item = PacketData> {
-        self.connection.callback_stream(self.internal_uid, function_id).await
+    pub async fn get_callback_receiver(
+        &mut self,
+        function_id: u8,
+    ) -> impl Stream<Item = PacketData> {
+        self.connection
+            .callback_stream(self.internal_uid, function_id)
+            .await
     }
 
-    pub async fn get(&mut self, function_id: u8, payload: &[u8]) -> Result<PacketData, TinkerforgeError> {
+    pub async fn get(
+        &mut self,
+        function_id: u8,
+        payload: &[u8],
+    ) -> Result<PacketData, TinkerforgeError> {
         #[cfg(feature = "prometheus")]
-        let timer = REQUEST_TIMING.with_label_values(&[self.device_display_name, function_id.to_string().as_str(), "get"]).start_timer();
-        let result = self.connection.get(self.internal_uid, function_id, payload, DEFAULT_TIMEOUT).await;
+        let timer = REQUEST_TIMING
+            .with_label_values(&[
+                self.device_display_name,
+                function_id.to_string().as_str(),
+                "get",
+            ])
+            .start_timer();
+        let result = self
+            .connection
+            .get(self.internal_uid, function_id, payload, DEFAULT_TIMEOUT)
+            .await;
         #[cfg(feature = "prometheus")]
         drop(timer);
         result

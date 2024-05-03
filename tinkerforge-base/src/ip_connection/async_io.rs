@@ -3,12 +3,11 @@ use std::{
     fmt::Debug,
     ops::{Deref, DerefMut},
     sync::{
-        Arc,
         atomic::{AtomicBool, Ordering},
+        Arc,
     },
     time::Duration,
 };
-
 
 use log::{debug, error, info, warn};
 use tokio::{
@@ -22,8 +21,8 @@ use tokio::{
 };
 use tokio_stream::{
     empty,
-    Stream,
-    StreamExt, wrappers::{BroadcastStream, errors::BroadcastStreamRecvError},
+    wrappers::{errors::BroadcastStreamRecvError, BroadcastStream},
+    Stream, StreamExt,
 };
 use tokio_util::either::Either;
 
@@ -40,14 +39,26 @@ pub struct AsyncIpConnection {
 }
 
 impl AsyncIpConnection {
-    pub async fn enumerate(&mut self) -> Result<impl Stream<Item=EnumerateResponse> , TinkerforgeError> {
+    pub async fn enumerate(
+        &mut self,
+    ) -> Result<impl Stream<Item = EnumerateResponse>, TinkerforgeError> {
         self.inner.borrow_mut().lock().await.enumerate().await
     }
     pub async fn disconnect_probe(&mut self) -> Result<(), TinkerforgeError> {
-        self.inner.borrow_mut().lock().await.disconnect_probe().await
+        self.inner
+            .borrow_mut()
+            .lock()
+            .await
+            .disconnect_probe()
+            .await
     }
     pub async fn get_authentication_nonce(&mut self) -> Result<[u8; 4], TinkerforgeError> {
-        self.inner.borrow_mut().lock().await.get_authentication_nonce().await
+        self.inner
+            .borrow_mut()
+            .lock()
+            .await
+            .get_authentication_nonce()
+            .await
     }
     pub async fn set(
         &mut self,
@@ -56,7 +67,12 @@ impl AsyncIpConnection {
         payload: &[u8],
         timeout: Option<Duration>,
     ) -> Result<Option<PacketData>, TinkerforgeError> {
-        self.inner.borrow_mut().lock().await.set(uid, function_id, payload, timeout).await
+        self.inner
+            .borrow_mut()
+            .lock()
+            .await
+            .set(uid, function_id, payload, timeout)
+            .await
     }
     pub async fn get(
         &mut self,
@@ -65,13 +81,31 @@ impl AsyncIpConnection {
         payload: &[u8],
         timeout: Duration,
     ) -> Result<PacketData, TinkerforgeError> {
-        self.inner.borrow_mut().lock().await.get(uid, function_id, payload, timeout).await
+        self.inner
+            .borrow_mut()
+            .lock()
+            .await
+            .get(uid, function_id, payload, timeout)
+            .await
     }
-    pub async fn callback_stream(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item=PacketData> {
-        self.inner.borrow_mut().lock().await.callback_stream(uid, function_id).await
+    pub async fn callback_stream(
+        &mut self,
+        uid: Uid,
+        function_id: u8,
+    ) -> impl Stream<Item = PacketData> {
+        self.inner
+            .borrow_mut()
+            .lock()
+            .await
+            .callback_stream(uid, function_id)
+            .await
     }
-    pub async fn new<T: ToSocketAddrs + Debug + Clone + Send + 'static>(addr: T) -> Result<Self, TinkerforgeError> {
-        Ok(Self { inner: Arc::new(Mutex::new(InnerAsyncIpConnection::new(addr).await?)) })
+    pub async fn new<T: ToSocketAddrs + Debug + Clone + Send + 'static>(
+        addr: T,
+    ) -> Result<Self, TinkerforgeError> {
+        Ok(Self {
+            inner: Arc::new(Mutex::new(InnerAsyncIpConnection::new(addr).await?)),
+        })
     }
 }
 
@@ -85,7 +119,9 @@ struct InnerAsyncIpConnection {
 }
 
 impl InnerAsyncIpConnection {
-    pub async fn new<T: ToSocketAddrs + Clone + Debug + Send + 'static>(addr: T) -> Result<Self, TinkerforgeError> {
+    pub async fn new<T: ToSocketAddrs + Clone + Debug + Send + 'static>(
+        addr: T,
+    ) -> Result<Self, TinkerforgeError> {
         let socket = TcpStream::connect(addr.clone()).await?;
         Self::enable_keepalive(&socket)?;
 
@@ -134,8 +170,14 @@ impl InnerAsyncIpConnection {
             running_clone.store(false, Ordering::Relaxed);
             info!("Terminated receiver thread");
         })
-            .abort_handle();
-        Ok(Self { write_stream, abort_handle, seq_num: 1, receiver, running })
+        .abort_handle();
+        Ok(Self {
+            write_stream,
+            abort_handle,
+            seq_num: 1,
+            receiver,
+            running,
+        })
     }
 
     fn enable_keepalive(socket: &TcpStream) -> Result<(), TinkerforgeError> {
@@ -145,27 +187,45 @@ impl InnerAsyncIpConnection {
         socket2::SockRef::from(&socket).set_tcp_keepalive(&ka)?;
         Ok(())
     }
-    pub async fn enumerate(&mut self) -> Result<impl Stream<Item=EnumerateResponse>, TinkerforgeError> {
+    pub async fn enumerate(
+        &mut self,
+    ) -> Result<impl Stream<Item = EnumerateResponse>, TinkerforgeError> {
         if !self.running.as_ref().load(Ordering::Relaxed) {
             return Ok(Either::Left(empty()));
         }
-        let request = Request::Set { uid: Uid::zero(), function_id: 254, payload: &[] };
-        let stream = BroadcastStream::new(self.receiver.resubscribe()).map_while(Self::while_some).filter_map(EnumerateResponse::extract_enumeration_packet);
+        let request = Request::Set {
+            uid: Uid::zero(),
+            function_id: 254,
+            payload: &[],
+        };
+        let stream = BroadcastStream::new(self.receiver.resubscribe())
+            .map_while(Self::while_some)
+            .filter_map(EnumerateResponse::extract_enumeration_packet);
         let seq = self.next_seq();
         self.send_packet(&request, seq, true).await?;
         Ok(Either::Right(stream))
     }
 
     pub async fn disconnect_probe(&mut self) -> Result<(), TinkerforgeError> {
-        let request = Request::Set { uid: Uid::zero(), function_id: 128, payload: &[] };
+        let request = Request::Set {
+            uid: Uid::zero(),
+            function_id: 128,
+            payload: &[],
+        };
         let seq = self.next_seq();
         self.send_packet(&request, seq, true).await?;
         Ok(())
     }
     async fn get_authentication_nonce(&mut self) -> Result<[u8; 4], TinkerforgeError> {
-        let request = Request::Set { uid: Uid::zero(), function_id: 1, payload: &[] };
+        let request = Request::Set {
+            uid: Uid::zero(),
+            function_id: 1,
+            payload: &[],
+        };
         let seq = self.next_seq();
-        let stream = BroadcastStream::new(self.receiver.resubscribe()).map_while(Self::while_some).timeout(Duration::from_secs(5));
+        let stream = BroadcastStream::new(self.receiver.resubscribe())
+            .map_while(Self::while_some)
+            .timeout(Duration::from_secs(5));
         self.send_packet(&request, seq, true).await?;
         tokio::pin!(stream);
         let option = stream.next().await;
@@ -190,7 +250,11 @@ impl InnerAsyncIpConnection {
         payload: &[u8],
         timeout: Option<Duration>,
     ) -> Result<Option<PacketData>, TinkerforgeError> {
-        let request = Request::Set { uid, function_id, payload };
+        let request = Request::Set {
+            uid,
+            function_id,
+            payload,
+        };
         let seq = self.next_seq();
         if let Some(timeout) = timeout {
             let stream = BroadcastStream::new(self.receiver.resubscribe())
@@ -200,7 +264,9 @@ impl InnerAsyncIpConnection {
             self.send_packet(&request, seq, true).await?;
             tokio::pin!(stream);
             if let Some(done) = stream.next().await {
-                Ok(Some(done.map_err(|_| TinkerforgeError::NoResponseReceived)??))
+                Ok(Some(
+                    done.map_err(|_| TinkerforgeError::NoResponseReceived)??,
+                ))
             } else {
                 Err(TinkerforgeError::NoResponseReceived)
             }
@@ -210,17 +276,33 @@ impl InnerAsyncIpConnection {
         }
     }
 
-    fn filter_response(uid: Uid, function_id: u8, seq: u8) -> impl Fn(&Result<PacketData, BroadcastStreamRecvError>) -> bool {
+    fn filter_response(
+        uid: Uid,
+        function_id: u8,
+        seq: u8,
+    ) -> impl Fn(&Result<PacketData, BroadcastStreamRecvError>) -> bool {
         move |result| {
             if let Ok(PacketData { header, .. }) = result {
-                header.uid == uid && header.function_id == function_id && header.sequence_number == seq
+                header.uid == uid
+                    && header.function_id == function_id
+                    && header.sequence_number == seq
             } else {
                 false
             }
         }
     }
-    pub async fn get(&mut self, uid: Uid, function_id: u8, payload: &[u8], timeout: Duration) -> Result<PacketData, TinkerforgeError> {
-        let request = Request::Get { uid, function_id, payload };
+    pub async fn get(
+        &mut self,
+        uid: Uid,
+        function_id: u8,
+        payload: &[u8],
+        timeout: Duration,
+    ) -> Result<PacketData, TinkerforgeError> {
+        let request = Request::Get {
+            uid,
+            function_id,
+            payload,
+        };
         let seq = self.next_seq();
         let stream = BroadcastStream::new(self.receiver.resubscribe())
             .map_while(Self::while_some)
@@ -228,17 +310,27 @@ impl InnerAsyncIpConnection {
             .timeout(timeout);
         tokio::pin!(stream);
         self.send_packet(&request, seq, true).await?;
-        Ok(stream.next().await.ok_or(TinkerforgeError::NoResponseReceived)?.map_err(|_| TinkerforgeError::NoResponseReceived)??)
+        Ok(stream
+            .next()
+            .await
+            .ok_or(TinkerforgeError::NoResponseReceived)?
+            .map_err(|_| TinkerforgeError::NoResponseReceived)??)
     }
 
-    fn while_some(v: Result<Option<PacketData>, BroadcastStreamRecvError>) -> Option<Result<PacketData, BroadcastStreamRecvError>> {
+    fn while_some(
+        v: Result<Option<PacketData>, BroadcastStreamRecvError>,
+    ) -> Option<Result<PacketData, BroadcastStreamRecvError>> {
         match v {
             Ok(None) => None,
             Ok(Some(p)) => Some(Ok(p)),
             Err(e) => Some(Err(e)),
         }
     }
-    pub async fn callback_stream(&mut self, uid: Uid, function_id: u8) -> impl Stream<Item=PacketData> {
+    pub async fn callback_stream(
+        &mut self,
+        uid: Uid,
+        function_id: u8,
+    ) -> impl Stream<Item = PacketData> {
         BroadcastStream::new(self.receiver.resubscribe())
             .map_while(move |result| match result {
                 Ok(Some(p)) => {
@@ -247,7 +339,9 @@ impl InnerAsyncIpConnection {
                     if header.uid == uid && header.function_id == function_id {
                         Some(Some(p))
                     } else if header.function_id == 253 {
-                        if let Ok(enum_paket) = Result::<EnumerateResponse, Base58Error>::from_le_byte_slice(p.body()) {
+                        if let Ok(enum_paket) =
+                            Result::<EnumerateResponse, Base58Error>::from_le_byte_slice(p.body())
+                        {
                             if enum_paket.uid == uid {
                                 // device is disconnected -> end stream
                                 None
@@ -269,7 +363,12 @@ impl InnerAsyncIpConnection {
             })
             .filter_map(|f| f)
     }
-    async fn send_packet(&mut self, request: &Request<'_>, seq: u8, response_expected: bool) -> Result<(), TinkerforgeError> {
+    async fn send_packet(
+        &mut self,
+        request: &Request<'_>,
+        seq: u8,
+        response_expected: bool,
+    ) -> Result<(), TinkerforgeError> {
         let header = request.get_header(response_expected, seq);
         assert!(header.length <= 72);
         let mut result = vec![0; header.length as usize];
@@ -319,19 +418,44 @@ impl PacketData {
 
 #[derive(Debug, Clone)]
 pub enum Request<'a> {
-    Set { uid: Uid, function_id: u8, payload: &'a [u8] },
-    Get { uid: Uid, function_id: u8, payload: &'a [u8] },
+    Set {
+        uid: Uid,
+        function_id: u8,
+        payload: &'a [u8],
+    },
+    Get {
+        uid: Uid,
+        function_id: u8,
+        payload: &'a [u8],
+    },
 }
 
 impl Request<'_> {
     fn get_header(&self, response_expected: bool, sequence_number: u8) -> PacketHeader {
         match self {
-            Request::Set { uid, function_id, payload } => {
-                PacketHeader::with_payload(*uid, *function_id, sequence_number, response_expected, payload.len() as u8)
-            }
-            Request::Get { uid, function_id, payload, .. } => {
-                PacketHeader::with_payload(*uid, *function_id, sequence_number, true, payload.len() as u8)
-            }
+            Request::Set {
+                uid,
+                function_id,
+                payload,
+            } => PacketHeader::with_payload(
+                *uid,
+                *function_id,
+                sequence_number,
+                response_expected,
+                payload.len() as u8,
+            ),
+            Request::Get {
+                uid,
+                function_id,
+                payload,
+                ..
+            } => PacketHeader::with_payload(
+                *uid,
+                *function_id,
+                sequence_number,
+                true,
+                payload.len() as u8,
+            ),
         }
     }
     fn get_payload(&self) -> &[u8] {

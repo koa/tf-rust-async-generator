@@ -14,14 +14,22 @@ use syn::{
     Arm,
     Block,
     Expr,
-    ExprMatch, Field, FieldMutability, FieldValue, File, Ident, ImplItem, ImplItemFn, Item, ItemImpl, ItemMod, Lit, parse_quote, Path, PathArguments, PathSegment,
-    punctuated::Punctuated, Stmt, token::{Comma, PathSep, Pub}, Type, TypePath, Variant, Visibility,
+    ExprMatch, Field, FieldMutability, FieldValue, File, Ident, ImplItem, ImplItemFn, Item, ItemImpl,
+    ItemMod, Lit, parse_quote, Path, PathArguments, PathSegment, punctuated::Punctuated, Stmt, token::{Comma, PathSep, Pub}, Type,
+    TypePath, Variant, Visibility,
 };
 
-use crate::json_model::{JsonAnyDefaultValue, JsonCategory, JsonConstantGroup, JsonContent, JsonDirection, JsonElement, JsonLevel, JsonLocale, JsonPacketDescription, JsonPacketType};
+use crate::json_model::{
+    JsonAnyDefaultValue, JsonCategory, JsonConstantGroup, JsonContent, JsonDirection, JsonElement,
+    JsonLevel, JsonLocale, JsonPacketDescription, JsonPacketType, JsonRole,
+};
 
 pub fn parse_json() {
-    let file = process_directory(current_dir().expect("Cannot access current directory").join("bindings"));
+    let file = process_directory(
+        current_dir()
+            .expect("Cannot access current directory")
+            .join("bindings"),
+    );
 
     let out_dir = env::var_os("OUT_DIR").unwrap();
     let dest_path = path::Path::new(&out_dir).join("bindings.rs");
@@ -29,12 +37,25 @@ pub fn parse_json() {
 }
 
 pub fn process_directory(bindings_dir: PathBuf) -> File {
-    generate_code(bindings_dir.read_dir().expect("Cannot read directory")
-        .into_iter()
-        .map(|entry| entry.expect("cannot access directory entry"))
-        .filter(|entry| entry.file_name().to_str().map(|name| name.ends_with(".json")).unwrap_or(false))
-        .map(|json_dir_entry| fs::File::open(&json_dir_entry.path()).expect("Cannot open json file"))
-        .map(|json_file| serde_json::from_reader::<_, JsonContent>(json_file).expect("Cannot parse json"))
+    generate_code(
+        bindings_dir
+            .read_dir()
+            .expect("Cannot read directory")
+            .into_iter()
+            .map(|entry| entry.expect("cannot access directory entry"))
+            .filter(|entry| {
+                entry
+                    .file_name()
+                    .to_str()
+                    .map(|name| name.ends_with(".json"))
+                    .unwrap_or(false)
+            })
+            .map(|json_dir_entry| {
+                fs::File::open(&json_dir_entry.path()).expect("Cannot open json file")
+            })
+            .map(|json_file| {
+                serde_json::from_reader::<_, JsonContent>(json_file).expect("Cannot parse json")
+            }),
     )
 }
 
@@ -80,49 +101,57 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
 
         device_variants.push(parse_quote!(#device_struct_name));
         device_encode_arms.push(parse_quote!(DeviceIdentifier::#device_struct_name =>#device_id));
-        device_parse_arms.push(parse_quote!(#device_id => Ok(DeviceIdentifier::#device_struct_name)));
-        device_name_arms.push(parse_quote!(DeviceIdentifier::#device_struct_name =>#raw_package_name));
+        device_parse_arms
+            .push(parse_quote!(#device_id => Ok(DeviceIdentifier::#device_struct_name)));
+        device_name_arms
+            .push(parse_quote!(DeviceIdentifier::#device_struct_name =>#raw_package_name));
 
         let mut items = Vec::new();
         items.push(parse_quote!(
-         #[allow(unused_imports)]
-         use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
-     ));
+            #[allow(unused_imports)]
+            use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
+        ));
         items.push(parse_quote!(
-         #[allow(unused_imports)]
-         use tokio_stream::StreamExt;
-     ));
+            #[allow(unused_imports)]
+            use tokio_stream::StreamExt;
+        ));
         items.push(parse_quote!(
-         #[allow(unused_imports)]
-         use std::convert::TryInto;
-     ));
+            #[allow(unused_imports)]
+            use std::convert::TryInto;
+        ));
 
         println!("Name: {raw_package_name}");
         println!("Package: {package_name}");
         //println!("Tf Device: {tf_device:#?}");
         items.push(parse_quote!(
-         #[derive(Clone, Debug)]
-         pub struct #device_struct_name {
-             device: tinkerforge_base::device::Device,
-         }
-     ));
+            #[derive(Clone, Debug)]
+            pub struct #device_struct_name {
+                device: tinkerforge_base::device::Device,
+            }
+        ));
         let mut device_impl: ItemImpl = parse_quote!(
-         impl #device_struct_name {
-             pub fn new(uid: impl Into<tinkerforge_base::base58::Uid>, connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection) -> #device_struct_name {
-                 Self{
-                     device: tinkerforge_base::device::Device::new(uid.into(),connection,#raw_package_name)
-                 }
-             }
-             pub fn uid(&self)->tinkerforge_base::base58::Uid{
-                 self.device.uid()
-             }
-         }
-     );
+            impl #device_struct_name {
+                pub fn new(uid: impl Into<tinkerforge_base::base58::Uid>, connection: tinkerforge_base::ip_connection::async_io::AsyncIpConnection) -> #device_struct_name {
+                    Self{
+                        device: tinkerforge_base::device::Device::new(uid.into(),connection,#raw_package_name)
+                    }
+                }
+                pub fn uid(&self)->tinkerforge_base::base58::Uid{
+                    self.device.uid()
+                }
+            }
+        );
         let mut already_declared_constants = HashSet::new();
         for packet_description in tf_device.packets.iter() {
-            if packet_description.level == JsonLevel::High { continue; }
-            let function =
-                generate_packet_element_item(&mut items, packet_description, &package_path, &mut already_declared_constants);
+            if packet_description.level == JsonLevel::High {
+                continue;
+            }
+            let function = generate_packet_element_item(
+                &mut items,
+                packet_description,
+                &package_path,
+                &mut already_declared_constants,
+            );
             device_impl.items.push(ImplItem::Fn(function));
         }
         items.push(Item::Impl(device_impl));
@@ -139,38 +168,42 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
     device_parse_arms.push(parse_quote!(_ => Err(())));
 
     bindings_content.push(Item::Enum(parse_quote!(
-     #[derive(Copy,Clone,Eq,PartialEq,Debug,Ord, PartialOrd)]
-     pub enum DeviceIdentifier{
-         #device_variants
-     }
- )));
+        #[derive(Copy,Clone,Eq,PartialEq,Debug,Ord, PartialOrd)]
+        pub enum DeviceIdentifier{
+            #device_variants
+        }
+    )));
     let name_match = match_self(device_name_arms);
     bindings_content.push(Item::Impl(parse_quote!(
-     impl DeviceIdentifier {
-         pub fn name(self) -> &'static str {
-             #name_match
-         }
-     }
- )));
+        impl DeviceIdentifier {
+            pub fn name(self) -> &'static str {
+                #name_match
+            }
+        }
+    )));
     let encode_match = match_self(device_encode_arms);
     bindings_content.push(Item::Impl(parse_quote!(
-     impl Into<u16> for DeviceIdentifier {
-         fn into(self) -> u16 {
-             #encode_match
-         }
-     }
- )));
+        impl Into<u16> for DeviceIdentifier {
+            fn into(self) -> u16 {
+                #encode_match
+            }
+        }
+    )));
     let parse_match = match_self(device_parse_arms);
     bindings_content.push(Item::Impl(parse_quote!(
-     impl std::convert::TryInto<DeviceIdentifier> for u16 {
-         type Error = ();
-         fn try_into(self) -> Result<DeviceIdentifier, Self::Error> {
-             #parse_match
-         }
-     }
- )));
+        impl std::convert::TryInto<DeviceIdentifier> for u16 {
+            type Error = ();
+            fn try_into(self) -> Result<DeviceIdentifier, Self::Error> {
+                #parse_match
+            }
+        }
+    )));
 
-    let file = File { shebang: None, attrs: vec![], items: bindings_content };
+    let file = File {
+        shebang: None,
+        attrs: vec![],
+        items: bindings_content,
+    };
     file
 }
 
@@ -308,108 +341,299 @@ impl TfValueType {
 
 fn generate_packet_element_item(
     items: &mut Vec<Item>,
-    packet_entry: &JsonPacketDescription,
+    packet_description: &JsonPacketDescription,
     base_path: &Path,
     already_declared_constants: &mut HashSet<Box<str>>,
 ) -> ImplItemFn {
-    let packet_name = packet_entry.name.as_ref().to_case(Case::UpperCamel);
-    let packet_type = &packet_entry.r#type;
-    let function_id = packet_entry.function_id;
-    let doc = &packet_entry.doc;
+    let packet_name = packet_description.name.as_ref().to_case(Case::UpperCamel);
+    let packet_type = &packet_description.r#type;
+    let function_id = packet_description.function_id;
+    let doc = &packet_description.doc;
 
-    let doc_de = doc.text.0.get(&JsonLocale::De).map(|v| v.as_ref()).unwrap_or_default();
+    let doc_de = doc
+        .text
+        .0
+        .get(&JsonLocale::De)
+        .map(|v| v.as_ref())
+        .unwrap_or_default();
     println!("Packet: {packet_name}");
 
-    let (mut in_fields, mut out_fields) = parse_packet_elements(packet_entry, base_path, items, already_declared_constants);
+    let mut fields = parse_packet_elements(
+        packet_description,
+        base_path,
+        items,
+        already_declared_constants,
+    );
     match packet_type {
-        JsonPacketType::Function =>
-            generate_element_function(items, packet_entry, base_path, &packet_name, &mut in_fields, &mut out_fields)
-        ,
+        JsonPacketType::Function => generate_element_function(
+            items,
+            packet_description,
+            base_path,
+            &packet_name,
+            &mut fields,
+        ),
         JsonPacketType::Callback => {
-            let function_name = create_ident(&format!("{}_stream", packet_entry.name.as_ref().to_case(Case::Snake)));
+            let out_fields = &mut fields.out_fields;
+            let function_name = create_ident(&format!(
+                "{}_stream",
+                packet_description.name.as_ref().to_case(Case::Snake)
+            ));
             if out_fields.is_empty() {
                 let function_block: Block = parse_quote!({self.device
                     .get_callback_receiver(#function_id)
                     .await
                     .map(|_| ())});
                 parse_quote!(
-                #[doc = #doc_de]
-                pub async fn #function_name(&mut self) -> impl futures_core::Stream<Item = ()>
-                    #function_block
-            )
+                    #[doc = #doc_de]
+                    pub async fn #function_name(&mut self) -> impl futures_core::Stream<Item = ()>
+                        #function_block
+                )
             } else if out_fields.len() == 1 {
-                let (first_field, length) = out_fields.remove(0);
+                let first_field = out_fields.remove(0);
+                let length = first_field.size();
+                let first_field = first_field.field();
                 let length_literal: Lit = parse_quote!(#length);
                 let method_ident = parse_quote!(from_le_byte_slice);
                 let args = parse_quote!((&p.body()[0..#length_literal]));
                 let read_method_call = static_method_call(&first_field.ty, method_ident, args);
-                let struct_name = first_field.ty;
+                let struct_name = first_field.ty.clone();
                 let function_block: Block = parse_quote!(
-                {self.device
-                        .get_callback_receiver(#function_id)
-                        .await
-                        .map(|p| #read_method_call)
-                    }
-            );
+                    {self.device
+                            .get_callback_receiver(#function_id)
+                            .await
+                            .map(|p| #read_method_call)
+                        }
+                );
                 parse_quote!(
-                #[doc = #doc_de]
-                pub async fn #function_name(&mut self) -> impl futures_core::Stream<Item = #struct_name>
-                    #function_block
-            )
+                    #[doc = #doc_de]
+                    pub async fn #function_name(&mut self) -> impl futures_core::Stream<Item = #struct_name>
+                        #function_block
+                )
             } else {
                 let struct_name: Ident = create_ident(&format!("{packet_name}Callback"));
-                append_data_object(items, &mut out_fields, &struct_name);
+                append_data_object(items, out_fields, &struct_name);
                 let function_block: Block = parse_quote!({
-                       self.device
-                        .get_callback_receiver(#function_id)
-                        .await
-                        .map(|p| #struct_name::from_le_byte_slice(p.body()))}
-            );
+                           self.device
+                            .get_callback_receiver(#function_id)
+                            .await
+                            .map(|p| #struct_name::from_le_byte_slice(p.body()))}
+                );
                 parse_quote!(
-                #[doc = #doc_de]
-                pub async fn #function_name(&mut self) -> impl futures_core::Stream<Item = #base_path::#struct_name>
-                    #function_block
-            )
+                    #[doc = #doc_de]
+                    pub async fn #function_name(&mut self) -> impl futures_core::Stream<Item = #base_path::#struct_name>
+                        #function_block
+                )
             }
         }
     }
 }
 
-fn generate_element_function(items: &mut Vec<Item>, packet_entry: &JsonPacketDescription, base_path: &Path, packet_name: &String, in_fields: &mut Vec<(Field, usize)>, out_fields: &mut Vec<(Field, usize)>) -> ImplItemFn {
-    let function_id = packet_entry.function_id;
-    let doc = &packet_entry.doc;
-    let doc_de = doc.text.0.get(&JsonLocale::De).map(|v| v.as_ref()).unwrap_or_default();
+const LOW_LEVEL_SUFFIX: &str = " Low Level";
+
+fn generate_element_function(
+    items: &mut Vec<Item>,
+    packet_description: &JsonPacketDescription,
+    base_path: &Path,
+    packet_name: &str,
+    fields: &mut ParsedPacketFields,
+) -> ImplItemFn {
+    let function_id = packet_description.function_id;
+    let doc = &packet_description.doc;
+    let doc_de = doc
+        .text
+        .0
+        .get(&JsonLocale::De)
+        .map(|v| v.as_ref())
+        .unwrap_or_default();
+
+    let in_fields = &mut fields.in_fields;
+    let out_fields = &mut fields.out_fields;
 
     let (request_type, request_size): (Option<Type>, usize) = if in_fields.is_empty() {
         (None, 0)
     } else if in_fields.len() == 1 {
-        let (first_field, length) = in_fields.remove(0);
-        (Some(first_field.ty), length)
+        let first_field = in_fields.remove(0);
+        let length = first_field.size();
+        (Some(first_field.0.ty), length)
     } else {
-        let name = format!("{packet_name}Request");
-        let struct_name: Ident = create_ident(&name);
-        let size = append_data_object(items, &in_fields, &struct_name);
-        (Some(parse_quote!(#base_path::#struct_name)), size)
+        let struct_name: Ident = create_ident(&format!("{packet_name}Request"));
+        let size = append_data_object(items, in_fields, &struct_name);
+        if packet_description.level == JsonLevel::Low {
+            if let Some(stripped_raw_name) = packet_description.name.strip_suffix(LOW_LEVEL_SUFFIX) {
+                let stripped_struct_name = stripped_raw_name.to_case(Case::UpperCamel);
+                let stripped_function_name = stripped_raw_name.to_case(Case::Snake);
+                let mut struct_fields = Punctuated::<Field, Comma>::new();
+                let mut chunk_offset_field = None;
+                let mut stream_length_field = None;
+                let mut data_field = None;
+                let mut writer_statements = Vec::<Stmt>::new();
+                writer_statements.push(parse_quote!(let mut i=0;));
+
+                for field in in_fields.iter() {
+                    match field.1.role {
+                        None => {
+                            let field_name = field.0.ident.clone().unwrap();
+                            let increment = field.size();
+                            writer_statements.push(parse_quote!(i+=(&self.request.#field_name).write_to_slice(&mut target[i..i+#increment]);));
+                            struct_fields.push(field.0.clone());
+                        }
+                        Some(JsonRole::StreamChunkData) => {
+                            writer_statements.push(
+                                parse_quote!(i+=(&self.data).write_to_slice(&mut target[i..]);),
+                            );
+                            data_field = Some(field.1);
+                        }
+                        Some(JsonRole::StreamLength) => {
+                            let increment = field.size();
+                            writer_statements.push(parse_quote!(i+=(&self.length).write_to_slice(&mut target[i..i+#increment]);));
+                            stream_length_field = Some(field.1);
+                        }
+                        Some(JsonRole::StreamData) => {}
+                        Some(JsonRole::StreamChunkOffset) => {
+                            let increment = field.size();
+                            writer_statements.push(parse_quote!(i+=(&self.offset).write_to_slice(&mut target[i..i+#increment]);));
+                            chunk_offset_field = Some(field.1);
+                        }
+                        Some(JsonRole::StreamChunkWritten) => {}
+                        Some(JsonRole::StreamWritten) => {}
+                    }
+                }
+                writer_statements.push(parse_quote!(return i;));
+                if let (Some(data_element), Some(offset_element), Some(length_element)) =
+                    (data_field, chunk_offset_field, stream_length_field)
+                {
+                    let max_chunk_size = data_element.cardinality as usize;
+                    let element_type: TfValueType = data_element.r#type.into();
+                    let offset_type: TfValueType = offset_element.r#type.into();
+                    let length_type: TfValueType = length_element.r#type.into();
+                    let high_level_struct_name: Ident =
+                        create_ident(&format!("{stripped_struct_name}Request"));
+                    let high_level_iterator_name: Ident =
+                        create_ident(&format!("{stripped_struct_name}Iterator"));
+                    let high_level_slice_name: Ident =
+                        create_ident(&format!("{stripped_struct_name}Slice"));
+                    //println!("Struct: {}", struct_fields.clone().into_token_stream());
+                    if struct_fields.is_empty() {
+                        items.push(parse_quote!(
+                            #[derive(Copy, Clone, PartialEq, Debug)]
+                            pub struct #high_level_struct_name<'d> {
+                                pub data: &'d [#element_type],
+                            }
+                        ));
+                    } else {
+                        items.push(parse_quote!(
+                            #[derive(Copy, Clone, PartialEq, Debug)]
+                            pub struct #high_level_struct_name<'d> {
+                                #struct_fields,
+                                pub data: &'d [#element_type],
+                            }
+                        ));
+                    }
+                    items.push(parse_quote!(
+                        pub struct #high_level_iterator_name<'r> {
+                            request: &'r #high_level_struct_name<'r>,
+                            offset: #offset_type,
+                        }
+                    ));
+                    items.push(parse_quote!(
+                        impl<'d> #high_level_struct_name<'d> {
+                            pub fn write_to_slices(&'d self) -> #high_level_iterator_name<'d> {
+                                #high_level_iterator_name {
+                                    request: self,
+                                    offset: 0,
+                                }
+                            }
+                        }
+                    ));
+                    items.push(parse_quote!(
+                        impl<'r> Iterator for #high_level_iterator_name<'r> {
+                            type Item = #high_level_slice_name<'r>;
+
+                            fn next(&mut self) -> Option<Self::Item> {
+                                if self.offset as usize >= self.request.data.len() {
+                                    None
+                                } else {
+                                    let slice_offset = self.offset;
+                                    let length = self.request.data.len() as #length_type;
+                                    let packet_length = #length_type::min(#max_chunk_size as #length_type, length - slice_offset);
+                                    self.offset += packet_length;
+                                    let data = &self.request.data[slice_offset as usize..slice_offset as usize + packet_length as usize];
+                                    Some(#high_level_slice_name {
+                                        request: self.request,
+                                        offset: slice_offset,
+                                        length: length,
+                                        data,
+                                    })
+                                }
+                            }
+                        }
+                    ));
+                    items.push(parse_quote!(
+                        pub struct #high_level_slice_name<'r> {
+                            request: &'r #high_level_struct_name<'r>,
+                            offset: #offset_type,
+                            length: #length_type,
+                            data: &'r [#element_type],
+                        }
+                    ));
+                    let write_fields = Block {
+                        brace_token: Default::default(),
+                        stmts: writer_statements,
+                    };
+                    items.push(parse_quote!(
+                         impl <'r> tinkerforge_base::byte_converter::ToBytes for #high_level_slice_name<'r> {
+                            fn write_to_slice(&self, target: &mut [u8])->usize
+                                #write_fields
+                        }
+                    ));
+                    let function_name = create_ident(&stripped_function_name);
+                    return parse_quote!(
+                        #[doc = #doc_de]
+                        pub async fn #function_name(&mut self, request:#high_level_struct_name<'_>) -> Result<(), tinkerforge_base::error::TinkerforgeError>{
+                            let mut buffer = [0; 64];
+                            for slice in request.write_to_slices() {
+                                let length = slice.write_to_slice(&mut buffer);
+                                let payload = &buffer[0..length];
+                                self.device.set(#function_id, &payload,Some(std::time::Duration::from_secs(20))).await?;
+                            }
+                            Ok(())
+                        }
+                    );
+                }
+            }
+            (Some(parse_quote!(#base_path::#struct_name)), size)
+        } else {
+            let struct_name: Ident = create_ident(&format!("{packet_name}Request"));
+            (Some(parse_quote!(#base_path::#struct_name)), size)
+        }
     };
     let (response_type, response_line): (Type, Option<Stmt>) = if out_fields.is_empty() {
         (parse_quote!(()), None)
     } else if out_fields.len() == 1 {
-        let (first_field, length) = out_fields.remove(0);
+        let first_field = out_fields.remove(0);
+        let length = first_field.size();
+        let first_field = first_field.field();
         let length_literal: Lit = parse_quote!(#length);
         let method_ident = parse_quote!(from_le_byte_slice);
         let args = parse_quote!((&result.body()[0..#length_literal]));
         let read_method_call = static_method_call(&first_field.ty, method_ident, args);
-        (first_field.ty, Some(Stmt::Expr(parse_quote!(Ok(#read_method_call)), None)))
+        (
+            first_field.ty.clone(),
+            Some(Stmt::Expr(parse_quote!(Ok(#read_method_call)), None)),
+        )
     } else {
         let name = format!("{packet_name}Response");
         let struct_name: Ident = create_ident(&name);
         append_data_object(items, &out_fields, &struct_name);
         (
             parse_quote!(#base_path::#struct_name),
-            Some(Stmt::Expr(parse_quote!(Ok(#base_path::#struct_name::from_le_byte_slice(result.body()))), None)),
+            Some(Stmt::Expr(
+                parse_quote!(Ok(#base_path::#struct_name::from_le_byte_slice(result.body()))),
+                None,
+            )),
         )
     };
-    let function_name = create_ident(&packet_entry.name.as_ref().to_case(Case::Snake));
+    let function_name = create_ident(&packet_description.name.as_ref().to_case(Case::Snake));
     let mut function_statements = Vec::new();
     if request_type.is_some() {
         function_statements.push(parse_quote!(let mut payload = [0; #request_size];));
@@ -419,35 +643,73 @@ fn generate_element_function(items: &mut Vec<Item>, packet_entry: &JsonPacketDes
     }
 
     if let Some(response_line) = response_line {
-        function_statements.push(parse_quote!(let result = self.device.get(#function_id, &payload).await?;));
+        function_statements
+            .push(parse_quote!(let result = self.device.get(#function_id, &payload).await?;));
         function_statements.push(response_line);
     } else {
         function_statements
             .push(parse_quote!(self.device.set(#function_id, &payload,Some(std::time::Duration::from_secs(20))).await?;));
         function_statements.push(Stmt::Expr(parse_quote!(Ok(())), None));
     }
-    let function_block = Block { brace_token: Default::default(), stmts: function_statements };
+    let function_block = Block {
+        brace_token: Default::default(),
+        stmts: function_statements,
+    };
     if let Some(request_type) = request_type {
         parse_quote!(
-                #[doc = #doc_de]
-                pub async fn #function_name(&mut self, request: #request_type) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
-                    #function_block
-            )
+            #[doc = #doc_de]
+            pub async fn #function_name(&mut self, request: #request_type) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
+                #function_block
+        )
     } else {
         parse_quote!(
-                #[doc = #doc_de]
-                pub async fn #function_name(&mut self) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
-                    #function_block
-            )
+            #[doc = #doc_de]
+            pub async fn #function_name(&mut self) -> Result<#response_type, tinkerforge_base::error::TinkerforgeError>
+                #function_block
+        )
     }
 }
 
-fn parse_packet_elements(
-    packet_entry: &JsonPacketDescription,
+struct ParsedPacketFields<'a> {
+    in_fields: Vec<(Field, &'a JsonElement)>,
+    out_fields: Vec<(Field, &'a JsonElement)>,
+}
+
+trait FieldWithSize {
+    fn field(&self) -> &Field;
+    fn size(&self) -> usize;
+}
+
+impl FieldWithSize for (Field, &JsonElement) {
+    fn field(&self) -> &Field {
+        &self.0
+    }
+
+    fn size(&self) -> usize {
+        let element_entry = self.1;
+        let transfer_type: TfValueType = element_entry.r#type.into();
+        if element_entry.cardinality > 1
+            && (transfer_type == TfValueType::String || element_entry.extra.len() == 1)
+        {
+            transfer_type.bytecount(element_entry.cardinality as usize)
+        } else if element_entry.extra.len() as i32 == element_entry.cardinality {
+            transfer_type.bytecount(1)
+        } else {
+            panic!(
+                "Count mismatch {} != {}",
+                element_entry.extra.len(),
+                element_entry.cardinality
+            );
+        }
+    }
+}
+
+fn parse_packet_elements<'a>(
+    packet_entry: &'a JsonPacketDescription,
     base_path: &Path,
     constant_items: &mut Vec<Item>,
     already_declared_constants: &mut HashSet<Box<str>>,
-) -> (Vec<(Field, usize)>, Vec<(Field, usize)>) {
+) -> ParsedPacketFields<'a> {
     let mut in_fields = Vec::new();
     let mut out_fields = Vec::new();
     for element_entry in packet_entry.elements.iter() {
@@ -455,7 +717,10 @@ fn parse_packet_elements(
         let element_name_rust = element_name.to_case(Case::Camel);
         let transfer_type: TfValueType = element_entry.r#type.into();
         if element_entry.cardinality < 1 {
-            println!("Skip negative cardinality on {}; {element_name}", base_path.into_token_stream().to_string());
+            println!(
+                "Skip negative cardinality on {}; {element_name}",
+                base_path.into_token_stream().to_string()
+            );
             continue;
         }
         let repeat_count = element_entry.cardinality as usize;
@@ -466,49 +731,56 @@ fn parse_packet_elements(
         };
 
         let ident = create_ident(&element_name_rust.to_case(Case::Snake));
-        let (create_fields, field_size): (Box<[(Type, Ident)]>, _) =
-            if element_entry.cardinality > 1 && transfer_type == TfValueType::String {
-                (vec![(parse_quote!([char;#repeat_count]), parse_quote!(#ident))].into(), transfer_type.bytecount(repeat_count))
-            } else {
-                let base_type = transfer_type.to_token_stream();
-                let mut found_types: Vec<(Type, Ident)> = Vec::with_capacity(element_entry.extra.len());
-                for extra_entry in element_entry.extra.iter() {
-                    let extra_entry_name = extra_entry.name.as_ref();
-                    let extra_ident = if extra_entry_name == element_name {
-                        ident.clone()
-                    } else {
-                        create_ident(&format!("{element_name_rust} {extra_entry_name}").to_case(Case::Snake))
-                    };
-                    found_types.push(if let Some(constant_group) = &extra_entry.constant_group {
-                        if already_declared_constants.insert(constant_group.name.clone()) {
-                            process_constant_group(constant_items, element_entry, constant_group);
-                        }
-                        let constant_type_name = Some(create_ident(&constant_group.name.as_ref().to_case(Case::UpperCamel)));
-                        (
-                            if wrap_enum {
-                                parse_quote!(#base_path::#constant_type_name)
-                            } else {
-                                parse_quote!(tinkerforge_base::byte_converter::ParsedOrRaw<#base_path::#constant_type_name,#transfer_type>)
-                            },
-                            parse_quote!(#extra_ident),
-                        )
-                    } else {
-                        (parse_quote!(#base_type), parse_quote!( #extra_ident))
-                    });
-                }
-                if found_types.len() == 1 && element_entry.cardinality > 1 {
-                    if let [(base_type, ident)] = &found_types[..] {
-                        (vec![(parse_quote!([#base_type;#repeat_count]), ident.clone())].into(), transfer_type.bytecount(repeat_count))
-                    } else {
-                        panic!("Invalid");
-                    }
-                } else if found_types.len() == repeat_count {
-                    (found_types.into_boxed_slice(), transfer_type.bytecount(1))
+        let create_fields: Box<[(Type, Ident)]> = if element_entry.cardinality > 1
+            && transfer_type == TfValueType::String
+        {
+            vec![(parse_quote!([char;#repeat_count]), parse_quote!(#ident))].into()
+        } else {
+            let base_type = transfer_type.to_token_stream();
+            let mut found_types: Vec<(Type, Ident)> = Vec::with_capacity(element_entry.extra.len());
+            for extra_entry in element_entry.extra.iter() {
+                let extra_entry_name = extra_entry.name.as_ref();
+                let extra_ident = if extra_entry_name == element_name {
+                    ident.clone()
                 } else {
-                    panic!("Count mismatch {} != {}", found_types.len(), element_entry.cardinality);
+                    create_ident(
+                        &format!("{element_name_rust} {extra_entry_name}").to_case(Case::Snake),
+                    )
+                };
+                found_types.push(if let Some(constant_group) = &extra_entry.constant_group {
+                    if already_declared_constants.insert(constant_group.name.clone()) {
+                        process_constant_group(constant_items, element_entry, constant_group);
+                    }
+                    let constant_type_name = Some(create_ident(&constant_group.name.as_ref().to_case(Case::UpperCamel)));
+                    (
+                        if wrap_enum {
+                            parse_quote!(#base_path::#constant_type_name)
+                        } else {
+                            parse_quote!(tinkerforge_base::byte_converter::ParsedOrRaw<#base_path::#constant_type_name,#transfer_type>)
+                        },
+                        parse_quote!(#extra_ident)
+                    )
+                } else {
+                    (parse_quote!(#base_type), parse_quote!( #extra_ident))
+                });
+            }
+            if found_types.len() == 1 && element_entry.cardinality > 1 {
+                if let [(base_type, ident)] = &found_types[..] {
+                    vec![(parse_quote!([#base_type;#repeat_count]), ident.clone())].into()
+                } else {
+                    panic!("Invalid");
                 }
-            };
-        for (ty, ident) in create_fields.into_iter().cloned() {
+            } else if found_types.len() == repeat_count {
+                found_types.into_boxed_slice()
+            } else {
+                panic!(
+                    "Count mismatch {} != {}",
+                    found_types.len(),
+                    element_entry.cardinality
+                );
+            }
+        };
+        for (ty, ident) in create_fields.iter().cloned() {
             fields.push((
                 Field {
                     attrs: vec![],
@@ -518,11 +790,14 @@ fn parse_packet_elements(
                     colon_token: None,
                     ty,
                 },
-                field_size,
+                element_entry,
             ));
         }
     }
-    (in_fields, out_fields)
+    ParsedPacketFields {
+        in_fields,
+        out_fields,
+    }
 }
 
 fn process_constant_group(items: &mut Vec<Item>, element: &JsonElement, group: &JsonConstantGroup) {
@@ -544,11 +819,11 @@ fn process_constant_group(items: &mut Vec<Item>, element: &JsonElement, group: &
         parse_arms.push(parse_quote!(#value => Ok(#enum_name_ident::#variant_ident)))
     }
     items.push(parse_quote!(
-    #[derive(Copy,Clone,Eq,PartialEq,Debug)]
-    pub enum #enum_name_ident{
-        #variants
-    }
-));
+        #[derive(Copy,Clone,Eq,PartialEq,Debug)]
+        pub enum #enum_name_ident{
+            #variants
+        }
+    ));
     let encode_match = ExprMatch {
         attrs: vec![],
         match_token: Default::default(),
@@ -567,39 +842,39 @@ fn process_constant_group(items: &mut Vec<Item>, element: &JsonElement, group: &
     };
 
     items.push(Item::Impl(parse_quote!(
-    impl Into<#ty> for #enum_name_ident {
-        fn into(self) -> #ty {
-            #encode_match
+        impl Into<#ty> for #enum_name_ident {
+            fn into(self) -> #ty {
+                #encode_match
+            }
         }
-    }
-)));
+    )));
     items.push(parse_quote!(
-    impl tinkerforge_base::byte_converter::ToBytes for #enum_name_ident {
-        fn write_to_slice(&self,target: &mut [u8])->usize{
-            <#enum_name_ident as Into<#ty>>::into(*self).write_to_slice(target)
+        impl tinkerforge_base::byte_converter::ToBytes for #enum_name_ident {
+            fn write_to_slice(&self,target: &mut [u8])->usize{
+                <#enum_name_ident as Into<#ty>>::into(*self).write_to_slice(target)
+            }
         }
-    }
-));
+    ));
     let type_size = ty.bytecount(1);
     items.push(parse_quote!(
-    impl tinkerforge_base::byte_converter::FromByteSlice for #enum_name_ident {
-        fn from_le_byte_slice(bytes: &[u8])->Self{
-            #ty::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
+        impl tinkerforge_base::byte_converter::FromByteSlice for #enum_name_ident {
+            fn from_le_byte_slice(bytes: &[u8])->Self{
+                #ty::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
+            }
+            fn bytes_expected() -> usize{
+                #type_size
+            }
         }
-        fn bytes_expected() -> usize{
-            #type_size
-        }
-    }
-));
+    ));
 
     items.push(Item::Impl(parse_quote!(
-    impl std::convert::TryInto<#enum_name_ident> for #ty {
-        type Error = ();
-        fn try_into(self) -> Result<#enum_name_ident, Self::Error> {
-            #parse_match
+        impl std::convert::TryInto<#enum_name_ident> for #ty {
+            type Error = ();
+            fn try_into(self) -> Result<#enum_name_ident, Self::Error> {
+                #parse_match
+            }
         }
-    }
-)));
+    )));
 }
 
 fn create_ident(string: &str) -> Ident {
@@ -617,22 +892,37 @@ fn create_ident(string: &str) -> Ident {
 }
 
 fn match_self(arms: Vec<Arm>) -> ExprMatch {
-    ExprMatch { attrs: vec![], match_token: Default::default(), expr: Box::new(parse_quote!(self)), brace_token: Default::default(), arms }
+    ExprMatch {
+        attrs: vec![],
+        match_token: Default::default(),
+        expr: Box::new(parse_quote!(self)),
+        brace_token: Default::default(),
+        arms,
+    }
 }
 
-fn append_data_object(items: &mut Vec<Item>, fields: &[(Field, usize)], struct_name: &Ident) -> usize {
+fn append_data_object<F: FieldWithSize>(
+    items: &mut Vec<Item>,
+    fields: &[F],
+    struct_name: &Ident,
+) -> usize {
     let mut reader_statements = Vec::<Stmt>::new();
     let mut writer_statements = Vec::<Stmt>::new();
     let mut initialization_fields = Punctuated::<FieldValue, Comma>::new();
     let mut offset = 0;
     let mut struct_fields = Punctuated::<Field, Comma>::new();
-    for (field, size) in fields.iter() {
+    for field in fields.iter() {
+        let size = field.size();
+        let field = field.field();
         if let Some(field_name) = &field.ident {
             let offset_before: Lit = parse_quote!(#offset);
-            offset += *size;
+            offset += size;
             let offset_after: Lit = parse_quote!(#offset);
-            let read_method_call =
-                static_method_call(&field.ty, parse_quote!(from_le_byte_slice), parse_quote!((&bytes[#offset_before..#offset_after])));
+            let read_method_call = static_method_call(
+                &field.ty,
+                parse_quote!(from_le_byte_slice),
+                parse_quote!((&bytes[#offset_before..#offset_after])),
+            );
             reader_statements.push(parse_quote!(let #field_name = #read_method_call;));
             initialization_fields.push(parse_quote!(#field_name));
             writer_statements.push(parse_quote!((&self.#field_name).write_to_slice(&mut target[#offset_before..#offset_after]);));
@@ -641,38 +931,55 @@ fn append_data_object(items: &mut Vec<Item>, fields: &[(Field, usize)], struct_n
     }
     let total_size: Lit = parse_quote!(#offset);
     items.push(parse_quote!(
-    #[derive(Copy, Clone, PartialEq, Debug)]
-    pub struct #struct_name {
-        #struct_fields
-    }
+        #[derive(Copy, Clone, PartialEq, Debug)]
+        pub struct #struct_name {
+            #struct_fields
+        }
 
-));
+    ));
 
     reader_statements.push(Stmt::Expr(parse_quote!(Self{#initialization_fields}), None));
-    let read_fields = Block { brace_token: Default::default(), stmts: reader_statements };
+    let read_fields = Block {
+        brace_token: Default::default(),
+        stmts: reader_statements,
+    };
     items.push(parse_quote!(
-   impl tinkerforge_base::byte_converter::FromByteSlice for #struct_name {
-   fn from_le_byte_slice(bytes: &[u8]) -> Self
-           #read_fields
-   fn bytes_expected() -> usize {
-     #total_size
-   }
-}));
+       impl tinkerforge_base::byte_converter::FromByteSlice for #struct_name {
+       fn from_le_byte_slice(bytes: &[u8]) -> Self
+               #read_fields
+       fn bytes_expected() -> usize {
+         #total_size
+       }
+    }));
     writer_statements.push(parse_quote!(return #total_size;));
-    let write_fields = Block { brace_token: Default::default(), stmts: writer_statements };
+    let write_fields = Block {
+        brace_token: Default::default(),
+        stmts: writer_statements,
+    };
     items.push(parse_quote!(
-     impl tinkerforge_base::byte_converter::ToBytes for #struct_name {
-        fn write_to_slice(&self, target: &mut [u8])->usize
-            #write_fields
-    }
-));
+         impl tinkerforge_base::byte_converter::ToBytes for #struct_name {
+            fn write_to_slice(&self, target: &mut [u8])->usize
+                #write_fields
+        }
+    ));
     offset
 }
 
 fn static_method_call(ty: &Type, method: Ident, args: Punctuated<Expr, Comma>) -> Expr {
-    if let Type::Path(TypePath { qself: None, path: Path { leading_colon: _, segments } }) = &ty {
+    if let Type::Path(TypePath {
+                          qself: None,
+                          path: Path {
+                              leading_colon: _,
+                              segments,
+                          },
+                      }) = &ty
+    {
         let seg = segments.last();
-        if let Some(PathSegment { ident, arguments: PathArguments::AngleBracketed(bracketed) }) = seg {
+        if let Some(PathSegment {
+                        ident,
+                        arguments: PathArguments::AngleBracketed(bracketed),
+                    }) = seg
+        {
             return if segments.len() > 1 {
                 let mut type_path: Punctuated<PathSegment, PathSep> = Punctuated::new();
                 for segment in segments.iter().take(segments.len() - 1) {

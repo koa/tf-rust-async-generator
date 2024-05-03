@@ -11,7 +11,6 @@ pub trait ToBytes {
     fn write_to_slice(&self, target: &mut [u8]) -> usize;
 }
 
-
 /// A trait to deserialize the implemeting type from a byte slice.
 pub trait FromByteSlice {
     /// Deserialize the implementing type from a byte slice.
@@ -53,6 +52,13 @@ impl<const N: usize> ToBytes for [u8; N] {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
         write_bytes_to_target(self, target);
         N
+    }
+}
+
+impl ToBytes for [u8] {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
+        target.copy_from_slice(&self);
+        self.len()
     }
 }
 
@@ -112,6 +118,15 @@ impl<const N: usize> ToBytes for [char; N] {
     }
 }
 
+impl ToBytes for [char] {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
+        for (idx, char) in self.iter().enumerate() {
+            *(target.get_mut(idx).expect("slice too small")) = *char as u8;
+        }
+        self.len()
+    }
+}
+
 impl<const N: usize> ToBytes for [f32; N] {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
         write_bytes_to_target(self, target);
@@ -120,7 +135,10 @@ impl<const N: usize> ToBytes for [f32; N] {
 }
 
 #[inline]
-fn write_bytes_to_target<T: Default + Copy + FromByteSlice + ToBytes, const N: usize>(value: &[T; N], target: &mut [u8]) {
+fn write_bytes_to_target<T: Default + Copy + FromByteSlice + ToBytes, const N: usize>(
+    value: &[T; N],
+    target: &mut [u8],
+) {
     let component_size = T::bytes_expected();
     for i in 0..N {
         value[i].write_to_slice(&mut target[i * component_size..(i + 1) * component_size]);
@@ -154,7 +172,9 @@ impl ToBytes for &[bool] {
 }
 
 impl ToBytes for () {
-    fn write_to_slice(&self, _target: &mut [u8]) -> usize { 0 }
+    fn write_to_slice(&self, _target: &mut [u8]) -> usize {
+        0
+    }
 }
 
 impl FromByteSlice for () {
@@ -219,7 +239,7 @@ impl FromByteSlice for i8 {
 impl ToBytes for u16 {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
         LittleEndian::write_u16(target, *self);
-        1
+        2
     }
 }
 
@@ -344,7 +364,7 @@ impl ToBytes for String {
 }
 
 impl ToBytes for f32 {
-    fn write_to_slice(&self, target: &mut [u8])->usize {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
         LittleEndian::write_f32(target, *self);
         4
     }
@@ -361,7 +381,7 @@ impl FromByteSlice for f32 {
 }
 
 impl ToBytes for f64 {
-    fn write_to_slice(&self, target: &mut [u8])->usize {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
         LittleEndian::write_f64(target, *self);
         8
     }
@@ -442,7 +462,7 @@ impl<P, R> ToBytes for ParsedOrRaw<P, R>
         P: Into<R> + Debug + Clone + Copy,
         R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
 {
-    fn write_to_slice(&self, target: &mut [u8])->usize {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
         let raw_value = match self {
             ParsedOrRaw::Parsed(v) => (*v).into(),
             ParsedOrRaw::Raw(v) => *v,

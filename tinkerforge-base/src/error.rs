@@ -1,7 +1,4 @@
-use std::{
-    array::TryFromSliceError,
-    io
-};
+use std::{array::TryFromSliceError, io};
 use thiserror::Error;
 use tokio_stream::wrappers::errors::BroadcastStreamRecvError;
 

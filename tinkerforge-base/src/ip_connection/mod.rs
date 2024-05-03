@@ -6,11 +6,11 @@ use std::{
 
 use tokio_stream::wrappers::errors::BroadcastStreamRecvError;
 
+use crate::ip_connection::async_io::PacketData;
 use crate::{
     base58::{Base58Error, Uid},
     byte_converter::{FromByteSlice, ToBytes},
 };
-use crate::ip_connection::async_io::PacketData;
 
 pub mod async_io;
 
@@ -25,8 +25,21 @@ pub struct PacketHeader {
 }
 
 impl PacketHeader {
-    pub fn with_payload(uid: Uid, function_id: u8, sequence_number: u8, response_expected: bool, payload_len: u8) -> PacketHeader {
-        PacketHeader { uid, length: PacketHeader::SIZE as u8 + payload_len, function_id, sequence_number, response_expected, error_code: 0 }
+    pub fn with_payload(
+        uid: Uid,
+        function_id: u8,
+        sequence_number: u8,
+        response_expected: bool,
+        payload_len: u8,
+    ) -> PacketHeader {
+        PacketHeader {
+            uid,
+            length: PacketHeader::SIZE as u8 + payload_len,
+            function_id,
+            sequence_number,
+            response_expected,
+            error_code: 0,
+        }
     }
 
     pub const SIZE: usize = 8;
@@ -50,7 +63,7 @@ impl FromByteSlice for PacketHeader {
 }
 
 impl ToBytes for PacketHeader {
-    fn write_to_slice(&self, target: &mut [u8])->usize {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
         self.uid.write_to_slice(&mut target[0..4]);
         target[4] = self.length;
         target[5] = self.function_id;
@@ -109,7 +122,11 @@ impl Debug for Version {
 
 impl FromByteSlice for Version {
     fn from_le_byte_slice(bytes: &[u8]) -> Self {
-        Version { major: bytes[0], minor: bytes[1], patch: bytes[2] }
+        Version {
+            major: bytes[0],
+            minor: bytes[1],
+            patch: bytes[2],
+        }
     }
 
     fn bytes_expected() -> usize {
@@ -118,7 +135,7 @@ impl FromByteSlice for Version {
 }
 
 impl ToBytes for Version {
-    fn write_to_slice(&self, target: &mut [u8])->usize {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
         target[0] = self.major;
         target[1] = self.minor;
         target[2] = self.patch;
@@ -152,22 +169,28 @@ pub struct EnumerateResponse {
 }
 
 impl EnumerateResponse {
-    pub fn extract_enumeration_packet(p: Result<PacketData, BroadcastStreamRecvError>) -> Option<EnumerateResponse> {
+    pub fn extract_enumeration_packet(
+        p: Result<PacketData, BroadcastStreamRecvError>,
+    ) -> Option<EnumerateResponse> {
         match p {
-            Ok(p) if p.header().function_id == 253 => Result::<EnumerateResponse, Base58Error>::from_le_byte_slice(p.body()).ok(),
+            Ok(p) if p.header().function_id == 253 => {
+                Result::<EnumerateResponse, Base58Error>::from_le_byte_slice(p.body()).ok()
+            }
             _ => None,
         }
     }
 }
 
-
 impl FromByteSlice for Result<EnumerateResponse, Base58Error> {
     fn from_le_byte_slice(bytes: &[u8]) -> Result<EnumerateResponse, Base58Error> {
         let uid = Uid::from_str(
-            &str::from_utf8(&bytes[0..8]).expect("Could not convert to string. This is a bug in the rust bindings.").replace('\u{0}', ""),
+            &str::from_utf8(&bytes[0..8])
+                .expect("Could not convert to string. This is a bug in the rust bindings.")
+                .replace('\u{0}', ""),
         )?;
-        let string =
-            str::from_utf8(&bytes[8..16]).expect("Could not convert to string. This is a bug in the rust bindings.").replace('\u{0}', "");
+        let string = str::from_utf8(&bytes[8..16])
+            .expect("Could not convert to string. This is a bug in the rust bindings.")
+            .replace('\u{0}', "");
         let connected_uid = Uid::from_str(&string)?;
         Ok(EnumerateResponse {
             uid,
