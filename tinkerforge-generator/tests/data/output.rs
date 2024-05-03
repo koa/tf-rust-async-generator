@@ -1,17 +1,14 @@
 pub mod master {
     #[allow(unused_imports)]
-    use std::convert::TryInto;
-
-    #[allow(unused_imports)]
-        use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
+    use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
     #[allow(unused_imports)]
     use tokio_stream::StreamExt;
-
+    #[allow(unused_imports)]
+    use std::convert::TryInto;
     #[derive(Clone, Debug)]
     pub struct MasterBrick {
         device: tinkerforge_base::device::Device,
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum ExtensionType {
         Chibi,
@@ -20,7 +17,6 @@ pub mod master {
         Ethernet,
         Wifi2,
     }
-
     impl Into<u32> for ExtensionType {
         fn into(self) -> u32 {
             match self {
@@ -32,13 +28,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ExtensionType {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <ExtensionType as Into<u32>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for ExtensionType {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u32::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -47,7 +41,6 @@ pub mod master {
             4usize
         }
     }
-
     impl std::convert::TryInto<ExtensionType> for u32 {
         type Error = ();
         fn try_into(self) -> Result<ExtensionType, Self::Error> {
@@ -61,13 +54,11 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetExtensionTypeRequest {
         pub extension: u8,
         pub exttype: crate::bindings::master::ExtensionType,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for SetExtensionTypeRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let extension = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -80,7 +71,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetExtensionTypeRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.extension).write_to_slice(&mut target[0usize..1usize]);
@@ -88,13 +78,11 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetChibiSlaveAddressRequest {
         pub num: u8,
         pub address: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetChibiSlaveAddressRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -106,7 +94,6 @@ pub mod master {
             2usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetChibiSlaveAddressRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.num).write_to_slice(&mut target[0usize..1usize]);
@@ -114,7 +101,6 @@ pub mod master {
             return 2usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetChibiErrorLogResponse {
         pub underrun: u16,
@@ -122,7 +108,6 @@ pub mod master {
         pub no_ack: u16,
         pub overflow: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetChibiErrorLogResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let underrun = u16::from_le_byte_slice(&bytes[0usize..2usize]);
@@ -140,7 +125,6 @@ pub mod master {
             8usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetChibiErrorLogResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.underrun).write_to_slice(&mut target[0usize..2usize]);
@@ -150,7 +134,6 @@ pub mod master {
             return 8usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum ChibiFrequency {
         Oqpsk868MHz,
@@ -158,7 +141,6 @@ pub mod master {
         Oqpsk780MHz,
         Bpsk40915MHz,
     }
-
     impl Into<u8> for ChibiFrequency {
         fn into(self) -> u8 {
             match self {
@@ -169,13 +151,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ChibiFrequency {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <ChibiFrequency as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for ChibiFrequency {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -184,7 +164,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<ChibiFrequency> for u8 {
         type Error = ();
         fn try_into(self) -> Result<ChibiFrequency, Self::Error> {
@@ -197,13 +176,11 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetRs485SlaveAddressRequest {
         pub num: u8,
         pub address: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetRs485SlaveAddressRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -215,7 +192,6 @@ pub mod master {
             2usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetRs485SlaveAddressRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.num).write_to_slice(&mut target[0usize..1usize]);
@@ -223,14 +199,12 @@ pub mod master {
             return 2usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Rs485Parity {
         None,
         Even,
         Odd,
     }
-
     impl Into<char> for Rs485Parity {
         fn into(self) -> char {
             match self {
@@ -240,13 +214,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Rs485Parity {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Rs485Parity as Into<char>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Rs485Parity {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             char::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -255,7 +227,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<Rs485Parity> for char {
         type Error = ();
         fn try_into(self) -> Result<Rs485Parity, Self::Error> {
@@ -267,14 +238,12 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetRs485ConfigurationRequest {
         pub speed: u32,
         pub parity: crate::bindings::master::Rs485Parity,
         pub stopbits: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetRs485ConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -289,7 +258,6 @@ pub mod master {
             6usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetRs485ConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.speed).write_to_slice(&mut target[0usize..4usize]);
@@ -298,7 +266,6 @@ pub mod master {
             return 6usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetRs485ConfigurationResponse {
         pub speed: u32,
@@ -308,7 +275,6 @@ pub mod master {
         >,
         pub stopbits: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetRs485ConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -324,7 +290,6 @@ pub mod master {
             6usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetRs485ConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.speed).write_to_slice(&mut target[0usize..4usize]);
@@ -333,7 +298,6 @@ pub mod master {
             return 6usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum WifiConnection {
         Dhcp,
@@ -343,7 +307,6 @@ pub mod master {
         AdHocDhcp,
         AdHocStaticIp,
     }
-
     impl Into<u8> for WifiConnection {
         fn into(self) -> u8 {
             match self {
@@ -356,13 +319,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WifiConnection {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <WifiConnection as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiConnection {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -371,7 +332,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<WifiConnection> for u8 {
         type Error = ();
         fn try_into(self) -> Result<WifiConnection, Self::Error> {
@@ -386,7 +346,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetWifiConfigurationRequest {
         pub ssid: [char; 32usize],
@@ -396,7 +355,6 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub port: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetWifiConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -423,7 +381,6 @@ pub mod master {
             47usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetWifiConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.ssid).write_to_slice(&mut target[0usize..32usize]);
@@ -435,7 +392,6 @@ pub mod master {
             return 47usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifiConfigurationResponse {
         pub ssid: [char; 32usize],
@@ -448,7 +404,6 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub port: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifiConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -476,7 +431,6 @@ pub mod master {
             47usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.ssid).write_to_slice(&mut target[0usize..32usize]);
@@ -488,7 +442,6 @@ pub mod master {
             return 47usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum WifiEncryption {
         WpaWpa2,
@@ -496,7 +449,6 @@ pub mod master {
         Wep,
         NoEncryption,
     }
-
     impl Into<u8> for WifiEncryption {
         fn into(self) -> u8 {
             match self {
@@ -507,13 +459,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WifiEncryption {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <WifiEncryption as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiEncryption {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -522,7 +472,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<WifiEncryption> for u8 {
         type Error = ();
         fn try_into(self) -> Result<WifiEncryption, Self::Error> {
@@ -535,7 +484,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum WifiEapOption {
         OuterAuthEapFast,
@@ -548,7 +496,6 @@ pub mod master {
         CertTypeClientCert,
         CertTypePrivateKey,
     }
-
     impl Into<u8> for WifiEapOption {
         fn into(self) -> u8 {
             match self {
@@ -564,13 +511,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WifiEapOption {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <WifiEapOption as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiEapOption {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -579,7 +524,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<WifiEapOption> for u8 {
         type Error = ();
         fn try_into(self) -> Result<WifiEapOption, Self::Error> {
@@ -597,7 +541,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetWifiEncryptionRequest {
         pub encryption: crate::bindings::master::WifiEncryption,
@@ -608,7 +551,6 @@ pub mod master {
         pub client_certificate_length: u16,
         pub private_key_length: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for SetWifiEncryptionRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let encryption = crate::bindings::master::WifiEncryption::from_le_byte_slice(
@@ -640,7 +582,6 @@ pub mod master {
             59usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetWifiEncryptionRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.encryption).write_to_slice(&mut target[0usize..1usize]);
@@ -654,7 +595,6 @@ pub mod master {
             return 59usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifiEncryptionResponse {
         pub encryption: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -671,7 +611,6 @@ pub mod master {
         pub client_certificate_length: u16,
         pub private_key_length: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetWifiEncryptionResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let encryption = tinkerforge_base::byte_converter::ParsedOrRaw::<
@@ -705,7 +644,6 @@ pub mod master {
             59usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiEncryptionResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.encryption).write_to_slice(&mut target[0usize..1usize]);
@@ -719,7 +657,6 @@ pub mod master {
             return 59usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum WifiState {
         Disassociated,
@@ -728,7 +665,6 @@ pub mod master {
         Error,
         NotInitializedYet,
     }
-
     impl Into<u8> for WifiState {
         fn into(self) -> u8 {
             match self {
@@ -740,13 +676,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WifiState {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <WifiState as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiState {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -755,7 +689,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<WifiState> for u8 {
         type Error = ();
         fn try_into(self) -> Result<WifiState, Self::Error> {
@@ -769,7 +702,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifiStatusResponse {
         pub mac_address: [u8; 6usize],
@@ -786,7 +718,6 @@ pub mod master {
             u8,
         >,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetWifiStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let mac_address = <[u8; 6usize]>::from_le_byte_slice(&bytes[0usize..6usize]);
@@ -821,7 +752,6 @@ pub mod master {
             36usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiStatusResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.mac_address).write_to_slice(&mut target[0usize..6usize]);
@@ -837,14 +767,12 @@ pub mod master {
             return 36usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetWifiCertificateRequest {
         pub index: u16,
         pub data: [u8; 32usize],
         pub data_length: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for SetWifiCertificateRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u16::from_le_byte_slice(&bytes[0usize..2usize]);
@@ -856,7 +784,6 @@ pub mod master {
             35usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetWifiCertificateRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..2usize]);
@@ -865,13 +792,11 @@ pub mod master {
             return 35usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifiCertificateResponse {
         pub data: [u8; 32usize],
         pub data_length: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetWifiCertificateResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let data = <[u8; 32usize]>::from_le_byte_slice(&bytes[0usize..32usize]);
@@ -882,7 +807,6 @@ pub mod master {
             33usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiCertificateResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.data).write_to_slice(&mut target[0usize..32usize]);
@@ -890,13 +814,11 @@ pub mod master {
             return 33usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum WifiPowerMode {
         FullSpeed,
         LowPower,
     }
-
     impl Into<u8> for WifiPowerMode {
         fn into(self) -> u8 {
             match self {
@@ -905,13 +827,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WifiPowerMode {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <WifiPowerMode as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiPowerMode {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -920,7 +840,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<WifiPowerMode> for u8 {
         type Error = ();
         fn try_into(self) -> Result<WifiPowerMode, Self::Error> {
@@ -931,14 +850,12 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifiBufferInfoResponse {
         pub overflow: u32,
         pub low_watermark: u16,
         pub used: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetWifiBufferInfoResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let overflow = u32::from_le_byte_slice(&bytes[0usize..4usize]);
@@ -954,7 +871,6 @@ pub mod master {
             8usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifiBufferInfoResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.overflow).write_to_slice(&mut target[0usize..4usize]);
@@ -963,14 +879,12 @@ pub mod master {
             return 8usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum WifiDomain {
         Channel1To11,
         Channel1To13,
         Channel1To14,
     }
-
     impl Into<u8> for WifiDomain {
         fn into(self) -> u8 {
             match self {
@@ -980,13 +894,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WifiDomain {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <WifiDomain as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WifiDomain {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -995,7 +907,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<WifiDomain> for u8 {
         type Error = ();
         fn try_into(self) -> Result<WifiDomain, Self::Error> {
@@ -1007,7 +918,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum ThresholdOption {
         Off,
@@ -1016,7 +926,6 @@ pub mod master {
         Smaller,
         Greater,
     }
-
     impl Into<char> for ThresholdOption {
         fn into(self) -> char {
             match self {
@@ -1028,13 +937,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ThresholdOption {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <ThresholdOption as Into<char>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for ThresholdOption {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             char::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -1043,7 +950,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<ThresholdOption> for char {
         type Error = ();
         fn try_into(self) -> Result<ThresholdOption, Self::Error> {
@@ -1057,14 +963,12 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetStackCurrentCallbackThresholdRequest {
         pub option: crate::bindings::master::ThresholdOption,
         pub min: u16,
         pub max: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetStackCurrentCallbackThresholdRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1079,7 +983,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetStackCurrentCallbackThresholdRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1089,7 +992,6 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetStackCurrentCallbackThresholdResponse {
         pub option: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -1099,7 +1001,6 @@ pub mod master {
         pub min: u16,
         pub max: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetStackCurrentCallbackThresholdResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1115,7 +1016,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetStackCurrentCallbackThresholdResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1125,14 +1025,12 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetStackVoltageCallbackThresholdRequest {
         pub option: crate::bindings::master::ThresholdOption,
         pub min: u16,
         pub max: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetStackVoltageCallbackThresholdRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1147,7 +1045,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetStackVoltageCallbackThresholdRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1157,7 +1054,6 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetStackVoltageCallbackThresholdResponse {
         pub option: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -1167,7 +1063,6 @@ pub mod master {
         pub min: u16,
         pub max: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetStackVoltageCallbackThresholdResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1183,7 +1078,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetStackVoltageCallbackThresholdResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1193,14 +1087,12 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetUsbVoltageCallbackThresholdRequest {
         pub option: crate::bindings::master::ThresholdOption,
         pub min: u16,
         pub max: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetUsbVoltageCallbackThresholdRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1215,7 +1107,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetUsbVoltageCallbackThresholdRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1225,7 +1116,6 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetUsbVoltageCallbackThresholdResponse {
         pub option: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -1235,7 +1125,6 @@ pub mod master {
         pub min: u16,
         pub max: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetUsbVoltageCallbackThresholdResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1251,7 +1140,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetUsbVoltageCallbackThresholdResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1261,13 +1149,11 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum EthernetConnection {
         Dhcp,
         StaticIp,
     }
-
     impl Into<u8> for EthernetConnection {
         fn into(self) -> u8 {
             match self {
@@ -1276,13 +1162,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for EthernetConnection {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <EthernetConnection as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for EthernetConnection {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -1291,7 +1175,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<EthernetConnection> for u8 {
         type Error = ();
         fn try_into(self) -> Result<EthernetConnection, Self::Error> {
@@ -1302,7 +1185,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetEthernetConfigurationRequest {
         pub connection: crate::bindings::master::EthernetConnection,
@@ -1311,7 +1193,6 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub port: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetEthernetConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1334,7 +1215,6 @@ pub mod master {
             15usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetEthernetConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.connection).write_to_slice(&mut target[0usize..1usize]);
@@ -1345,7 +1225,6 @@ pub mod master {
             return 15usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetEthernetConfigurationResponse {
         pub connection: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -1357,7 +1236,6 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub port: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetEthernetConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1381,7 +1259,6 @@ pub mod master {
             15usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetEthernetConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.connection).write_to_slice(&mut target[0usize..1usize]);
@@ -1392,7 +1269,6 @@ pub mod master {
             return 15usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetEthernetStatusResponse {
         pub mac_address: [u8; 6usize],
@@ -1403,7 +1279,6 @@ pub mod master {
         pub tx_count: u32,
         pub hostname: [char; 32usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetEthernetStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let mac_address = <[u8; 6usize]>::from_le_byte_slice(&bytes[0usize..6usize]);
@@ -1431,7 +1306,6 @@ pub mod master {
             58usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetEthernetStatusResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.mac_address).write_to_slice(&mut target[0usize..6usize]);
@@ -1444,13 +1318,11 @@ pub mod master {
             return 58usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetEthernetWebsocketConfigurationRequest {
         pub sockets: u8,
         pub port: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetEthernetWebsocketConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1462,7 +1334,6 @@ pub mod master {
             3usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetEthernetWebsocketConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1471,13 +1342,11 @@ pub mod master {
             return 3usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetEthernetWebsocketConfigurationResponse {
         pub sockets: u8,
         pub port: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetEthernetWebsocketConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1489,7 +1358,6 @@ pub mod master {
             3usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetEthernetWebsocketConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1498,7 +1366,6 @@ pub mod master {
             return 3usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum ConnectionType {
         None,
@@ -1510,7 +1377,6 @@ pub mod master {
         Ethernet,
         Wifi2,
     }
-
     impl Into<u8> for ConnectionType {
         fn into(self) -> u8 {
             match self {
@@ -1525,13 +1391,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ConnectionType {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <ConnectionType as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for ConnectionType {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -1540,7 +1404,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<ConnectionType> for u8 {
         type Error = ();
         fn try_into(self) -> Result<ConnectionType, Self::Error> {
@@ -1557,13 +1420,11 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct WriteWifi2SerialPortRequest {
         pub data: [u8; 60usize],
         pub length: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for WriteWifi2SerialPortRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1575,7 +1436,6 @@ pub mod master {
             61usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WriteWifi2SerialPortRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.data).write_to_slice(&mut target[0usize..60usize]);
@@ -1583,13 +1443,11 @@ pub mod master {
             return 61usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct ReadWifi2SerialPortResponse {
         pub data: [u8; 60usize],
         pub result: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for ReadWifi2SerialPortResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1601,7 +1459,6 @@ pub mod master {
             61usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ReadWifi2SerialPortResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.data).write_to_slice(&mut target[0usize..60usize]);
@@ -1609,14 +1466,12 @@ pub mod master {
             return 61usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Wifi2PhyMode {
         B,
         G,
         N,
     }
-
     impl Into<u8> for Wifi2PhyMode {
         fn into(self) -> u8 {
             match self {
@@ -1626,13 +1481,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Wifi2PhyMode {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Wifi2PhyMode as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2PhyMode {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -1641,7 +1494,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<Wifi2PhyMode> for u8 {
         type Error = ();
         fn try_into(self) -> Result<Wifi2PhyMode, Self::Error> {
@@ -1653,7 +1505,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetWifi2ConfigurationRequest {
         pub port: u16,
@@ -1663,7 +1514,6 @@ pub mod master {
         pub sleep_mode: u8,
         pub website: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetWifi2ConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1688,7 +1538,6 @@ pub mod master {
             9usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetWifi2ConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.port).write_to_slice(&mut target[0usize..2usize]);
@@ -1700,7 +1549,6 @@ pub mod master {
             return 9usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2ConfigurationResponse {
         pub port: u16,
@@ -1713,7 +1561,6 @@ pub mod master {
         pub sleep_mode: u8,
         pub website: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifi2ConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1739,7 +1586,6 @@ pub mod master {
             9usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2ConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.port).write_to_slice(&mut target[0usize..2usize]);
@@ -1751,7 +1597,6 @@ pub mod master {
             return 9usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Wifi2ClientStatus {
         Idle,
@@ -1762,7 +1607,6 @@ pub mod master {
         GotIp,
         Unknown,
     }
-
     impl Into<u8> for Wifi2ClientStatus {
         fn into(self) -> u8 {
             match self {
@@ -1776,13 +1620,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Wifi2ClientStatus {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Wifi2ClientStatus as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2ClientStatus {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -1791,7 +1633,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<Wifi2ClientStatus> for u8 {
         type Error = ();
         fn try_into(self) -> Result<Wifi2ClientStatus, Self::Error> {
@@ -1807,7 +1648,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2StatusResponse {
         pub client_enabled: bool,
@@ -1831,7 +1671,6 @@ pub mod master {
         pub ap_tx_count: u32,
         pub ap_connected_count: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetWifi2StatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let client_enabled = bool::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -1890,7 +1729,6 @@ pub mod master {
             57usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2StatusResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.client_enabled).write_to_slice(&mut target[0usize..1usize]);
@@ -1913,7 +1751,6 @@ pub mod master {
             return 57usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetWifi2ClientConfigurationRequest {
         pub enable: bool,
@@ -1924,7 +1761,6 @@ pub mod master {
         pub mac_address: [u8; 6usize],
         pub bssid: [u8; 6usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetWifi2ClientConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -1953,7 +1789,6 @@ pub mod master {
             57usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetWifi2ClientConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -1967,7 +1802,6 @@ pub mod master {
             return 57usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2ClientConfigurationResponse {
         pub enable: bool,
@@ -1978,7 +1812,6 @@ pub mod master {
         pub mac_address: [u8; 6usize],
         pub bssid: [u8; 6usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifi2ClientConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2007,7 +1840,6 @@ pub mod master {
             57usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetWifi2ClientConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -2021,7 +1853,6 @@ pub mod master {
             return 57usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Wifi2ApEncryption {
         Open,
@@ -2030,7 +1861,6 @@ pub mod master {
         Wpa2Psk,
         WpaWpa2Psk,
     }
-
     impl Into<u8> for Wifi2ApEncryption {
         fn into(self) -> u8 {
             match self {
@@ -2042,13 +1872,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Wifi2ApEncryption {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Wifi2ApEncryption as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2ApEncryption {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -2057,7 +1885,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<Wifi2ApEncryption> for u8 {
         type Error = ();
         fn try_into(self) -> Result<Wifi2ApEncryption, Self::Error> {
@@ -2071,7 +1898,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetWifi2ApConfigurationRequest {
         pub enable: bool,
@@ -2084,7 +1910,6 @@ pub mod master {
         pub channel: u8,
         pub mac_address: [u8; 6usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetWifi2ApConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2119,7 +1944,6 @@ pub mod master {
             54usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetWifi2ApConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.enable).write_to_slice(&mut target[0usize..1usize]);
@@ -2134,7 +1958,6 @@ pub mod master {
             return 54usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2ApConfigurationResponse {
         pub enable: bool,
@@ -2150,7 +1973,6 @@ pub mod master {
         pub channel: u8,
         pub mac_address: [u8; 6usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifi2ApConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2186,7 +2008,6 @@ pub mod master {
             54usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2ApConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.enable).write_to_slice(&mut target[0usize..1usize]);
@@ -2201,14 +2022,12 @@ pub mod master {
             return 54usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2FirmwareVersionResponse {
         pub firmware_version_major: u8,
         pub firmware_version_minor: u8,
         pub firmware_version_revision: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifi2FirmwareVersionResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2227,7 +2046,6 @@ pub mod master {
             3usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2FirmwareVersionResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.firmware_version_major).write_to_slice(&mut target[0usize..1usize]);
@@ -2237,7 +2055,6 @@ pub mod master {
             return 3usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetWifi2MeshConfigurationRequest {
         pub enable: bool,
@@ -2250,7 +2067,6 @@ pub mod master {
         pub gateway_ip: [u8; 4usize],
         pub gateway_port: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetWifi2MeshConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2289,7 +2105,6 @@ pub mod master {
             47usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetWifi2MeshConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.enable).write_to_slice(&mut target[0usize..1usize]);
@@ -2304,7 +2119,6 @@ pub mod master {
             return 47usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2MeshConfigurationResponse {
         pub enable: bool,
@@ -2317,7 +2131,6 @@ pub mod master {
         pub gateway_ip: [u8; 4usize],
         pub gateway_port: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifi2MeshConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2356,7 +2169,6 @@ pub mod master {
             47usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetWifi2MeshConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -2372,7 +2184,6 @@ pub mod master {
             return 47usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Wifi2MeshStatus {
         Disabled,
@@ -2384,7 +2195,6 @@ pub mod master {
         ApSetup,
         LeafAvailable,
     }
-
     impl Into<u8> for Wifi2MeshStatus {
         fn into(self) -> u8 {
             match self {
@@ -2399,13 +2209,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Wifi2MeshStatus {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Wifi2MeshStatus as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Wifi2MeshStatus {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -2414,7 +2222,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<Wifi2MeshStatus> for u8 {
         type Error = ();
         fn try_into(self) -> Result<Wifi2MeshStatus, Self::Error> {
@@ -2431,7 +2238,6 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2MeshCommonStatusResponse {
         pub status: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -2444,7 +2250,6 @@ pub mod master {
         pub rx_count: u32,
         pub tx_count: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifi2MeshCommonStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2470,7 +2275,6 @@ pub mod master {
             13usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshCommonStatusResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.status).write_to_slice(&mut target[0usize..1usize]);
@@ -2482,7 +2286,6 @@ pub mod master {
             return 13usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2MeshClientStatusResponse {
         pub hostname: [char; 32usize],
@@ -2491,7 +2294,6 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub mac_address: [u8; 6usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifi2MeshClientStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2518,7 +2320,6 @@ pub mod master {
             50usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshClientStatusResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.hostname).write_to_slice(&mut target[0usize..32usize]);
@@ -2529,7 +2330,6 @@ pub mod master {
             return 50usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetWifi2MeshApStatusResponse {
         pub ssid: [char; 32usize],
@@ -2538,7 +2338,6 @@ pub mod master {
         pub gateway: [u8; 4usize],
         pub mac_address: [u8; 6usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetWifi2MeshApStatusResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2563,7 +2362,6 @@ pub mod master {
             50usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetWifi2MeshApStatusResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.ssid).write_to_slice(&mut target[0usize..32usize]);
@@ -2574,7 +2372,6 @@ pub mod master {
             return 50usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetBrickletXmcFlashConfigRequest {
         pub config: u32,
@@ -2582,7 +2379,6 @@ pub mod master {
         pub parameter_2: u32,
         pub data: [u8; 52usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetBrickletXmcFlashConfigRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2601,7 +2397,6 @@ pub mod master {
             64usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetBrickletXmcFlashConfigRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.config).write_to_slice(&mut target[0usize..4usize]);
@@ -2611,13 +2406,11 @@ pub mod master {
             return 64usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetBrickletXmcFlashConfigResponse {
         pub return_value: u32,
         pub return_data: [u8; 60usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetBrickletXmcFlashConfigResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2631,7 +2424,6 @@ pub mod master {
             64usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetBrickletXmcFlashConfigResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -2640,13 +2432,11 @@ pub mod master {
             return 64usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetSpitfpBaudrateConfigRequest {
         pub enable_dynamic_baudrate: bool,
         pub minimum_dynamic_baudrate: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetSpitfpBaudrateConfigRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2665,7 +2455,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetSpitfpBaudrateConfigRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.enable_dynamic_baudrate).write_to_slice(&mut target[0usize..1usize]);
@@ -2673,13 +2462,11 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetSpitfpBaudrateConfigResponse {
         pub enable_dynamic_baudrate: bool,
         pub minimum_dynamic_baudrate: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetSpitfpBaudrateConfigResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2698,7 +2485,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpBaudrateConfigResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.enable_dynamic_baudrate).write_to_slice(&mut target[0usize..1usize]);
@@ -2706,7 +2492,6 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum CommunicationMethod {
         None,
@@ -2718,7 +2503,6 @@ pub mod master {
         Ethernet,
         WifiV2,
     }
-
     impl Into<u8> for CommunicationMethod {
         fn into(self) -> u8 {
             match self {
@@ -2733,13 +2517,11 @@ pub mod master {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for CommunicationMethod {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <CommunicationMethod as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for CommunicationMethod {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -2748,7 +2530,6 @@ pub mod master {
             1usize
         }
     }
-
     impl std::convert::TryInto<CommunicationMethod> for u8 {
         type Error = ();
         fn try_into(self) -> Result<CommunicationMethod, Self::Error> {
@@ -2765,13 +2546,11 @@ pub mod master {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetSpitfpBaudrateRequest {
         pub bricklet_port: char,
         pub baudrate: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for SetSpitfpBaudrateRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let bricklet_port = char::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -2782,7 +2561,6 @@ pub mod master {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetSpitfpBaudrateRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.bricklet_port).write_to_slice(&mut target[0usize..1usize]);
@@ -2790,7 +2568,6 @@ pub mod master {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetSpitfpErrorCountResponse {
         pub error_count_ack_checksum: u32,
@@ -2798,7 +2575,6 @@ pub mod master {
         pub error_count_frame: u32,
         pub error_count_overflow: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetSpitfpErrorCountResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2821,7 +2597,6 @@ pub mod master {
             16usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpErrorCountResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.error_count_ack_checksum).write_to_slice(&mut target[0usize..4usize]);
@@ -2832,7 +2607,6 @@ pub mod master {
             return 16usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetProtocol1BrickletNameResponse {
         pub protocol_version: u8,
@@ -2841,7 +2615,6 @@ pub mod master {
         pub firmware_version_revision: u8,
         pub name: [char; 40usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetProtocol1BrickletNameResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -2864,7 +2637,6 @@ pub mod master {
             44usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetProtocol1BrickletNameResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.protocol_version).write_to_slice(&mut target[0usize..1usize]);
@@ -2876,14 +2648,12 @@ pub mod master {
             return 44usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct WriteBrickletPluginRequest {
         pub port: char,
         pub offset: u8,
         pub chunk: [u8; 32usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WriteBrickletPluginRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let port = char::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -2895,7 +2665,6 @@ pub mod master {
             34usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WriteBrickletPluginRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.port).write_to_slice(&mut target[0usize..1usize]);
@@ -2904,13 +2673,11 @@ pub mod master {
             return 34usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct ReadBrickletPluginRequest {
         pub port: char,
         pub offset: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for ReadBrickletPluginRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let port = char::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -2921,7 +2688,6 @@ pub mod master {
             2usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ReadBrickletPluginRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.port).write_to_slice(&mut target[0usize..1usize]);
@@ -2929,7 +2695,6 @@ pub mod master {
             return 2usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetIdentityResponse {
         pub uid: [char; 8usize],
@@ -2943,7 +2708,6 @@ pub mod master {
         pub firmware_version_revision: u8,
         pub device_identifier: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetIdentityResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let uid = <[char; 8usize]>::from_le_byte_slice(&bytes[0usize..8usize]);
@@ -2987,7 +2751,6 @@ pub mod master {
             25usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetIdentityResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.uid).write_to_slice(&mut target[0usize..8usize]);
@@ -3005,7 +2768,6 @@ pub mod master {
             return 25usize;
         }
     }
-
     impl MasterBrick {
         pub fn new(
             uid: impl Into<tinkerforge_base::base58::Uid>,
@@ -3023,13 +2785,13 @@ pub mod master {
             self.device.uid()
         }
         /**
-        Gibt die Spannung des Stapels zurück. Diese Spannung wird über
-        den Stapel verteilt und kann zum Beispiel über eine Step-Down oder
-        Step-Up Power Supply eingespeist werden.
+Gibt die Spannung des Stapels zurück. Diese Spannung wird über
+den Stapel verteilt und kann zum Beispiel über eine Step-Down oder
+Step-Up Power Supply eingespeist werden.
 
-        .. note::
-         Es ist mit dieser Funktion nicht möglich, Spannungen, die per PoE oder USB eingespeist werden, zu messen.
-         */
+.. note::
+ Es ist mit dieser Funktion nicht möglich, Spannungen, die per PoE oder USB eingespeist werden, zu messen.
+*/
         pub async fn get_stack_voltage(
             &mut self,
         ) -> Result<u16, tinkerforge_base::error::TinkerforgeError> {
@@ -3038,13 +2800,13 @@ pub mod master {
             Ok(u16::from_le_byte_slice(&result.body()[0..2usize]))
         }
         /**
-        Gibt den Stromverbrauch des Stapels zurück. Der angegebene Strom
-        bezieht sich auf den Stromverbrauch der am Stapel angeschlossenen Verbraucher.
-        Die Speisung kann z.B. über eine Step-Down oder Step-Up Power Supply erfolgen.
+Gibt den Stromverbrauch des Stapels zurück. Der angegebene Strom
+bezieht sich auf den Stromverbrauch der am Stapel angeschlossenen Verbraucher.
+Die Speisung kann z.B. über eine Step-Down oder Step-Up Power Supply erfolgen.
 
-        .. note::
-         Es ist mit dieser Funktion nicht möglich, den Stromverbrauch über PoE oder USB zu messen.
-         */
+.. note::
+ Es ist mit dieser Funktion nicht möglich, den Stromverbrauch über PoE oder USB zu messen.
+*/
         pub async fn get_stack_current(
             &mut self,
         ) -> Result<u16, tinkerforge_base::error::TinkerforgeError> {
@@ -3053,26 +2815,26 @@ pub mod master {
             Ok(u16::from_le_byte_slice(&result.body()[0..2usize]))
         }
         /**
-        Schreibt den Typ der Extension in den EEPROM der angegebenen Extension.
-        Die Extension kann entweder 0 oder 1 sein (0 ist die untere, 1
-        die obere, wenn nur eine Extension verfügbar ist, ist 0 zu verwenden)
+Schreibt den Typ der Extension in den EEPROM der angegebenen Extension.
+Die Extension kann entweder 0 oder 1 sein (0 ist die untere, 1
+die obere, wenn nur eine Extension verfügbar ist, ist 0 zu verwenden)
 
-        Mögliche Extensiontypen:
+Mögliche Extensiontypen:
 
-        .. csv-table::
-         :header: "Typ", "Beschreibung"
-         :widths: 10, 100
+.. csv-table::
+ :header: "Typ", "Beschreibung"
+ :widths: 10, 100
 
-         "1",    "Chibi"
-         "2",    "RS485"
-         "3",    "WIFI"
-         "4",    "Ethernet"
-         "5",    "WIFI 2.0"
+ "1",    "Chibi"
+ "2",    "RS485"
+ "3",    "WIFI"
+ "4",    "Ethernet"
+ "5",    "WIFI 2.0"
 
-        Der Typ der Extension ist schon gesetzt beim Erwerb der Extension und kann
-        über den Brick Viewer gesetzt werden. Daher ist es unwahrscheinlich, dass
-        diese Funktion benötigt wird.
-         */
+Der Typ der Extension ist schon gesetzt beim Erwerb der Extension und kann
+über den Brick Viewer gesetzt werden. Daher ist es unwahrscheinlich, dass
+diese Funktion benötigt wird.
+*/
         pub async fn set_extension_type(
             &mut self,
             request: crate::bindings::master::SetExtensionTypeRequest,
@@ -3088,8 +2850,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Typ der angegebenen Extension zurück, wie von :func:`Set Extension Type` gesetzt.
-         */
+Gibt den Typ der angegebenen Extension zurück, wie von :func:`Set Extension Type` gesetzt.
+*/
         pub async fn get_extension_type(
             &mut self,
             request: u8,
@@ -3114,9 +2876,9 @@ pub mod master {
             )
         }
         /**
-        Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
-        Chibi Extension verfügbar ist.
-         */
+Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
+Chibi Extension verfügbar ist.
+*/
         pub async fn is_chibi_present(
             &mut self,
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
@@ -3125,12 +2887,12 @@ pub mod master {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Setzt die zugehörige Adresse der Chibi Extension.
+Setzt die zugehörige Adresse der Chibi Extension.
 
-        Es ist möglich die Adresse mit dem Brick Viewer zu setzen und diese
-        wird im EEPROM der Chibi Extension abgespeichert. Ein Setzen bei
-        jedem Start ist daher nicht notwendig.
-         */
+Es ist möglich die Adresse mit dem Brick Viewer zu setzen und diese
+wird im EEPROM der Chibi Extension abgespeichert. Ein Setzen bei
+jedem Start ist daher nicht notwendig.
+*/
         pub async fn set_chibi_address(
             &mut self,
             request: u8,
@@ -3146,8 +2908,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Adresse zurück, wie von :func:`Set Chibi Address` gesetzt.
-         */
+Gibt die Adresse zurück, wie von :func:`Set Chibi Address` gesetzt.
+*/
         pub async fn get_chibi_address(
             &mut self,
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
@@ -3156,14 +2918,14 @@ pub mod master {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Setzt die Adresse des Chibi Master. Diese Adresse wird verwendet
-        wenn die Chibi Extension als Slave verwendet wird (z.B. wenn keine USB-Verbindung
-        besteht).
+Setzt die Adresse des Chibi Master. Diese Adresse wird verwendet
+wenn die Chibi Extension als Slave verwendet wird (z.B. wenn keine USB-Verbindung
+besteht).
 
-        Es ist möglich die Adresse mit dem Brick Viewer zu setzen und diese wird im
-        EEPROM der Chibi Extension abgespeichert. Ein Setzen bei
-        jedem Start ist daher nicht notwendig.
-         */
+Es ist möglich die Adresse mit dem Brick Viewer zu setzen und diese wird im
+EEPROM der Chibi Extension abgespeichert. Ein Setzen bei
+jedem Start ist daher nicht notwendig.
+*/
         pub async fn set_chibi_master_address(
             &mut self,
             request: u8,
@@ -3179,8 +2941,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Adresse zurück, wie von :func:`Set Chibi Master Address` gesetzt.
-         */
+Gibt die Adresse zurück, wie von :func:`Set Chibi Master Address` gesetzt.
+*/
         pub async fn get_chibi_master_address(
             &mut self,
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
@@ -3189,23 +2951,23 @@ pub mod master {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Setzt bis zu 254 Slave Adressen. 0 hat eine
-        besondere Bedeutung, sie wird zur Terminierung der Liste verwendet und ist nicht
-        als normale Slave Adresse erlaubt.
-        Die Adressnummerierung (mittels :param:`num` Parameter) muss aufsteigend ab
-        0 erfolgen. Beispiel: Wenn die Chibi Extension im Master Modus verwendet wird
-        (z.B. wenn der Stapel eine USB-Verbindung hat) und es soll mit drei weiteren
-        Chibi Stapeln kommuniziert werden, mit den Adressen 17, 23 und 42, sollten die
-        Aufrufe ``(0, 17)``, ``(1, 23)``, ``(2, 42)`` und ``(3, 0)`` sein. Der letzte
-        Aufruf mit ``(3, 0)`` dient der Terminierung der Liste und zeigt an, dass die
-        Chibi Slave Adressliste in diesem Fall 3 Einträge beinhaltet.
+Setzt bis zu 254 Slave Adressen. 0 hat eine
+besondere Bedeutung, sie wird zur Terminierung der Liste verwendet und ist nicht
+als normale Slave Adresse erlaubt.
+Die Adressnummerierung (mittels :param:`num` Parameter) muss aufsteigend ab
+0 erfolgen. Beispiel: Wenn die Chibi Extension im Master Modus verwendet wird
+(z.B. wenn der Stapel eine USB-Verbindung hat) und es soll mit drei weiteren
+Chibi Stapeln kommuniziert werden, mit den Adressen 17, 23 und 42, sollten die
+Aufrufe ``(0, 17)``, ``(1, 23)``, ``(2, 42)`` und ``(3, 0)`` sein. Der letzte
+Aufruf mit ``(3, 0)`` dient der Terminierung der Liste und zeigt an, dass die
+Chibi Slave Adressliste in diesem Fall 3 Einträge beinhaltet.
 
-        Es ist möglich die Adressen mit dem Brick Viewer zu setzen, dieser kümmert sich
-        dann um korrekte Adressnummerierung und Terminierung der Liste.
+Es ist möglich die Adressen mit dem Brick Viewer zu setzen, dieser kümmert sich
+dann um korrekte Adressnummerierung und Terminierung der Liste.
 
-        Die Slave Adresse werden im EEPROM der Chibi Extension abgespeichert. Ein
-        Setzen bei jedem Start ist daher nicht notwendig.
-         */
+Die Slave Adresse werden im EEPROM der Chibi Extension abgespeichert. Ein
+Setzen bei jedem Start ist daher nicht notwendig.
+*/
         pub async fn set_chibi_slave_address(
             &mut self,
             request: crate::bindings::master::SetChibiSlaveAddressRequest,
@@ -3221,9 +2983,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Slave Adresse für eine Adressnummerierung (mittels :param:`num` Parameter)
-        zurück, wie von :func:`Set Chibi Slave Address` gesetzt.
-         */
+Gibt die Slave Adresse für eine Adressnummerierung (mittels :param:`num` Parameter)
+zurück, wie von :func:`Set Chibi Slave Address` gesetzt.
+*/
         pub async fn get_chibi_slave_address(
             &mut self,
             request: u8,
@@ -3237,9 +2999,9 @@ pub mod master {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Gibt die Signalstärke in dBm zurück. Die Aktualisierung der Signalstärke
-        wird bei jedem Empfang eines Paketes durchgeführt.
-         */
+Gibt die Signalstärke in dBm zurück. Die Aktualisierung der Signalstärke
+wird bei jedem Empfang eines Paketes durchgeführt.
+*/
         pub async fn get_chibi_signal_strength(
             &mut self,
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
@@ -3248,11 +3010,11 @@ pub mod master {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Gibt folgende Fehlerzähler der Chibi Kommunikation zurück: Underrun, CRC Fehler,
-        kein ACK und Overflow. Bei Anstieg dieser Fehlerzähler ist es wahrscheinlich, dass
-        entweder die Entfernung zwischen zwei Chibi Stapeln zu groß wird oder Störungen
-        vorliegen.
-         */
+Gibt folgende Fehlerzähler der Chibi Kommunikation zurück: Underrun, CRC Fehler,
+kein ACK und Overflow. Bei Anstieg dieser Fehlerzähler ist es wahrscheinlich, dass
+entweder die Entfernung zwischen zwei Chibi Stapeln zu groß wird oder Störungen
+vorliegen.
+*/
         pub async fn get_chibi_error_log(
             &mut self,
         ) -> Result<
@@ -3268,21 +3030,21 @@ pub mod master {
             )
         }
         /**
-        Setzt den Chibi Frequenzbereich der Chibi Extension. Mögliche Werte sind:
+Setzt den Chibi Frequenzbereich der Chibi Extension. Mögliche Werte sind:
 
-        .. csv-table::
-         :header: "Typ", "Beschreibung"
-         :widths: 10, 100
+.. csv-table::
+ :header: "Typ", "Beschreibung"
+ :widths: 10, 100
 
-         "0",    "OQPSK 868MHz (Europe)"
-         "1",    "OQPSK 915MHz (US)"
-         "2",    "OQPSK 780MHz (China)"
-         "3",    "BPSK40 915MHz"
+ "0",    "OQPSK 868MHz (Europe)"
+ "1",    "OQPSK 915MHz (US)"
+ "2",    "OQPSK 780MHz (China)"
+ "3",    "BPSK40 915MHz"
 
-        Es ist möglich den Frequenzbereich mit dem Brick Viewer zu setzen und dieser wird
-        im EEPROM der Chibi Extension abgespeichert. Ein Setzen bei
-        jedem Start ist daher nicht notwendig.
-         */
+Es ist möglich den Frequenzbereich mit dem Brick Viewer zu setzen und dieser wird
+im EEPROM der Chibi Extension abgespeichert. Ein Setzen bei
+jedem Start ist daher nicht notwendig.
+*/
         pub async fn set_chibi_frequency(
             &mut self,
             request: crate::bindings::master::ChibiFrequency,
@@ -3298,8 +3060,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Frequenzbereich zurück, wie von :func:`Set Chibi Frequency` gesetzt.
-         */
+Gibt den Frequenzbereich zurück, wie von :func:`Set Chibi Frequency` gesetzt.
+*/
         pub async fn get_chibi_frequency(
             &mut self,
         ) -> Result<
@@ -3319,22 +3081,22 @@ pub mod master {
             )
         }
         /**
-        Setzt den verwendeten Kanal der Chibi Extension. Die möglichen Kanäle sind
-        abhängig vom verwendeten Frequenzbereich:
+Setzt den verwendeten Kanal der Chibi Extension. Die möglichen Kanäle sind
+abhängig vom verwendeten Frequenzbereich:
 
-        .. csv-table::
-         :header: "Frequenzbereich", "Mögliche Kanäle"
-         :widths: 40, 60
+.. csv-table::
+ :header: "Frequenzbereich", "Mögliche Kanäle"
+ :widths: 40, 60
 
-         "OQPSK 868MHz (Europe)", "0"
-         "OQPSK 915MHz (US)",     "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
-         "OQPSK 780MHz (China)",  "0, 1, 2, 3"
-         "BPSK40 915MHz",         "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+ "OQPSK 868MHz (Europe)", "0"
+ "OQPSK 915MHz (US)",     "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+ "OQPSK 780MHz (China)",  "0, 1, 2, 3"
+ "BPSK40 915MHz",         "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
 
-        Es ist möglich den Kanal mit dem Brick Viewer zu setzen und dieser wird
-        im EEPROM der Chibi Extension abgespeichert. Ein Setzen bei
-        jedem Start ist daher nicht notwendig.
-         */
+Es ist möglich den Kanal mit dem Brick Viewer zu setzen und dieser wird
+im EEPROM der Chibi Extension abgespeichert. Ein Setzen bei
+jedem Start ist daher nicht notwendig.
+*/
         pub async fn set_chibi_channel(
             &mut self,
             request: u8,
@@ -3350,8 +3112,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Kanal zurück, wie von :func:`Set Chibi Channel` gesetzt.
-         */
+Gibt den Kanal zurück, wie von :func:`Set Chibi Channel` gesetzt.
+*/
         pub async fn get_chibi_channel(
             &mut self,
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
@@ -3360,9 +3122,9 @@ pub mod master {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
-        RS485 Extension verfügbar ist.
-         */
+Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
+RS485 Extension verfügbar ist.
+*/
         pub async fn is_rs_485_present(
             &mut self,
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
@@ -3371,15 +3133,15 @@ pub mod master {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Setzt die zugehörige Adresse (0-255) der RS485 Extension.
+Setzt die zugehörige Adresse (0-255) der RS485 Extension.
 
-        Um eine RS485 Extension als RS485 Master (z.B. verbunden mit einem PC über
-        USB) zu betreiben muss die Adresse auf 0 gesetzt werden.
+Um eine RS485 Extension als RS485 Master (z.B. verbunden mit einem PC über
+USB) zu betreiben muss die Adresse auf 0 gesetzt werden.
 
-        Es ist möglich die Adresse mit dem Brick Viewer zu setzen und diese wird im
-        EEPROM der RS485 Extension abgespeichert. Ein Setzen bei
-        jedem Start ist daher nicht notwendig.
-         */
+Es ist möglich die Adresse mit dem Brick Viewer zu setzen und diese wird im
+EEPROM der RS485 Extension abgespeichert. Ein Setzen bei
+jedem Start ist daher nicht notwendig.
+*/
         pub async fn set_rs_485_address(
             &mut self,
             request: u8,
@@ -3395,8 +3157,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Adresse zurück, wie von :func:`Set RS485 Address` gesetzt.
-         */
+Gibt die Adresse zurück, wie von :func:`Set RS485 Address` gesetzt.
+*/
         pub async fn get_rs_485_address(
             &mut self,
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
@@ -3405,23 +3167,23 @@ pub mod master {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Setzt bis zu 255 Slave Adressen. Gültige Adressen sind 1-255. 0 hat eine
-        besondere Bedeutung, sie wird zur Terminierung der Liste verwendet und ist nicht
-        als normale Slave Adresse erlaubt.
-        Die Adressnummerierung (mittels ``num`` Parameter) muss aufsteigend ab
-        0 erfolgen. Beispiel: Wenn die RS485 Extension im Master Modus verwendet wird
-        (z.B. wenn der Stapel eine USB-Verbindung hat) und es soll mit drei weiteren
-        RS485 Stapeln kommuniziert werden, mit den Adressen 17, 23 und 42, sollten die
-        Aufrufe ``(0, 17)``, ``(1, 23)``, ``(2, 42)`` und ``(3, 0)`` sein. Der letzte
-        Aufruf mit ``(3, 0)`` dient der Terminierung der Liste und zeigt an, dass die
-        RS485 Slave Adressliste in diesem Fall 3 Einträge beinhaltet.
+Setzt bis zu 255 Slave Adressen. Gültige Adressen sind 1-255. 0 hat eine
+besondere Bedeutung, sie wird zur Terminierung der Liste verwendet und ist nicht
+als normale Slave Adresse erlaubt.
+Die Adressnummerierung (mittels ``num`` Parameter) muss aufsteigend ab
+0 erfolgen. Beispiel: Wenn die RS485 Extension im Master Modus verwendet wird
+(z.B. wenn der Stapel eine USB-Verbindung hat) und es soll mit drei weiteren
+RS485 Stapeln kommuniziert werden, mit den Adressen 17, 23 und 42, sollten die
+Aufrufe ``(0, 17)``, ``(1, 23)``, ``(2, 42)`` und ``(3, 0)`` sein. Der letzte
+Aufruf mit ``(3, 0)`` dient der Terminierung der Liste und zeigt an, dass die
+RS485 Slave Adressliste in diesem Fall 3 Einträge beinhaltet.
 
-        Es ist möglich die Adressen mit dem Brick Viewer zu setzen, dieser kümmert sich
-        dann um korrekte Adressnummerierung und Terminierung der Liste.
+Es ist möglich die Adressen mit dem Brick Viewer zu setzen, dieser kümmert sich
+dann um korrekte Adressnummerierung und Terminierung der Liste.
 
-        Die Slave Adresse werden im EEPROM der RS485 Extension abgespeichert. Ein
-        Setzen bei jedem Start ist daher nicht notwendig.
-         */
+Die Slave Adresse werden im EEPROM der RS485 Extension abgespeichert. Ein
+Setzen bei jedem Start ist daher nicht notwendig.
+*/
         pub async fn set_rs_485_slave_address(
             &mut self,
             request: crate::bindings::master::SetRs485SlaveAddressRequest,
@@ -3437,9 +3199,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Slave Adresse für eine Adressnummerierung (mittels ``num`` Parameter)
-        zurück, wie von :func:`Set RS485 Slave Address` gesetzt.
-         */
+Gibt die Slave Adresse für eine Adressnummerierung (mittels ``num`` Parameter)
+zurück, wie von :func:`Set RS485 Slave Address` gesetzt.
+*/
         pub async fn get_rs_485_slave_address(
             &mut self,
             request: u8,
@@ -3453,10 +3215,10 @@ pub mod master {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Gibt den CRC Fehlerzähler der RS485 Kommunikation zurück. Wenn dieser Zähler
-        ansteigt ist es wahrscheinlich, dass der Abstand zwischen zwei RS485-Teilnehmern
-        zu groß ist oder es Störungen gibt.
-         */
+Gibt den CRC Fehlerzähler der RS485 Kommunikation zurück. Wenn dieser Zähler
+ansteigt ist es wahrscheinlich, dass der Abstand zwischen zwei RS485-Teilnehmern
+zu groß ist oder es Störungen gibt.
+*/
         pub async fn get_rs_485_error_log(
             &mut self,
         ) -> Result<u16, tinkerforge_base::error::TinkerforgeError> {
@@ -3465,19 +3227,19 @@ pub mod master {
             Ok(u16::from_le_byte_slice(&result.body()[0..2usize]))
         }
         /**
-        Setzt die Schnittstellenkonfiguration der RS485 Extension.
-        Der Master Brick versucht die vorgegebene Baudrate so
-        genau wie möglich zu erreichen. Die maximale empfohlene Baudrate ist 2000000
-        (2MBd). Mögliche Werte für die Parität sind 'n' (keine), 'e' (gerade) und
-        'o' (ungerade).
+Setzt die Schnittstellenkonfiguration der RS485 Extension.
+Der Master Brick versucht die vorgegebene Baudrate so
+genau wie möglich zu erreichen. Die maximale empfohlene Baudrate ist 2000000
+(2MBd). Mögliche Werte für die Parität sind 'n' (keine), 'e' (gerade) und
+'o' (ungerade).
 
-        Wenn die RS485 Kommunikation instabil ist (verlorene Nachrichten etc.), sollte
-        zuerst die Baudrate verringert werden. Sehr lange Busleitungen (z.B. 1km)
-        sollten möglichst Werte im Bereich von 100000 (100kBd) verwenden.
+Wenn die RS485 Kommunikation instabil ist (verlorene Nachrichten etc.), sollte
+zuerst die Baudrate verringert werden. Sehr lange Busleitungen (z.B. 1km)
+sollten möglichst Werte im Bereich von 100000 (100kBd) verwenden.
 
-        Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt. Dass
-        bedeutet, der Master Brick muss nach einer Konfiguration neu gestartet werden.
-         */
+Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt. Dass
+bedeutet, der Master Brick muss nach einer Konfiguration neu gestartet werden.
+*/
         pub async fn set_rs_485_configuration(
             &mut self,
             request: crate::bindings::master::SetRs485ConfigurationRequest,
@@ -3493,8 +3255,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Schnittstellenkonfiguration zurück, wie von :func:`Set RS485 Configuration` gesetzt.
-         */
+Gibt die Schnittstellenkonfiguration zurück, wie von :func:`Set RS485 Configuration` gesetzt.
+*/
         pub async fn get_rs_485_configuration(
             &mut self,
         ) -> Result<
@@ -3510,9 +3272,9 @@ pub mod master {
             )
         }
         /**
-        Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
-        WIFI Extension verfügbar ist.
-         */
+Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
+WIFI Extension verfügbar ist.
+*/
         pub async fn is_wifi_present(
             &mut self,
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
@@ -3521,35 +3283,35 @@ pub mod master {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Setzt die Konfiguration der WIFI Extension. Die ``ssid`` darf eine maximale
-        Länge von 32 Zeichen haben. Mögliche Werte für ``connection`` sind:
+Setzt die Konfiguration der WIFI Extension. Die ``ssid`` darf eine maximale
+Länge von 32 Zeichen haben. Mögliche Werte für ``connection`` sind:
 
-        .. csv-table::
-         :header: "Wert", "Beschreibung"
-         :widths: 10, 90
+.. csv-table::
+ :header: "Wert", "Beschreibung"
+ :widths: 10, 90
 
-         "0", "DHCP"
-         "1", "Statische IP"
-         "2", "Access Point: DHCP"
-         "3", "Access Point: Statische IP"
-         "4", "Ad Hoc: DHCP"
-         "5", "Ad Hoc: Statische IP"
+ "0", "DHCP"
+ "1", "Statische IP"
+ "2", "Access Point: DHCP"
+ "3", "Access Point: Statische IP"
+ "4", "Ad Hoc: DHCP"
+ "5", "Ad Hoc: Statische IP"
 
-        Wenn ``connection`` auf eine der statische IP Optionen gesetzt wird, dann müssen
-        ``ip``, ``subnet_mask`` und ``gateway`` als ein Array der Größe 4 angegeben
-        werden. Dabei ist das erste Element im Array das niederwertigste Byte. Falls
-        ``connection`` auf eine der DHCP Optionen gesetzt ist, werden ``ip``,
-        ``subnet_mask`` und ``gateway`` ignoriert.
+Wenn ``connection`` auf eine der statische IP Optionen gesetzt wird, dann müssen
+``ip``, ``subnet_mask`` und ``gateway`` als ein Array der Größe 4 angegeben
+werden. Dabei ist das erste Element im Array das niederwertigste Byte. Falls
+``connection`` auf eine der DHCP Optionen gesetzt ist, werden ``ip``,
+``subnet_mask`` und ``gateway`` ignoriert.
 
-        Der letzte Parameter ist der Port auf den das Anwendungsprogramm sich
-        verbindet.
+Der letzte Parameter ist der Port auf den das Anwendungsprogramm sich
+verbindet.
 
-        Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt. Dass
-        bedeutet, der Master Brick muss nach einer Konfiguration neu gestartet werden.
+Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt. Dass
+bedeutet, der Master Brick muss nach einer Konfiguration neu gestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension zu
+konfigurieren.
+*/
         pub async fn set_wifi_configuration(
             &mut self,
             request: crate::bindings::master::SetWifiConfigurationRequest,
@@ -3565,8 +3327,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Konfiguration zurück, wie von :func:`Set Wifi Configuration` gesetzt.
-         */
+Gibt die Konfiguration zurück, wie von :func:`Set Wifi Configuration` gesetzt.
+*/
         pub async fn get_wifi_configuration(
             &mut self,
         ) -> Result<
@@ -3582,52 +3344,52 @@ pub mod master {
             )
         }
         /**
-        Setzt die Verschlüsselung der WIFI Extension. Der erste Parameter ist der
-        Typ der Verschlüsselung. Mögliche Werte sind:
+Setzt die Verschlüsselung der WIFI Extension. Der erste Parameter ist der
+Typ der Verschlüsselung. Mögliche Werte sind:
 
-        .. csv-table::
-         :header: "Wert", "Beschreibung"
-         :widths: 10, 90
+.. csv-table::
+ :header: "Wert", "Beschreibung"
+ :widths: 10, 90
 
-         "0", "WPA/WPA2"
-         "1", "WPA Enterprise (EAP-FAST, EAP-TLS, EAP-TTLS, PEAP)"
-         "2", "WEP"
-         "3", "Keine Verschlüsselung"
+ "0", "WPA/WPA2"
+ "1", "WPA Enterprise (EAP-FAST, EAP-TLS, EAP-TTLS, PEAP)"
+ "2", "WEP"
+ "3", "Keine Verschlüsselung"
 
-        Der ``key`` hat eine maximale Länge von 50 Zeichen und wird benutzt
-        falls ``encryption`` auf 0 oder 2 (WPA/WPA2 oder WEP) gesetzt ist. Andernfalls
-        wird dieser Parameter ignoriert.
+Der ``key`` hat eine maximale Länge von 50 Zeichen und wird benutzt
+falls ``encryption`` auf 0 oder 2 (WPA/WPA2 oder WEP) gesetzt ist. Andernfalls
+wird dieser Parameter ignoriert.
 
-        Für WPA/WPA2 muss der Schlüssel mindestens 8 Zeichen lang sein. Wenn ein
-        Schlüssel mit mehr als 50 Zeichen gesetzt werden soll, kann
-        :func:`Set Long Wifi Key` genutzt werden.
+Für WPA/WPA2 muss der Schlüssel mindestens 8 Zeichen lang sein. Wenn ein
+Schlüssel mit mehr als 50 Zeichen gesetzt werden soll, kann
+:func:`Set Long Wifi Key` genutzt werden.
 
-        Für WEP muss der Schlüssel entweder 10 oder 26 hexadezimale Zeichen lang sein.
-        Es ist möglich den ``key_index`` zu setzen (1-4). Fall der ``key_index``
-        unbekannt ist, ist er wahrscheinlich 1.
+Für WEP muss der Schlüssel entweder 10 oder 26 hexadezimale Zeichen lang sein.
+Es ist möglich den ``key_index`` zu setzen (1-4). Fall der ``key_index``
+unbekannt ist, ist er wahrscheinlich 1.
 
-        Wenn WPA Enterprise als ``encryption`` gewählt wird, müssen ``eap_options`` und
-        die Länge der Zertifikate gesetzt werden. Die Zertifikate selbst können mit
-        :func:`Set Wifi Certificate` übertragen
-        werden. Die ``eap_options`` bestehen aus Outer Authentication (Bits 1-2),
-        Inner Authentication (Bit 3) und Certificate Type (Bits 4-5):
+Wenn WPA Enterprise als ``encryption`` gewählt wird, müssen ``eap_options`` und
+die Länge der Zertifikate gesetzt werden. Die Zertifikate selbst können mit
+:func:`Set Wifi Certificate` übertragen
+werden. Die ``eap_options`` bestehen aus Outer Authentication (Bits 1-2),
+Inner Authentication (Bit 3) und Certificate Type (Bits 4-5):
 
-        .. csv-table::
-         :header: "Option", "Bits", "Beschreibung"
-         :widths: 10, 10, 80
+.. csv-table::
+ :header: "Option", "Bits", "Beschreibung"
+ :widths: 10, 10, 80
 
-         "Outer Authentication", "1-2", "0=EAP-FAST, 1=EAP-TLS, 2=EAP-TTLS, 3=EAP-PEAP"
-         "Inner Authentication", "3", "0=EAP-MSCHAP, 1=EAP-GTC"
-         "Certificate Type", "4-5", "0=CA Certificate, 1=Client Certificate, 2=Private Key"
+ "Outer Authentication", "1-2", "0=EAP-FAST, 1=EAP-TLS, 2=EAP-TTLS, 3=EAP-PEAP"
+ "Inner Authentication", "3", "0=EAP-MSCHAP, 1=EAP-GTC"
+ "Certificate Type", "4-5", "0=CA Certificate, 1=Client Certificate, 2=Private Key"
 
-        Beispiel für EAP-TTLS + EAP-GTC + Private Key: ``option = 2 | (1 << 2) | (2 << 3)``.
+Beispiel für EAP-TTLS + EAP-GTC + Private Key: ``option = 2 | (1 << 2) | (2 << 3)``.
 
-        Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
-        Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet werden.
+Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
+Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WLAN Verschlüsselung
-        zu konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WLAN Verschlüsselung
+zu konfigurieren.
+*/
         pub async fn set_wifi_encryption(
             &mut self,
             request: crate::bindings::master::SetWifiEncryptionRequest,
@@ -3643,13 +3405,13 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Verschlüsselungseinstellungen zurück, wie von
-        :func:`Set Wifi Encryption` gesetzt.
+Gibt die Verschlüsselungseinstellungen zurück, wie von
+:func:`Set Wifi Encryption` gesetzt.
 
-        .. note::
-         Seit Master Brick Firmware Version 2.4.4 wird der Schlüssel nicht mehr
-         zurückgegeben.
-         */
+.. note::
+ Seit Master Brick Firmware Version 2.4.4 wird der Schlüssel nicht mehr
+ zurückgegeben.
+*/
         pub async fn get_wifi_encryption(
             &mut self,
         ) -> Result<
@@ -3665,22 +3427,22 @@ pub mod master {
             )
         }
         /**
-        Gibt den Status der WIFI Extension zurück. ``state`` wird automatisch
-        aktualisiert, alle anderen Parameter werden nur beim Starten und nach jedem
-        Aufruf von :func:`Refresh Wifi Status` aktualisiert.
+Gibt den Status der WIFI Extension zurück. ``state`` wird automatisch
+aktualisiert, alle anderen Parameter werden nur beim Starten und nach jedem
+Aufruf von :func:`Refresh Wifi Status` aktualisiert.
 
-        Mögliche Werte für *state* sind:
+Mögliche Werte für *state* sind:
 
-        .. csv-table::
-         :header: "State", "Beschreibung"
-         :widths: 10, 90
+.. csv-table::
+ :header: "State", "Beschreibung"
+ :widths: 10, 90
 
-         "0", "Getrennt"
-         "1", "Verbunden"
-         "2", "Verbindung wird aufgebaut"
-         "3", "Fehler"
-         "255", "Noch nicht initialisiert"
-         */
+ "0", "Getrennt"
+ "1", "Verbunden"
+ "2", "Verbindung wird aufgebaut"
+ "3", "Fehler"
+ "255", "Noch nicht initialisiert"
+*/
         pub async fn get_wifi_status(
             &mut self,
         ) -> Result<
@@ -3696,13 +3458,13 @@ pub mod master {
             )
         }
         /**
-        Aktualisiert den WLAN Status (siehe :func:`Get Wifi Status`). Um den Status
-        vom WLAN Modul zu lesen, muss der Master Brick vom Datenmodus in den
-        Kommandomodus und wieder zurück wechseln. Dieser Wechsel und das eigentliche
-        Auslesen ist leider zeitaufwändig. Dass heißt, es dauert ein paar ms bis der
-        Stapel mit aufgesteckter WIFI Extension wieder reagiert nachdem die
-        Funktion aufgerufen wurde.
-         */
+Aktualisiert den WLAN Status (siehe :func:`Get Wifi Status`). Um den Status
+vom WLAN Modul zu lesen, muss der Master Brick vom Datenmodus in den
+Kommandomodus und wieder zurück wechseln. Dieser Wechsel und das eigentliche
+Auslesen ist leider zeitaufwändig. Dass heißt, es dauert ein paar ms bis der
+Stapel mit aufgesteckter WIFI Extension wieder reagiert nachdem die
+Funktion aufgerufen wurde.
+*/
         pub async fn refresh_wifi_status(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -3713,25 +3475,25 @@ pub mod master {
             Ok(())
         }
         /**
-        Diese Funktion kann benutzt werden um sowohl das Zertifikat als auch
-        Benutzername und Passwort für WPA Enterprise zu setzen. Für den Benutzernamen
-        muss Index 0xFFFF und für das Password Index 0xFFFE genutzt werden.
-        Die maximale Länge für beide ist 32.
+Diese Funktion kann benutzt werden um sowohl das Zertifikat als auch
+Benutzername und Passwort für WPA Enterprise zu setzen. Für den Benutzernamen
+muss Index 0xFFFF und für das Password Index 0xFFFE genutzt werden.
+Die maximale Länge für beide ist 32.
 
-        Das Zertifikat wird in Chunks der Größe 32 geschrieben und der Index
-        gibt den Index des Chunk an. ``data_length`` sollte fast immer auf 32 gesetzt
-        werden. Nur beim letzten Chunk ist eine Länge ungleich 32 möglich.
+Das Zertifikat wird in Chunks der Größe 32 geschrieben und der Index
+gibt den Index des Chunk an. ``data_length`` sollte fast immer auf 32 gesetzt
+werden. Nur beim letzten Chunk ist eine Länge ungleich 32 möglich.
 
-        Der Startindex für CA Certificate ist 0, für Client Certificate 10000 und
-        für Private Key 20000. Die Maximalen Dateigrößen sind jeweils 1312, 1312 und
-        4320 Byte.
+Der Startindex für CA Certificate ist 0, für Client Certificate 10000 und
+für Private Key 20000. Die Maximalen Dateigrößen sind jeweils 1312, 1312 und
+4320 Byte.
 
-        Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
-        Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet werden.
+Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
+Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die Zertifikate, Benutzernamen
-        und Passwort zu konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die Zertifikate, Benutzernamen
+und Passwort zu konfigurieren.
+*/
         pub async fn set_wifi_certificate(
             &mut self,
             request: crate::bindings::master::SetWifiCertificateRequest,
@@ -3747,9 +3509,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt das Zertifikat für einen Index zurück, wie von
-        :func:`Set Wifi Certificate` gesetzt.
-         */
+Gibt das Zertifikat für einen Index zurück, wie von
+:func:`Set Wifi Certificate` gesetzt.
+*/
         pub async fn get_wifi_certificate(
             &mut self,
             request: u16,
@@ -3770,15 +3532,15 @@ pub mod master {
             )
         }
         /**
-        Setzt den Stromsparmodus für die WIFI Extension. Mögliche Werte sind:
+Setzt den Stromsparmodus für die WIFI Extension. Mögliche Werte sind:
 
-        .. csv-table::
-         :header: "Mode", "Beschreibung"
-         :widths: 10, 90
+.. csv-table::
+ :header: "Mode", "Beschreibung"
+ :widths: 10, 90
 
-         "0", "Full Speed (hoher Stromverbrauch, hoher Durchsatz)"
-         "1", "Low Power (geringer Stromverbrauch, geringer Durchsatz)"
-         */
+ "0", "Full Speed (hoher Stromverbrauch, hoher Durchsatz)"
+ "1", "Low Power (geringer Stromverbrauch, geringer Durchsatz)"
+*/
         pub async fn set_wifi_power_mode(
             &mut self,
             request: crate::bindings::master::WifiPowerMode,
@@ -3794,8 +3556,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Stromsparmodus zurück, wie von :func:`Set Wifi Power Mode` gesetzt.
-         */
+Gibt den Stromsparmodus zurück, wie von :func:`Set Wifi Power Mode` gesetzt.
+*/
         pub async fn get_wifi_power_mode(
             &mut self,
         ) -> Result<
@@ -3815,21 +3577,21 @@ pub mod master {
             )
         }
         /**
-        Gibt Informationen über denn WLAN Empfangsbuffer zurück. Der WLAN
-        Empfangsbuffer hat eine maximale Größe von 1500 Byte und falls zu viele
-        Daten übertragen werden, kann er überlaufen.
+Gibt Informationen über denn WLAN Empfangsbuffer zurück. Der WLAN
+Empfangsbuffer hat eine maximale Größe von 1500 Byte und falls zu viele
+Daten übertragen werden, kann er überlaufen.
 
-        Die Rückgabewerte sind die Anzahl der Overflows, die Low-Watermark
-        (d.h. die kleinste Anzahl an Byte die je noch frei waren im Buffer) und
-        die Anzahl der im Moment verwendeten Bytes im Buffer.
+Die Rückgabewerte sind die Anzahl der Overflows, die Low-Watermark
+(d.h. die kleinste Anzahl an Byte die je noch frei waren im Buffer) und
+die Anzahl der im Moment verwendeten Bytes im Buffer.
 
-        Es sollte immer versucht werden den Buffer leer zu halten, andernfalls
-        ist mit einer permanenten Latenz zu rechnen. Eine gute Daumenregel ist,
-        nicht mehr als 1000 Nachrichten pro Sekunde zu verschicken.
+Es sollte immer versucht werden den Buffer leer zu halten, andernfalls
+ist mit einer permanenten Latenz zu rechnen. Eine gute Daumenregel ist,
+nicht mehr als 1000 Nachrichten pro Sekunde zu verschicken.
 
-        Dabei sollten am besten nie mehr als 50 Nachrichten auf einmal ohne
-        Pausen gesendet werden.
-         */
+Dabei sollten am besten nie mehr als 50 Nachrichten auf einmal ohne
+Pausen gesendet werden.
+*/
         pub async fn get_wifi_buffer_info(
             &mut self,
         ) -> Result<
@@ -3845,16 +3607,16 @@ pub mod master {
             )
         }
         /**
-        Setzt den Geltungsbereich der WIFI Extension. Mögliche Werte sind:
+Setzt den Geltungsbereich der WIFI Extension. Mögliche Werte sind:
 
-        .. csv-table::
-         :header: "Geltungsbereich", "Beschreibung"
-         :widths: 10, 90
+.. csv-table::
+ :header: "Geltungsbereich", "Beschreibung"
+ :widths: 10, 90
 
-         "0", "FCC: Kanal 1-11 (N/S Amerika, Australien, Neuseeland)"
-         "1", "ETSI: Kanal 1-13 (Europa, Mittlerer Osten, Afrika)"
-         "2", "TELEC: Kanal 1-14 (Japan)"
-         */
+ "0", "FCC: Kanal 1-11 (N/S Amerika, Australien, Neuseeland)"
+ "1", "ETSI: Kanal 1-13 (Europa, Mittlerer Osten, Afrika)"
+ "2", "TELEC: Kanal 1-14 (Japan)"
+*/
         pub async fn set_wifi_regulatory_domain(
             &mut self,
             request: crate::bindings::master::WifiDomain,
@@ -3870,8 +3632,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Geltungsbereich zurück, wie von :func:`Set Wifi Regulatory Domain` gesetzt.
-         */
+Gibt den Geltungsbereich zurück, wie von :func:`Set Wifi Regulatory Domain` gesetzt.
+*/
         pub async fn get_wifi_regulatory_domain(
             &mut self,
         ) -> Result<
@@ -3891,8 +3653,8 @@ pub mod master {
             )
         }
         /**
-        Gibt die USB Spannung zurück. Funktioniert nicht mit Hardware Version 2.1 oder neuer.
-         */
+Gibt die USB Spannung zurück. Funktioniert nicht mit Hardware Version 2.1 oder neuer.
+*/
         pub async fn get_usb_voltage(
             &mut self,
         ) -> Result<u16, tinkerforge_base::error::TinkerforgeError> {
@@ -3901,16 +3663,16 @@ pub mod master {
             Ok(u16::from_le_byte_slice(&result.body()[0..2usize]))
         }
         /**
-        Setzt einen langen WLAN Schlüssel (bis zu 63 Zeichen, mindestens 8 Zeichen) für
-        WPA Verschlüsselung. Dieser Schlüssel wird genutzt, wenn der Schlüssel in
-        :func:`Set Wifi Encryption` auf "-" gesetzt wird. Im alten Protokoll war
-        ein Payload der Größe 63 nicht möglich, dadurch wurde die maximale
-        Schlüssellänge auf 50 gesetzt.
+Setzt einen langen WLAN Schlüssel (bis zu 63 Zeichen, mindestens 8 Zeichen) für
+WPA Verschlüsselung. Dieser Schlüssel wird genutzt, wenn der Schlüssel in
+:func:`Set Wifi Encryption` auf "-" gesetzt wird. Im alten Protokoll war
+ein Payload der Größe 63 nicht möglich, dadurch wurde die maximale
+Schlüssellänge auf 50 gesetzt.
 
-        Mit dem neuen Protokoll ist die volle
-        Schlüssellänge möglich. Da wir keine API brechen wollten, wurde diese
-        Funktion zusätzlich hinzugefügt.
-         */
+Mit dem neuen Protokoll ist die volle
+Schlüssellänge möglich. Da wir keine API brechen wollten, wurde diese
+Funktion zusätzlich hinzugefügt.
+*/
         pub async fn set_long_wifi_key(
             &mut self,
             request: [char; 64usize],
@@ -3926,13 +3688,13 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Verschlüsselungsschlüssel zurück, wie von
-        :func:`Set Long Wifi Key` gesetzt.
+Gibt den Verschlüsselungsschlüssel zurück, wie von
+:func:`Set Long Wifi Key` gesetzt.
 
-        .. note::
-         Seit Master Brick Firmware Version 2.4.4 wird der Schlüssel nicht mehr
-         zurückgegeben.
-         */
+.. note::
+ Seit Master Brick Firmware Version 2.4.4 wird der Schlüssel nicht mehr
+ zurückgegeben.
+*/
         pub async fn get_long_wifi_key(
             &mut self,
         ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
@@ -3941,12 +3703,12 @@ pub mod master {
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
         }
         /**
-        Setzt den Hostnamen der WIFI Extension. Der Hostname wird von
-        Access Points als Hostname in der DHCP Client Tabelle angezeigt.
+Setzt den Hostnamen der WIFI Extension. Der Hostname wird von
+Access Points als Hostname in der DHCP Client Tabelle angezeigt.
 
-        Das Setzen eines leeren Strings stellt den voreingestellten Hostnamen
-        wieder her.
-         */
+Das Setzen eines leeren Strings stellt den voreingestellten Hostnamen
+wieder her.
+*/
         pub async fn set_wifi_hostname(
             &mut self,
             request: [char; 16usize],
@@ -3962,11 +3724,11 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Hostnamen zurück, wie von :func:`Set Wifi Hostname` gesetzt.
+Gibt den Hostnamen zurück, wie von :func:`Set Wifi Hostname` gesetzt.
 
-        Ein leerer String bedeutet, dass der voreingestellte Hostname
-        genutzt wird.
-         */
+Ein leerer String bedeutet, dass der voreingestellte Hostname
+genutzt wird.
+*/
         pub async fn get_wifi_hostname(
             &mut self,
         ) -> Result<[char; 16usize], tinkerforge_base::error::TinkerforgeError> {
@@ -3975,12 +3737,12 @@ pub mod master {
             Ok(<[char; 16usize]>::from_le_byte_slice(&result.body()[0..16usize]))
         }
         /**
-        Setzt die Periode mit welcher der :cb:`Stack Current` Callback ausgelöst
-        wird. Ein Wert von 0 deaktiviert den Callback.
+Setzt die Periode mit welcher der :cb:`Stack Current` Callback ausgelöst
+wird. Ein Wert von 0 deaktiviert den Callback.
 
-        Der :cb:`Stack Current` Callback wird nur ausgelöst, wenn sich die Stromstärke
-        seit der letzten Auslösung geändert hat.
-         */
+Der :cb:`Stack Current` Callback wird nur ausgelöst, wenn sich die Stromstärke
+seit der letzten Auslösung geändert hat.
+*/
         pub async fn set_stack_current_callback_period(
             &mut self,
             request: u32,
@@ -3996,8 +3758,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Periode zurück, wie von :func:`Set Stack Current Callback Period` gesetzt
-         */
+Gibt die Periode zurück, wie von :func:`Set Stack Current Callback Period` gesetzt
+*/
         pub async fn get_stack_current_callback_period(
             &mut self,
         ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
@@ -4006,12 +3768,12 @@ pub mod master {
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
         /**
-        Setzt die Periode mit welcher der :cb:`Stack Voltage` Callback ausgelöst
-        wird. Ein Wert von 0 deaktiviert den Callback.
+Setzt die Periode mit welcher der :cb:`Stack Voltage` Callback ausgelöst
+wird. Ein Wert von 0 deaktiviert den Callback.
 
-        Der :cb:`Stack Voltage` Callback wird nur ausgelöst, wenn sich die Spannung seit
-        der letzten Auslösung geändert hat.
-         */
+Der :cb:`Stack Voltage` Callback wird nur ausgelöst, wenn sich die Spannung seit
+der letzten Auslösung geändert hat.
+*/
         pub async fn set_stack_voltage_callback_period(
             &mut self,
             request: u32,
@@ -4027,8 +3789,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Periode zurück, wie von :func:`Set Stack Voltage Callback Period` gesetzt
-         */
+Gibt die Periode zurück, wie von :func:`Set Stack Voltage Callback Period` gesetzt
+*/
         pub async fn get_stack_voltage_callback_period(
             &mut self,
         ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
@@ -4037,12 +3799,12 @@ pub mod master {
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
         /**
-        Setzt die Periode mit welcher der :cb:`USB Voltage` Callback ausgelöst
-        wird. Ein Wert von 0 deaktiviert den Callback.
+Setzt die Periode mit welcher der :cb:`USB Voltage` Callback ausgelöst
+wird. Ein Wert von 0 deaktiviert den Callback.
 
-        Der :cb:`USB Voltage` Callback wird nur ausgelöst, wenn sich die Spannung seit
-        der letzten Auslösung geändert hat.
-         */
+Der :cb:`USB Voltage` Callback wird nur ausgelöst, wenn sich die Spannung seit
+der letzten Auslösung geändert hat.
+*/
         pub async fn set_usb_voltage_callback_period(
             &mut self,
             request: u32,
@@ -4058,8 +3820,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Periode zurück, wie von :func:`Set USB Voltage Callback Period` gesetzt
-         */
+Gibt die Periode zurück, wie von :func:`Set USB Voltage Callback Period` gesetzt
+*/
         pub async fn get_usb_voltage_callback_period(
             &mut self,
         ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
@@ -4068,20 +3830,20 @@ pub mod master {
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
         /**
-        Setzt den Schwellwert für den :cb:`Stack Current Reached` Callback.
+Setzt den Schwellwert für den :cb:`Stack Current Reached` Callback.
 
-        Die folgenden Optionen sind möglich:
+Die folgenden Optionen sind möglich:
 
-        .. csv-table::
-         :header: "Option", "Beschreibung"
-         :widths: 10, 100
+.. csv-table::
+ :header: "Option", "Beschreibung"
+ :widths: 10, 100
 
-         "'x'",    "Callback ist inaktiv"
-         "'o'",    "Callback wird ausgelöst, wenn die Stromstärke *außerhalb* des min und max Wertes ist"
-         "'i'",    "Callback wird ausgelöst, wenn die Stromstärke *innerhalb* des min und max Wertes ist"
-         "'<'",    "Callback wird ausgelöst, wenn die Stromstärke kleiner als der min Wert ist (max wird ignoriert)"
-         "'>'",    "Callback wird ausgelöst, wenn die Stromstärke größer als der min Wert ist (max wird ignoriert)"
-         */
+ "'x'",    "Callback ist inaktiv"
+ "'o'",    "Callback wird ausgelöst, wenn die Stromstärke *außerhalb* des min und max Wertes ist"
+ "'i'",    "Callback wird ausgelöst, wenn die Stromstärke *innerhalb* des min und max Wertes ist"
+ "'<'",    "Callback wird ausgelöst, wenn die Stromstärke kleiner als der min Wert ist (max wird ignoriert)"
+ "'>'",    "Callback wird ausgelöst, wenn die Stromstärke größer als der min Wert ist (max wird ignoriert)"
+*/
         pub async fn set_stack_current_callback_threshold(
             &mut self,
             request: crate::bindings::master::SetStackCurrentCallbackThresholdRequest,
@@ -4097,8 +3859,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Schwellwert zurück, wie von :func:`Set Stack Current Callback Threshold` gesetzt.
-         */
+Gibt den Schwellwert zurück, wie von :func:`Set Stack Current Callback Threshold` gesetzt.
+*/
         pub async fn get_stack_current_callback_threshold(
             &mut self,
         ) -> Result<
@@ -4114,20 +3876,20 @@ pub mod master {
             )
         }
         /**
-        Setzt den Schwellwert für den :cb:`Stack Voltage Reached` Callback.
+Setzt den Schwellwert für den :cb:`Stack Voltage Reached` Callback.
 
-        Die folgenden Optionen sind möglich:
+Die folgenden Optionen sind möglich:
 
-        .. csv-table::
-         :header: "Option", "Beschreibung"
-         :widths: 10, 100
+.. csv-table::
+ :header: "Option", "Beschreibung"
+ :widths: 10, 100
 
-         "'x'",    "Callback ist inaktiv"
-         "'o'",    "Callback wird ausgelöst, wenn die Spannung *außerhalb* des min und max Wertes ist"
-         "'i'",    "Callback wird ausgelöst, wenn die Spannung *innerhalb* des min und max Wertes ist"
-         "'<'",    "Callback wird ausgelöst, wenn die Spannung kleiner als der min Wert ist (max wird ignoriert)"
-         "'>'",    "Callback wird ausgelöst, wenn die Spannung größer als der min Wert ist (max wird ignoriert)"
-         */
+ "'x'",    "Callback ist inaktiv"
+ "'o'",    "Callback wird ausgelöst, wenn die Spannung *außerhalb* des min und max Wertes ist"
+ "'i'",    "Callback wird ausgelöst, wenn die Spannung *innerhalb* des min und max Wertes ist"
+ "'<'",    "Callback wird ausgelöst, wenn die Spannung kleiner als der min Wert ist (max wird ignoriert)"
+ "'>'",    "Callback wird ausgelöst, wenn die Spannung größer als der min Wert ist (max wird ignoriert)"
+*/
         pub async fn set_stack_voltage_callback_threshold(
             &mut self,
             request: crate::bindings::master::SetStackVoltageCallbackThresholdRequest,
@@ -4143,8 +3905,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Schwellwert zurück, wie von :func:`Set Stack Voltage Callback Threshold` gesetzt.
-         */
+Gibt den Schwellwert zurück, wie von :func:`Set Stack Voltage Callback Threshold` gesetzt.
+*/
         pub async fn get_stack_voltage_callback_threshold(
             &mut self,
         ) -> Result<
@@ -4160,20 +3922,20 @@ pub mod master {
             )
         }
         /**
-        Setzt den Schwellwert für den :cb:`USB Voltage Reached` Callback.
+Setzt den Schwellwert für den :cb:`USB Voltage Reached` Callback.
 
-        Die folgenden Optionen sind möglich:
+Die folgenden Optionen sind möglich:
 
-        .. csv-table::
-         :header: "Option", "Beschreibung"
-         :widths: 10, 100
+.. csv-table::
+ :header: "Option", "Beschreibung"
+ :widths: 10, 100
 
-         "'x'",    "Callback ist inaktiv"
-         "'o'",    "Callback wird ausgelöst, wenn die Spannung *außerhalb* des min und max Wertes ist"
-         "'i'",    "Callback wird ausgelöst, wenn die Spannung *innerhalb* des min und max Wertes ist"
-         "'<'",    "Callback wird ausgelöst, wenn die Spannung kleiner als der min Wert ist (max wird ignoriert)"
-         "'>'",    "Callback wird ausgelöst, wenn die Spannung größer als der min Wert ist (max wird ignoriert)"
-         */
+ "'x'",    "Callback ist inaktiv"
+ "'o'",    "Callback wird ausgelöst, wenn die Spannung *außerhalb* des min und max Wertes ist"
+ "'i'",    "Callback wird ausgelöst, wenn die Spannung *innerhalb* des min und max Wertes ist"
+ "'<'",    "Callback wird ausgelöst, wenn die Spannung kleiner als der min Wert ist (max wird ignoriert)"
+ "'>'",    "Callback wird ausgelöst, wenn die Spannung größer als der min Wert ist (max wird ignoriert)"
+*/
         pub async fn set_usb_voltage_callback_threshold(
             &mut self,
             request: crate::bindings::master::SetUsbVoltageCallbackThresholdRequest,
@@ -4189,8 +3951,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Schwellwert zurück, wie von :func:`Set USB Voltage Callback Threshold` gesetzt.
-         */
+Gibt den Schwellwert zurück, wie von :func:`Set USB Voltage Callback Threshold` gesetzt.
+*/
         pub async fn get_usb_voltage_callback_threshold(
             &mut self,
         ) -> Result<
@@ -4206,20 +3968,20 @@ pub mod master {
             )
         }
         /**
-        Setzt die Periode mit welcher die Schwellwert Callbacks
+Setzt die Periode mit welcher die Schwellwert Callbacks
 
-        * :cb:`Stack Current Reached`,
-        * :cb:`Stack Voltage Reached`,
-        * :cb:`USB Voltage Reached`
+* :cb:`Stack Current Reached`,
+* :cb:`Stack Voltage Reached`,
+* :cb:`USB Voltage Reached`
 
-        ausgelöst werden, wenn die Schwellwerte
+ausgelöst werden, wenn die Schwellwerte
 
-        * :func:`Set Stack Current Callback Threshold`,
-        * :func:`Set Stack Voltage Callback Threshold`,
-        * :func:`Set USB Voltage Callback Threshold`
+* :func:`Set Stack Current Callback Threshold`,
+* :func:`Set Stack Voltage Callback Threshold`,
+* :func:`Set USB Voltage Callback Threshold`
 
-        weiterhin erreicht bleiben.
-         */
+weiterhin erreicht bleiben.
+*/
         pub async fn set_debounce_period(
             &mut self,
             request: u32,
@@ -4235,8 +3997,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Entprellperiode zurück, wie von :func:`Set Debounce Period` gesetzt.
-         */
+Gibt die Entprellperiode zurück, wie von :func:`Set Debounce Period` gesetzt.
+*/
         pub async fn get_debounce_period(
             &mut self,
         ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
@@ -4245,107 +4007,107 @@ pub mod master {
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
         /**
-        Dieser Callback wird mit der Periode, wie gesetzt mit
-        :func:`Set Stack Current Callback Period`, ausgelöst. Der :word:`parameter` ist
-        die Stromstärke des Sensors.
+Dieser Callback wird mit der Periode, wie gesetzt mit
+:func:`Set Stack Current Callback Period`, ausgelöst. Der :word:`parameter` ist
+die Stromstärke des Sensors.
 
-        Der :cb:`Stack Current` Callback wird nur ausgelöst, wenn sich die Stromstärke
-        seit der letzten Auslösung geändert hat.
-         */
+Der :cb:`Stack Current` Callback wird nur ausgelöst, wenn sich die Stromstärke
+seit der letzten Auslösung geändert hat.
+*/
         pub async fn stack_current_stream(
             &mut self,
-        ) -> impl futures_core::Stream<Item=u16> {
+        ) -> impl futures_core::Stream<Item = u16> {
             self.device
                 .get_callback_receiver(59u8)
                 .await
                 .map(|p| u16::from_le_byte_slice(&p.body()[0..2usize]))
         }
         /**
-        Dieser Callback wird mit der Periode, wie gesetzt mit
-        :func:`Set Stack Voltage Callback Period`, ausgelöst. Der :word:`parameter`
-        ist die Spannung des Sensors.
+Dieser Callback wird mit der Periode, wie gesetzt mit
+:func:`Set Stack Voltage Callback Period`, ausgelöst. Der :word:`parameter`
+ist die Spannung des Sensors.
 
-        Der :cb:`Stack Voltage` Callback wird nur ausgelöst, wenn sich die Spannung seit
-        der letzten Auslösung geändert hat.
-         */
+Der :cb:`Stack Voltage` Callback wird nur ausgelöst, wenn sich die Spannung seit
+der letzten Auslösung geändert hat.
+*/
         pub async fn stack_voltage_stream(
             &mut self,
-        ) -> impl futures_core::Stream<Item=u16> {
+        ) -> impl futures_core::Stream<Item = u16> {
             self.device
                 .get_callback_receiver(60u8)
                 .await
                 .map(|p| u16::from_le_byte_slice(&p.body()[0..2usize]))
         }
         /**
-        Dieser Callback wird mit der Periode, wie gesetzt mit
-        :func:`Set USB Voltage Callback Period`, ausgelöst. Der :word:`parameter` ist
-        die USB Spannung.
+Dieser Callback wird mit der Periode, wie gesetzt mit
+:func:`Set USB Voltage Callback Period`, ausgelöst. Der :word:`parameter` ist
+die USB Spannung.
 
-        Der :cb:`USB Voltage` Callback wird nur ausgelöst, wenn sich die USB Spannung
-        seit der letzten Auslösung geändert hat.
+Der :cb:`USB Voltage` Callback wird nur ausgelöst, wenn sich die USB Spannung
+seit der letzten Auslösung geändert hat.
 
-        Funktioniert nicht mit Hardware Version 2.1 oder neuer.
-         */
+Funktioniert nicht mit Hardware Version 2.1 oder neuer.
+*/
         pub async fn usb_voltage_stream(
             &mut self,
-        ) -> impl futures_core::Stream<Item=u16> {
+        ) -> impl futures_core::Stream<Item = u16> {
             self.device
                 .get_callback_receiver(61u8)
                 .await
                 .map(|p| u16::from_le_byte_slice(&p.body()[0..2usize]))
         }
         /**
-        Dieser Callback wird ausgelöst, wenn der Schwellwert, wie von
-        :func:`Set Stack Current Callback Threshold` gesetzt, erreicht wird.
-        Der :word:`parameter` ist der Stromverbrauch des Stapels.
+Dieser Callback wird ausgelöst, wenn der Schwellwert, wie von
+:func:`Set Stack Current Callback Threshold` gesetzt, erreicht wird.
+Der :word:`parameter` ist der Stromverbrauch des Stapels.
 
-        Wenn der Schwellwert erreicht bleibt, wird der Callback mit der Periode, wie
-        mit :func:`Set Debounce Period` gesetzt, ausgelöst.
-         */
+Wenn der Schwellwert erreicht bleibt, wird der Callback mit der Periode, wie
+mit :func:`Set Debounce Period` gesetzt, ausgelöst.
+*/
         pub async fn stack_current_reached_stream(
             &mut self,
-        ) -> impl futures_core::Stream<Item=u16> {
+        ) -> impl futures_core::Stream<Item = u16> {
             self.device
                 .get_callback_receiver(62u8)
                 .await
                 .map(|p| u16::from_le_byte_slice(&p.body()[0..2usize]))
         }
         /**
-        Dieser Callback wird ausgelöst, wenn der Schwellwert, wie von
-        :func:`Set Stack Voltage Callback Threshold` gesetzt, erreicht wird.
-        Der :word:`parameter` ist die Spannung des Stapels.
+Dieser Callback wird ausgelöst, wenn der Schwellwert, wie von
+:func:`Set Stack Voltage Callback Threshold` gesetzt, erreicht wird.
+Der :word:`parameter` ist die Spannung des Stapels.
 
-        Wenn der Schwellwert erreicht bleibt, wird der Callback mit der Periode, wie
-        mit :func:`Set Debounce Period` gesetzt, ausgelöst.
-         */
+Wenn der Schwellwert erreicht bleibt, wird der Callback mit der Periode, wie
+mit :func:`Set Debounce Period` gesetzt, ausgelöst.
+*/
         pub async fn stack_voltage_reached_stream(
             &mut self,
-        ) -> impl futures_core::Stream<Item=u16> {
+        ) -> impl futures_core::Stream<Item = u16> {
             self.device
                 .get_callback_receiver(63u8)
                 .await
                 .map(|p| u16::from_le_byte_slice(&p.body()[0..2usize]))
         }
         /**
-        Dieser Callback wird ausgelöst, wenn der Schwellwert, wie von
-        :func:`Set USB Voltage Callback Threshold` gesetzt, erreicht wird.
-        Der :word:`parameter` ist die Spannung des Sensors.
+Dieser Callback wird ausgelöst, wenn der Schwellwert, wie von
+:func:`Set USB Voltage Callback Threshold` gesetzt, erreicht wird.
+Der :word:`parameter` ist die Spannung des Sensors.
 
-        Wenn der Schwellwert erreicht bleibt, wird der Callback mit der Periode, wie
-        mit :func:`Set Debounce Period` gesetzt, ausgelöst.
-         */
+Wenn der Schwellwert erreicht bleibt, wird der Callback mit der Periode, wie
+mit :func:`Set Debounce Period` gesetzt, ausgelöst.
+*/
         pub async fn usb_voltage_reached_stream(
             &mut self,
-        ) -> impl futures_core::Stream<Item=u16> {
+        ) -> impl futures_core::Stream<Item = u16> {
             self.device
                 .get_callback_receiver(64u8)
                 .await
                 .map(|p| u16::from_le_byte_slice(&p.body()[0..2usize]))
         }
         /**
-        Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
-        Ethernet Extension verfügbar ist.
-         */
+Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
+Ethernet Extension verfügbar ist.
+*/
         pub async fn is_ethernet_present(
             &mut self,
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
@@ -4354,32 +4116,32 @@ pub mod master {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Setzt die Konfiguration der Ethernet Extension. Mögliche Werte für
-        ``connection`` sind:
+Setzt die Konfiguration der Ethernet Extension. Mögliche Werte für
+``connection`` sind:
 
-        .. csv-table::
-         :header: "Wert", "Beschreibung"
-         :widths: 10, 90
+.. csv-table::
+ :header: "Wert", "Beschreibung"
+ :widths: 10, 90
 
-         "0", "DHCP"
-         "1", "Statische IP"
+ "0", "DHCP"
+ "1", "Statische IP"
 
-        Wenn ``connection`` auf die statische IP Option gesetzt wird, dann müssen
-        ``ip``, ``subnet_mask`` und ``gateway`` als ein Array der Größe 4 angegeben
-        werden. Dabei ist das erste Element im Array das niederwertigste Byte. Falls
-        ``connection`` auf die DHCP Option gesetzt ist, werden ``ip``, ``subnet_mask``
-        und ``gateway`` ignoriert.
+Wenn ``connection`` auf die statische IP Option gesetzt wird, dann müssen
+``ip``, ``subnet_mask`` und ``gateway`` als ein Array der Größe 4 angegeben
+werden. Dabei ist das erste Element im Array das niederwertigste Byte. Falls
+``connection`` auf die DHCP Option gesetzt ist, werden ``ip``, ``subnet_mask``
+und ``gateway`` ignoriert.
 
-        Der letzte Parameter ist der Port auf den das Anwendungsprogramm sich
-        verbindet.
+Der letzte Parameter ist der Port auf den das Anwendungsprogramm sich
+verbindet.
 
-        Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
-        Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet
-        werden.
+Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
+Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet
+werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die Ethernet Extension zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die Ethernet Extension zu
+konfigurieren.
+*/
         pub async fn set_ethernet_configuration(
             &mut self,
             request: crate::bindings::master::SetEthernetConfigurationRequest,
@@ -4395,8 +4157,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Konfiguration zurück, wie von :func:`Set Ethernet Configuration` gesetzt.
-         */
+Gibt die Konfiguration zurück, wie von :func:`Set Ethernet Configuration` gesetzt.
+*/
         pub async fn get_ethernet_configuration(
             &mut self,
         ) -> Result<
@@ -4412,16 +4174,16 @@ pub mod master {
             )
         }
         /**
-        Gibt den Status der Ethernet Extension zurück.
+Gibt den Status der Ethernet Extension zurück.
 
-        ``mac_address``, ``ip``, ``subnet_mask`` und ``gateway`` werden als Array
-        übergeben. Das erste Element des Arrays ist das niederwertigste Byte.
+``mac_address``, ``ip``, ``subnet_mask`` und ``gateway`` werden als Array
+übergeben. Das erste Element des Arrays ist das niederwertigste Byte.
 
-        ``rx_count`` und ``tx_count`` sind die Anzahl der Bytes die seit dem letzten
-        Neustart empfangen/gesendet wurden.
+``rx_count`` und ``tx_count`` sind die Anzahl der Bytes die seit dem letzten
+Neustart empfangen/gesendet wurden.
 
-        ``hostname`` ist der aktuell genutzte Hostname.
-         */
+``hostname`` ist der aktuell genutzte Hostname.
+*/
         pub async fn get_ethernet_status(
             &mut self,
         ) -> Result<
@@ -4437,14 +4199,14 @@ pub mod master {
             )
         }
         /**
-        Setzt den Hostnamen der Ethernet Extension. Der Hostname wird von
-        Access Points als Hostname in der DHCP Client Tabelle angezeigt.
+Setzt den Hostnamen der Ethernet Extension. Der Hostname wird von
+Access Points als Hostname in der DHCP Client Tabelle angezeigt.
 
-        Das setzen eines leeren Strings stellt den voreingestellten Hostnamen
-        wieder her.
+Das setzen eines leeren Strings stellt den voreingestellten Hostnamen
+wieder her.
 
-        Der aktuelle Hostname kann mit :func:`Get Ethernet Status` herausgefunden werden.
-         */
+Der aktuelle Hostname kann mit :func:`Get Ethernet Status` herausgefunden werden.
+*/
         pub async fn set_ethernet_hostname(
             &mut self,
             request: [char; 32usize],
@@ -4460,12 +4222,12 @@ pub mod master {
             Ok(())
         }
         /**
-        Setzt die MAC Adresse der Ethernet Extension. Die Ethernet Extension sollte
-        mit einer vorkonfigurierten MAC Adresse ausgeliefert werden. Diese MAC Adresse
-        steht auch auf einem Aufkleber auf der Ethernet Extension.
+Setzt die MAC Adresse der Ethernet Extension. Die Ethernet Extension sollte
+mit einer vorkonfigurierten MAC Adresse ausgeliefert werden. Diese MAC Adresse
+steht auch auf einem Aufkleber auf der Ethernet Extension.
 
-        Die MAC Adresse kann mit :func:`Get Ethernet Status` wieder ausgelesen werden.
-         */
+Die MAC Adresse kann mit :func:`Get Ethernet Status` wieder ausgelesen werden.
+*/
         pub async fn set_ethernet_mac_address(
             &mut self,
             request: [u8; 6usize],
@@ -4481,22 +4243,22 @@ pub mod master {
             Ok(())
         }
         /**
-        Setzt die Ethernet WebSocket-Konfiguration. Der erste Parameter setzt
-        die Anzahl der Socket-Verbindungen die für WebSockets reserviert werden.
-        Der mögliche Wertebereich ist 0-7. Die Verbindungen werden zwischen den
-        normalen Sockets und den WebSockets aufgeteilt. Beispiel: Wenn die Socket-Verbindungen auf 3
-        gesetzt werden, stehen 3 WebSockets und 4 normale Sockets zur Verfügung.
+Setzt die Ethernet WebSocket-Konfiguration. Der erste Parameter setzt
+die Anzahl der Socket-Verbindungen die für WebSockets reserviert werden.
+Der mögliche Wertebereich ist 0-7. Die Verbindungen werden zwischen den
+normalen Sockets und den WebSockets aufgeteilt. Beispiel: Wenn die Socket-Verbindungen auf 3
+gesetzt werden, stehen 3 WebSockets und 4 normale Sockets zur Verfügung.
 
-        Der zweite Parameter ist der Port für die WebSocket-Verbindungen. Der Port
-        kann nicht der gleiche sein wie der Port des normalen Sockets.
+Der zweite Parameter ist der Port für die WebSocket-Verbindungen. Der Port
+kann nicht der gleiche sein wie der Port des normalen Sockets.
 
-        Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
-        Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet
-        werden.
+Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
+Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet
+werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die Ethernet Extension zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die Ethernet Extension zu
+konfigurieren.
+*/
         pub async fn set_ethernet_websocket_configuration(
             &mut self,
             request: crate::bindings::master::SetEthernetWebsocketConfigurationRequest,
@@ -4512,8 +4274,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Konfiguration zurück, wie von :func:`Set Ethernet Configuration` gesetzt.
-         */
+Gibt die Konfiguration zurück, wie von :func:`Set Ethernet Configuration` gesetzt.
+*/
         pub async fn get_ethernet_websocket_configuration(
             &mut self,
         ) -> Result<
@@ -4529,21 +4291,21 @@ pub mod master {
             )
         }
         /**
-        Setzt das Authentifizierungsgeheimnis. Das Geheimnis ist ein String aus bis zu
-        64 Buchstaben. Ein leerer String deaktiviert die Authentifizierung.
+Setzt das Authentifizierungsgeheimnis. Das Geheimnis ist ein String aus bis zu
+64 Buchstaben. Ein leerer String deaktiviert die Authentifizierung.
 
-        Für mehr Informationen zur Authentifizierung siehe das dazugehörige
-        :ref:`Tutorial <tutorial_authentication>`.
+Für mehr Informationen zur Authentifizierung siehe das dazugehörige
+:ref:`Tutorial <tutorial_authentication>`.
 
-        Das Authentifizierungsgehemnis wird im EEPROM gespeichert und nur beim Start angewandt.
-        Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet
-        werden.
+Das Authentifizierungsgehemnis wird im EEPROM gespeichert und nur beim Start angewandt.
+Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet
+werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die Authentifizierung der Ethernet
-        Extension einzurichten.
+Wir empfehlen den Brick Viewer zu verwenden, um die Authentifizierung der Ethernet
+Extension einzurichten.
 
-        Der Standardwert ist ein leerer String (Authentifizierung deaktiviert).
-         */
+Der Standardwert ist ein leerer String (Authentifizierung deaktiviert).
+*/
         pub async fn set_ethernet_authentication_secret(
             &mut self,
             request: [char; 64usize],
@@ -4559,9 +4321,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt das Authentifizierungsgeheimnis zurück, wie von
-        :func:`Set Ethernet Authentication Secret` gesetzt.
-         */
+Gibt das Authentifizierungsgeheimnis zurück, wie von
+:func:`Set Ethernet Authentication Secret` gesetzt.
+*/
         pub async fn get_ethernet_authentication_secret(
             &mut self,
         ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
@@ -4570,21 +4332,21 @@ pub mod master {
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
         }
         /**
-        Setzt das Authentifizierungsgeheimnis. Das Geheimnis ist ein String aus bis zu
-        64 Buchstaben. Ein leerer String deaktiviert die Authentifizierung.
+Setzt das Authentifizierungsgeheimnis. Das Geheimnis ist ein String aus bis zu
+64 Buchstaben. Ein leerer String deaktiviert die Authentifizierung.
 
-        Für mehr Informationen zur Authentifizierung siehe das dazugehörige
-        :ref:`Tutorial <tutorial_authentication>`.
+Für mehr Informationen zur Authentifizierung siehe das dazugehörige
+:ref:`Tutorial <tutorial_authentication>`.
 
-        Das Authentifizierungsgehemnis wird im EEPROM gespeichert und nur beim Start
-        angewandt. Das bedeutet der Master Brick muss nach einer Konfiguration neu
-        gestartet werden.
+Das Authentifizierungsgehemnis wird im EEPROM gespeichert und nur beim Start
+angewandt. Das bedeutet der Master Brick muss nach einer Konfiguration neu
+gestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die Authentifizierung der WIFI
-        Extension einzurichten.
+Wir empfehlen den Brick Viewer zu verwenden, um die Authentifizierung der WIFI
+Extension einzurichten.
 
-        Der Standardwert ist ein leerer String (Authentifizierung deaktiviert).
-         */
+Der Standardwert ist ein leerer String (Authentifizierung deaktiviert).
+*/
         pub async fn set_wifi_authentication_secret(
             &mut self,
             request: [char; 64usize],
@@ -4600,9 +4362,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt das Authentifizierungsgeheimnis zurück, wie von
-        :func:`Set Wifi Authentication Secret` gesetzt.
-         */
+Gibt das Authentifizierungsgeheimnis zurück, wie von
+:func:`Set Wifi Authentication Secret` gesetzt.
+*/
         pub async fn get_wifi_authentication_secret(
             &mut self,
         ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
@@ -4611,8 +4373,8 @@ pub mod master {
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
         }
         /**
-        Gibt den Typ der Verbingung zurück, über welche diese Funktion aufgerufen wurde.
-         */
+Gibt den Typ der Verbingung zurück, über welche diese Funktion aufgerufen wurde.
+*/
         pub async fn get_connection_type(
             &mut self,
         ) -> Result<
@@ -4632,9 +4394,9 @@ pub mod master {
             )
         }
         /**
-        Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
-        WIFI Extension 2.0 verfügbar ist.
-         */
+Gibt *true* zurück, wenn der Master Brick an Position 0 im Stapel und eine
+WIFI Extension 2.0 verfügbar ist.
+*/
         pub async fn is_wifi_2_present(
             &mut self,
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
@@ -4643,18 +4405,18 @@ pub mod master {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Startet den Bootloader der WIFI Extension 2.0. Gibt bei Erfolg 0 zurück.
-        Danach können die :func:`Write Wifi2 Serial Port` und :func:`Read Wifi2 Serial Port`
-        Funktionen zur Kommunikation mit dem Bootloader verwendet werden, um eine neue
-        Firmware zu flashen.
+Startet den Bootloader der WIFI Extension 2.0. Gibt bei Erfolg 0 zurück.
+Danach können die :func:`Write Wifi2 Serial Port` und :func:`Read Wifi2 Serial Port`
+Funktionen zur Kommunikation mit dem Bootloader verwendet werden, um eine neue
+Firmware zu flashen.
 
-        Der Bootloader sollte nur über eine USB Verbindung gestartet werden. Er kann
-        nicht über eine WIFI2 Verbindung gestartet werden, siehe die
-        :func:`Get Connection Type` Funktion.
+Der Bootloader sollte nur über eine USB Verbindung gestartet werden. Er kann
+nicht über eine WIFI2 Verbindung gestartet werden, siehe die
+:func:`Get Connection Type` Funktion.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die Firmware der WIFI
-        Extension 2.0 zu aktualisieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die Firmware der WIFI
+Extension 2.0 zu aktualisieren.
+*/
         pub async fn start_wifi_2_bootloader(
             &mut self,
         ) -> Result<i8, tinkerforge_base::error::TinkerforgeError> {
@@ -4663,16 +4425,16 @@ pub mod master {
             Ok(i8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Schreibt bis zu 60 Bytes (Anzahl zu schreibender Bytes mit ``length`` angeben)
-        auf die serielle Schnittstelle des Bootloaders der WIFI Extension 2.0. Gibt
-        bei Erfolg 0 zurück.
+Schreibt bis zu 60 Bytes (Anzahl zu schreibender Bytes mit ``length`` angeben)
+auf die serielle Schnittstelle des Bootloaders der WIFI Extension 2.0. Gibt
+bei Erfolg 0 zurück.
 
-        Bevor diese Funktion genutzt werden kann muss der Bootloader mit der
-        :func:`Start Wifi2 Bootloader` Funktion gestartet werden.
+Bevor diese Funktion genutzt werden kann muss der Bootloader mit der
+:func:`Start Wifi2 Bootloader` Funktion gestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die Firmware der WIFI
-        Extension 2.0 zu aktualisieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die Firmware der WIFI
+Extension 2.0 zu aktualisieren.
+*/
         pub async fn write_wifi_2_serial_port(
             &mut self,
             request: crate::bindings::master::WriteWifi2SerialPortRequest,
@@ -4686,16 +4448,16 @@ pub mod master {
             Ok(i8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Liest bis zu 60 Bytes (Anzahl zu lesender Bytes mit ``length`` angegeben) von
-        der seriellen Schnittstelle des Bootloaders der WIFI Extension 2.0. Gibt die
-        Anzahl der wirklich gelesenen Bytes zurück.
+Liest bis zu 60 Bytes (Anzahl zu lesender Bytes mit ``length`` angegeben) von
+der seriellen Schnittstelle des Bootloaders der WIFI Extension 2.0. Gibt die
+Anzahl der wirklich gelesenen Bytes zurück.
 
-        Bevor diese Funktion genutzt werden kann muss der Bootloader mit der
-        :func:`Start Wifi2 Bootloader` Funktion gestartet werden.
+Bevor diese Funktion genutzt werden kann muss der Bootloader mit der
+:func:`Start Wifi2 Bootloader` Funktion gestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die Firmware der WIFI
-        Extension 2.0 zu aktualisieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die Firmware der WIFI
+Extension 2.0 zu aktualisieren.
+*/
         pub async fn read_wifi_2_serial_port(
             &mut self,
             request: u8,
@@ -4716,20 +4478,20 @@ pub mod master {
             )
         }
         /**
-        Setzt das WLAN-Authentifizierungsgeheimnis. Das Geheimnis ist ein String aus
-        bis zu 64 Buchstaben. Ein leerer String deaktiviert die Authentifizierung. Der
-        Standardwert ist ein leerer String (Authentifizierung deaktiviert).
+Setzt das WLAN-Authentifizierungsgeheimnis. Das Geheimnis ist ein String aus
+bis zu 64 Buchstaben. Ein leerer String deaktiviert die Authentifizierung. Der
+Standardwert ist ein leerer String (Authentifizierung deaktiviert).
 
-        Für mehr Informationen zur Authentifizierung siehe das dazugehörige
-        :ref:`Tutorial <tutorial_authentication>`.
+Für mehr Informationen zur Authentifizierung siehe das dazugehörige
+:ref:`Tutorial <tutorial_authentication>`.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_authentication_secret(
             &mut self,
             request: [char; 64usize],
@@ -4745,9 +4507,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt das WLAN-Authentifizierungsgeheimnis zurück, wie von
-        :func:`Set Wifi2 Authentication Secret` gesetzt.
-         */
+Gibt das WLAN-Authentifizierungsgeheimnis zurück, wie von
+:func:`Set Wifi2 Authentication Secret` gesetzt.
+*/
         pub async fn get_wifi_2_authentication_secret(
             &mut self,
         ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
@@ -4756,29 +4518,29 @@ pub mod master {
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
         }
         /**
-        Setzt die allgemeine Konfiguration der WIFI Extension 2.0.
+Setzt die allgemeine Konfiguration der WIFI Extension 2.0.
 
-        Der ``port`` Parameter setzt die Portnummer auf die sich das Anwendungsprogramm
-        verbindet.
+Der ``port`` Parameter setzt die Portnummer auf die sich das Anwendungsprogramm
+verbindet.
 
-        Der ``websocket_port`` Parameter setzt die WebSocket-Portnummer auf die sich das
-        JavaScript Anwendungsprogramm verbindet.
+Der ``websocket_port`` Parameter setzt die WebSocket-Portnummer auf die sich das
+JavaScript Anwendungsprogramm verbindet.
 
-        Der ``website_port`` Parameter setzt die Portnummer für die Webseite der
-        WIFI Extension 2.0.
+Der ``website_port`` Parameter setzt die Portnummer für die Webseite der
+WIFI Extension 2.0.
 
-        Der ``phy_mode`` Parameter setzt den zu verwendenden WLAN-Modus. Mögliche Werte
-        sinf B, G und N.
+Der ``phy_mode`` Parameter setzt den zu verwendenden WLAN-Modus. Mögliche Werte
+sinf B, G und N.
 
-        Die ``sleep_mode`` und ``website`` Parameter werden momentan nicht verwendet.
+Die ``sleep_mode`` und ``website`` Parameter werden momentan nicht verwendet.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_configuration(
             &mut self,
             request: crate::bindings::master::SetWifi2ConfigurationRequest,
@@ -4794,8 +4556,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die allgemeine Konfiguration zurück, wie von :func:`Set Wifi2 Configuration` gesetzt.
-         */
+Gibt die allgemeine Konfiguration zurück, wie von :func:`Set Wifi2 Configuration` gesetzt.
+*/
         pub async fn get_wifi_2_configuration(
             &mut self,
         ) -> Result<
@@ -4811,8 +4573,8 @@ pub mod master {
             )
         }
         /**
-        Gibt den Client und Access Point Status der WIFI Extension 2.0 zurück.
-         */
+Gibt den Client und Access Point Status der WIFI Extension 2.0 zurück.
+*/
         pub async fn get_wifi_2_status(
             &mut self,
         ) -> Result<
@@ -4828,35 +4590,35 @@ pub mod master {
             )
         }
         /**
-        Setzt die Client-spezifische Konfiguration der WIFI Extension 2.0.
+Setzt die Client-spezifische Konfiguration der WIFI Extension 2.0.
 
-        Der ``enable`` Parameter aktiviert oder deaktiviert den Client-Teil der
-        WIFI Extension 2.0. Der Standardwert ist *true*.
+Der ``enable`` Parameter aktiviert oder deaktiviert den Client-Teil der
+WIFI Extension 2.0. Der Standardwert ist *true*.
 
-        Der ``ssid`` Parameter die SSID (bis zu 32 Zeichen) des Access Points zu dem
-        die WLAN Verbindung hergestellt werden soll.
+Der ``ssid`` Parameter die SSID (bis zu 32 Zeichen) des Access Points zu dem
+die WLAN Verbindung hergestellt werden soll.
 
-        Wenn die ``ip``, ``subnet_mask`` und ``gateway`` Parameter alle auf Null gesetzt
-        sind, dann wird DHCP verwendet. Andernfalls kann mit diese drei Parametern eine
-        statische IP Adresse eingestellt werden. Die Standardeinstellung ist DHCP.
+Wenn die ``ip``, ``subnet_mask`` und ``gateway`` Parameter alle auf Null gesetzt
+sind, dann wird DHCP verwendet. Andernfalls kann mit diese drei Parametern eine
+statische IP Adresse eingestellt werden. Die Standardeinstellung ist DHCP.
 
-        Wenn der ``mac_address`` Parameter auf Null gesetzt ist, dann wird die
-        voreingestellt MAC Adresse verwendet. Andernfalls kann mit diesem Parameter
-        eine eigene MAC Adresse eingestellt werden.
+Wenn der ``mac_address`` Parameter auf Null gesetzt ist, dann wird die
+voreingestellt MAC Adresse verwendet. Andernfalls kann mit diesem Parameter
+eine eigene MAC Adresse eingestellt werden.
 
-        Wenn der ``bssid`` Parameter auf Null gesetzt ist, dann verbindet sich die
-        WIFI Extension 2.0 mit einem Access Point wenn die eingestellt SSID
-        übereinstimmt. Andernfalls kann dieses Parameter verwendet werden, damit sich
-        die WIFI Extension 2.0 nur dann mit einem Access Point verbindet, wenn SSID
-        und BSSID übereinstimmen.
+Wenn der ``bssid`` Parameter auf Null gesetzt ist, dann verbindet sich die
+WIFI Extension 2.0 mit einem Access Point wenn die eingestellt SSID
+übereinstimmt. Andernfalls kann dieses Parameter verwendet werden, damit sich
+die WIFI Extension 2.0 nur dann mit einem Access Point verbindet, wenn SSID
+und BSSID übereinstimmen.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_client_configuration(
             &mut self,
             request: crate::bindings::master::SetWifi2ClientConfigurationRequest,
@@ -4872,9 +4634,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Client Konfiguration zurück, wie von
-        :func:`Set Wifi2 Client Configuration` gesetzt.
-         */
+Gibt die Client Konfiguration zurück, wie von
+:func:`Set Wifi2 Client Configuration` gesetzt.
+*/
         pub async fn get_wifi_2_client_configuration(
             &mut self,
         ) -> Result<
@@ -4890,16 +4652,16 @@ pub mod master {
             )
         }
         /**
-        Setzt den Client Hostnamen (bis zu 32 Zeichen) der WIFI Extension 2.0. Der
-        Hostname wird von Access Points als Hostname in der DHCP Client Tabelle angezeigt.
+Setzt den Client Hostnamen (bis zu 32 Zeichen) der WIFI Extension 2.0. Der
+Hostname wird von Access Points als Hostname in der DHCP Client Tabelle angezeigt.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_client_hostname(
             &mut self,
             request: [char; 32usize],
@@ -4915,8 +4677,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt den Client Hostnamen zurück, wie von :func:`Set Wifi2 Client Hostname` gesetzt.
-         */
+Gibt den Client Hostnamen zurück, wie von :func:`Set Wifi2 Client Hostname` gesetzt.
+*/
         pub async fn get_wifi_2_client_hostname(
             &mut self,
         ) -> Result<[char; 32usize], tinkerforge_base::error::TinkerforgeError> {
@@ -4925,15 +4687,15 @@ pub mod master {
             Ok(<[char; 32usize]>::from_le_byte_slice(&result.body()[0..32usize]))
         }
         /**
-        Setzt das Client-Passwort (bis zu 63 Zeichen) für WPA/WPA2 Verschlüsselung.
+Setzt das Client-Passwort (bis zu 63 Zeichen) für WPA/WPA2 Verschlüsselung.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_client_password(
             &mut self,
             request: [char; 64usize],
@@ -4949,12 +4711,12 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt das Client-Passwort zurück, wie von :func:`Set Wifi2 Client Password` gesetzt.
+Gibt das Client-Passwort zurück, wie von :func:`Set Wifi2 Client Password` gesetzt.
 
-        .. note::
-         Seit WIFI Extension 2.0 Firmware Version 2.1.3 wird das Passwort
-         nicht mehr zurückgegeben.
-         */
+.. note::
+ Seit WIFI Extension 2.0 Firmware Version 2.1.3 wird das Passwort
+ nicht mehr zurückgegeben.
+*/
         pub async fn get_wifi_2_client_password(
             &mut self,
         ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
@@ -4963,39 +4725,39 @@ pub mod master {
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
         }
         /**
-        Setzt die Access-Point-spezifische Konfiguration der WIFI Extension 2.0.
+Setzt die Access-Point-spezifische Konfiguration der WIFI Extension 2.0.
 
-        Der ``enable`` Parameter aktiviert oder deaktiviert den Access-Point-Teil der
-        WIFI Extension 2.0. Der Standardwert ist *true*.
+Der ``enable`` Parameter aktiviert oder deaktiviert den Access-Point-Teil der
+WIFI Extension 2.0. Der Standardwert ist *true*.
 
-        Der ``ssid`` Parameter die SSID (bis zu 32 Zeichen) des Access Points.
+Der ``ssid`` Parameter die SSID (bis zu 32 Zeichen) des Access Points.
 
-        Wenn die ``ip``, ``subnet_mask`` und ``gateway`` Parameter alle auf Null gesetzt
-        sind, dann wird ein DHCP Server aktiviert. Andernfalls kann mit diese drei
-        Parametern eine statische IP Adresse eingestellt werden. Die Standardeinstellung
-        ist DHCP.
+Wenn die ``ip``, ``subnet_mask`` und ``gateway`` Parameter alle auf Null gesetzt
+sind, dann wird ein DHCP Server aktiviert. Andernfalls kann mit diese drei
+Parametern eine statische IP Adresse eingestellt werden. Die Standardeinstellung
+ist DHCP.
 
-        Der ``encryption`` Parameter legt den Verschlüsselungsmodus fest. Mögliche Werte
-        sind Open (keine  Verschlüsselung), WEP oder WPA/WPA2 PSK.
-        Mit der :func:`Set Wifi2 AP Password` Kann das
-        Verschlüsselungspasswort gesetzt werden.
+Der ``encryption`` Parameter legt den Verschlüsselungsmodus fest. Mögliche Werte
+sind Open (keine  Verschlüsselung), WEP oder WPA/WPA2 PSK.
+Mit der :func:`Set Wifi2 AP Password` Kann das
+Verschlüsselungspasswort gesetzt werden.
 
-        Der ``hidden`` Parameter legt fest, oder der Access Point seine SSID versteckt
-        oder zeigt.
+Der ``hidden`` Parameter legt fest, oder der Access Point seine SSID versteckt
+oder zeigt.
 
-        Der ``channel`` Parameter gibt den Kanal (1 to 13) des Access Points and.
+Der ``channel`` Parameter gibt den Kanal (1 to 13) des Access Points and.
 
-        Wenn der ``mac_address`` Parameter auf Null gesetzt ist, dann wird die
-        voreingestellt MAC Adresse verwendet. Andernfalls kann mit diesem Parameter
-        eine eigene MAC Adresse eingestellt werden.
+Wenn der ``mac_address`` Parameter auf Null gesetzt ist, dann wird die
+voreingestellt MAC Adresse verwendet. Andernfalls kann mit diesem Parameter
+eine eigene MAC Adresse eingestellt werden.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_ap_configuration(
             &mut self,
             request: crate::bindings::master::SetWifi2ApConfigurationRequest,
@@ -5011,9 +4773,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Access-Point-Konfiguration zurück, wie von
-        :func:`Set Wifi2 AP Configuration` gesetzt.
-         */
+Gibt die Access-Point-Konfiguration zurück, wie von
+:func:`Set Wifi2 AP Configuration` gesetzt.
+*/
         pub async fn get_wifi_2_ap_configuration(
             &mut self,
         ) -> Result<
@@ -5029,16 +4791,16 @@ pub mod master {
             )
         }
         /**
-        Setzt das Access-Point-Passwort (mindestens 8 und bis zu 63 Zeichen) für den eingestellten
-        Verschlüsselungsmodus, siehe :func:`Set Wifi2 AP Configuration`.
+Setzt das Access-Point-Passwort (mindestens 8 und bis zu 63 Zeichen) für den eingestellten
+Verschlüsselungsmodus, siehe :func:`Set Wifi2 AP Configuration`.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_ap_password(
             &mut self,
             request: [char; 64usize],
@@ -5054,12 +4816,12 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt das Access-Point-Passwort zurück, wie von :func:`Set Wifi2 AP Password` gesetzt.
+Gibt das Access-Point-Passwort zurück, wie von :func:`Set Wifi2 AP Password` gesetzt.
 
-        .. note::
-         Seit WIFI Extension 2.0 Firmware Version 2.1.3 wird das Passwort
-         nicht mehr zurückgegeben.
-         */
+.. note::
+ Seit WIFI Extension 2.0 Firmware Version 2.1.3 wird das Passwort
+ nicht mehr zurückgegeben.
+*/
         pub async fn get_wifi_2_ap_password(
             &mut self,
         ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
@@ -5068,14 +4830,14 @@ pub mod master {
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
         }
         /**
-        Alle Konfigurationsfunktionen der WIFI Extension 2.0 ändern die Werte nicht
-        dauerhaft. Nach einer Konfiguration muss diese Funktion aufgerufen werden, um
-        die Werte dauerhaft zu speichern.
+Alle Konfigurationsfunktionen der WIFI Extension 2.0 ändern die Werte nicht
+dauerhaft. Nach einer Konfiguration muss diese Funktion aufgerufen werden, um
+die Werte dauerhaft zu speichern.
 
-        Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
-        Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet
-        werden.
-         */
+Die Werte sind im EEPROM gespeichert und werden nur beim Start angewandt.
+Das bedeutet der Master Brick muss nach einer Konfiguration neu gestartet
+werden.
+*/
         pub async fn save_wifi_2_configuration(
             &mut self,
         ) -> Result<u8, tinkerforge_base::error::TinkerforgeError> {
@@ -5084,8 +4846,8 @@ pub mod master {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Gibt die aktuelle Version der WIFI Extension 2.0 Firmware zurück.
-         */
+Gibt die aktuelle Version der WIFI Extension 2.0 Firmware zurück.
+*/
         pub async fn get_wifi_2_firmware_version(
             &mut self,
         ) -> Result<
@@ -5101,8 +4863,8 @@ pub mod master {
             )
         }
         /**
-        Aktiviert die grüne Status LED der WIFI Extension 2.0.
-         */
+Aktiviert die grüne Status LED der WIFI Extension 2.0.
+*/
         pub async fn enable_wifi_2_status_led(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -5113,8 +4875,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Deaktiviert die grüne Status LED der WIFI Extension 2.0.
-         */
+Deaktiviert die grüne Status LED der WIFI Extension 2.0.
+*/
         pub async fn disable_wifi_2_status_led(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -5125,8 +4887,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt *true* zurück falls die grüne Status LED der WIFI Extension 2.0 aktiviert ist.
-         */
+Gibt *true* zurück falls die grüne Status LED der WIFI Extension 2.0 aktiviert ist.
+*/
         pub async fn is_wifi_2_status_led_enabled(
             &mut self,
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
@@ -5135,41 +4897,41 @@ pub mod master {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Set die Mesh-Konfiguration der WIFI Extension 2.0.
+Set die Mesh-Konfiguration der WIFI Extension 2.0.
 
-        Der ``enable`` Parameter aktiviert oder deaktiviert den Mesh-Teil der
-        WIFI Extension 2.0. Der Mesh-Teil kann nicht
-        zusammen mit dem Client- und Access-Point-Teil aktiviert werden.
+Der ``enable`` Parameter aktiviert oder deaktiviert den Mesh-Teil der
+WIFI Extension 2.0. Der Mesh-Teil kann nicht
+zusammen mit dem Client- und Access-Point-Teil aktiviert werden.
 
-        Wenn die ``root_ip``, ``root_subnet_mask`` und ``root_gateway`` Parameter alle
-        auf Null gesetzt sind, dann wird DHCP verwendet. Andernfalls kann mit diese
-        drei Parametern eine statische IP Adresse eingestellt werden. Die
-        Standardeinstellung ist DHCP.
+Wenn die ``root_ip``, ``root_subnet_mask`` und ``root_gateway`` Parameter alle
+auf Null gesetzt sind, dann wird DHCP verwendet. Andernfalls kann mit diese
+drei Parametern eine statische IP Adresse eingestellt werden. Die
+Standardeinstellung ist DHCP.
 
-        Wenn der ``router_bssid`` Parameter auf Null gesetzt ist, dann verbindet sich
-        die WIFI Extension 2.0 mit einem Access Point wenn die eingestellt SSID
-        übereinstimmt, siehe :func:`Set Wifi2 Mesh Router SSID`. Andernfalls kann dieses
-        Parameter verwendet werden, damit sich die WIFI Extension 2.0 nur dann mit
-        einem Access Point verbindet, wenn SSID und BSSID übereinstimmen. Die BSSID
-        kann auch verwendet werden, um eine Verbindung mit einer verstecken SSID
-        herzustellen.
+Wenn der ``router_bssid`` Parameter auf Null gesetzt ist, dann verbindet sich
+die WIFI Extension 2.0 mit einem Access Point wenn die eingestellt SSID
+übereinstimmt, siehe :func:`Set Wifi2 Mesh Router SSID`. Andernfalls kann dieses
+Parameter verwendet werden, damit sich die WIFI Extension 2.0 nur dann mit
+einem Access Point verbindet, wenn SSID und BSSID übereinstimmen. Die BSSID
+kann auch verwendet werden, um eine Verbindung mit einer verstecken SSID
+herzustellen.
 
-        Die ``group_id`` und ``group_ssid_prefix`` Parameter identifizieren in bestimmtes
-        Mesh-Netzwerk und alle WIFI Extension 2.0 mit der gleichen Gruppeneinstellung
-        gehören um gleichen Mesh-Netzwerk.
+Die ``group_id`` und ``group_ssid_prefix`` Parameter identifizieren in bestimmtes
+Mesh-Netzwerk und alle WIFI Extension 2.0 mit der gleichen Gruppeneinstellung
+gehören um gleichen Mesh-Netzwerk.
 
-        Die ``gateway_ip`` und ``gateway_port`` Parameter geben an, wie der Mesh-Gateway
-        (brickd) erreicht werden kann.
+Die ``gateway_ip`` und ``gateway_port`` Parameter geben an, wie der Mesh-Gateway
+(brickd) erreicht werden kann.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_mesh_configuration(
             &mut self,
             request: crate::bindings::master::SetWifi2MeshConfigurationRequest,
@@ -5185,10 +4947,10 @@ pub mod master {
             Ok(())
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Gibt das Mesh Konfiguration zurück, wie von :func:`Set Wifi2 Mesh Configuration` gesetzt.
-         */
+Gibt das Mesh Konfiguration zurück, wie von :func:`Set Wifi2 Mesh Configuration` gesetzt.
+*/
         pub async fn get_wifi_2_mesh_configuration(
             &mut self,
         ) -> Result<
@@ -5204,22 +4966,22 @@ pub mod master {
             )
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Setzt die Mesh-Router-SSID der WIFI Extension 2.0. Diese wird verwendet um den
-        Mesh Router festzulegen.
+Setzt die Mesh-Router-SSID der WIFI Extension 2.0. Diese wird verwendet um den
+Mesh Router festzulegen.
 
-        Zu beachten ist, dass zwar 32 Zeichen als SSID übergeben werden können, aber im
-        Moment davon nur die ersten 31 Zeichen genutzt werden bedingt durch einen Bug
-        in der verwendeten Mesh-Bibliothek.
+Zu beachten ist, dass zwar 32 Zeichen als SSID übergeben werden können, aber im
+Moment davon nur die ersten 31 Zeichen genutzt werden bedingt durch einen Bug
+in der verwendeten Mesh-Bibliothek.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_mesh_router_ssid(
             &mut self,
             request: [char; 32usize],
@@ -5235,10 +4997,10 @@ pub mod master {
             Ok(())
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Gibt das Mesh-Router-SSID zurück, wie von :func:`Set Wifi2 Mesh Router SSID` gesetzt.
-         */
+Gibt das Mesh-Router-SSID zurück, wie von :func:`Set Wifi2 Mesh Router SSID` gesetzt.
+*/
         pub async fn get_wifi_2_mesh_router_ssid(
             &mut self,
         ) -> Result<[char; 32usize], tinkerforge_base::error::TinkerforgeError> {
@@ -5247,18 +5009,18 @@ pub mod master {
             Ok(<[char; 32usize]>::from_le_byte_slice(&result.body()[0..32usize]))
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Setzt das Mesh-Router-Passwort (bis zu 64 Zeichen) für WPA/WPA2 Verschlüsselung.
-        Das Password wird für die Verbindung zum Mesh Router verwendet.
+Setzt das Mesh-Router-Passwort (bis zu 64 Zeichen) für WPA/WPA2 Verschlüsselung.
+Das Password wird für die Verbindung zum Mesh Router verwendet.
 
-        Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
-        :func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
-        danach neugestartet werden.
+Um Konfigurationsänderungen für die WIFI Extension 2.0 zu übernehmen muss die
+:func:`Save Wifi2 Configuration` Funktion aufgerufen und der Master Brick
+danach neugestartet werden.
 
-        Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
-        konfigurieren.
-         */
+Wir empfehlen den Brick Viewer zu verwenden, um die WIFI Extension 2.0 zu
+konfigurieren.
+*/
         pub async fn set_wifi_2_mesh_router_password(
             &mut self,
             request: [char; 64usize],
@@ -5274,10 +5036,10 @@ pub mod master {
             Ok(())
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Gibt das Mesh-Router-Password zurück, wie von :func:`Set Wifi2 Mesh Router Password` gesetzt.
-         */
+Gibt das Mesh-Router-Password zurück, wie von :func:`Set Wifi2 Mesh Router Password` gesetzt.
+*/
         pub async fn get_wifi_2_mesh_router_password(
             &mut self,
         ) -> Result<[char; 64usize], tinkerforge_base::error::TinkerforgeError> {
@@ -5286,10 +5048,10 @@ pub mod master {
             Ok(<[char; 64usize]>::from_le_byte_slice(&result.body()[0..64usize]))
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Gibt den allgemeinen Mesh-Status der WIFI Extension 2.0 zurück.
-         */
+Gibt den allgemeinen Mesh-Status der WIFI Extension 2.0 zurück.
+*/
         pub async fn get_wifi_2_mesh_common_status(
             &mut self,
         ) -> Result<
@@ -5305,10 +5067,10 @@ pub mod master {
             )
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Gibt den Mesh-Client-Status der WIFI Extension 2.0 zurück.
-         */
+Gibt den Mesh-Client-Status der WIFI Extension 2.0 zurück.
+*/
         pub async fn get_wifi_2_mesh_client_status(
             &mut self,
         ) -> Result<
@@ -5324,10 +5086,10 @@ pub mod master {
             )
         }
         /**
-        Benötigt WIFI Extension 2.0 Firmware 2.1.0.
+Benötigt WIFI Extension 2.0 Firmware 2.1.0.
 
-        Gibt den Mesh-AP-Status der WIFI Extension 2.0 zurück.
-         */
+Gibt den Mesh-AP-Status der WIFI Extension 2.0 zurück.
+*/
         pub async fn get_wifi_2_mesh_ap_status(
             &mut self,
         ) -> Result<
@@ -5343,16 +5105,16 @@ pub mod master {
             )
         }
         /**
-        Diese Funktion wird Tinkerforge-Intern genutzt um initial den
-        Bootstrapper und Bootloader auf Bricklets zu flashen.
+Diese Funktion wird Tinkerforge-Intern genutzt um initial den
+Bootstrapper und Bootloader auf Bricklets zu flashen.
 
-        Falls die Notwendigkeit besteht einen Bootstrapper/Bootloader
-        zu flashen (zum Beispiel weil ein eigenes Bricklet entwickelet
-        wurde) bitte nicht diese Funktion direkt benutzen.
+Falls die Notwendigkeit besteht einen Bootstrapper/Bootloader
+zu flashen (zum Beispiel weil ein eigenes Bricklet entwickelet
+wurde) bitte nicht diese Funktion direkt benutzen.
 
-        Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
-        `https://github.com/Tinkerforge/flash-test <https://github.com/Tinkerforge/flash-test>`__
-         */
+Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
+`https://github.com/Tinkerforge/flash-test <https://github.com/Tinkerforge/flash-test>`__
+*/
         pub async fn set_bricklet_xmc_flash_config(
             &mut self,
             request: crate::bindings::master::SetBrickletXmcFlashConfigRequest,
@@ -5373,16 +5135,16 @@ pub mod master {
             )
         }
         /**
-        Diese Funktion wird Tinkerforge-Intern genutzt um initial den
-        Bootstrapper und Bootloader auf Bricklets zu flashen.
+Diese Funktion wird Tinkerforge-Intern genutzt um initial den
+Bootstrapper und Bootloader auf Bricklets zu flashen.
 
-        Falls die Notwendigkeit besteht einen Bootstrapper/Bootloader
-        zu flashen (zum Beispiel weil ein eigenes Bricklet entwickelet
-        wurde) bitte nicht diese Funktion direkt benutzen.
+Falls die Notwendigkeit besteht einen Bootstrapper/Bootloader
+zu flashen (zum Beispiel weil ein eigenes Bricklet entwickelet
+wurde) bitte nicht diese Funktion direkt benutzen.
 
-        Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
-        `https://github.com/Tinkerforge/flash-test <https://github.com/Tinkerforge/flash-test>`__
-         */
+Dafür kann unser Open Source Flash/Test-Tool genutzt werden:
+`https://github.com/Tinkerforge/flash-test <https://github.com/Tinkerforge/flash-test>`__
+*/
         pub async fn set_bricklet_xmc_flash_data(
             &mut self,
             request: [u8; 64usize],
@@ -5411,8 +5173,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt *true* zurück wenn die Bricklets aktiviert sind und *false* wenn sie deaktiviert sind.
-         */
+Gibt *true* zurück wenn die Bricklets aktiviert sind und *false* wenn sie deaktiviert sind.
+*/
         pub async fn get_bricklets_enabled(
             &mut self,
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
@@ -5421,26 +5183,26 @@ pub mod master {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Das SPITF-Protokoll kann mit einer dynamischen Baudrate genutzt werden. Wenn die dynamische
-        Baudrate aktiviert ist, versucht der Brick die Baudrate anhand des Datenaufkommens
-        zwischen Brick und Bricklet anzupassen.
+Das SPITF-Protokoll kann mit einer dynamischen Baudrate genutzt werden. Wenn die dynamische
+Baudrate aktiviert ist, versucht der Brick die Baudrate anhand des Datenaufkommens
+zwischen Brick und Bricklet anzupassen.
 
-        Die Baudrate wird exponentiell erhöht wenn viele Daten gesendet/empfangen werden
-        und linear verringert wenn wenig Daten gesendet/empfangen werden.
+Die Baudrate wird exponentiell erhöht wenn viele Daten gesendet/empfangen werden
+und linear verringert wenn wenig Daten gesendet/empfangen werden.
 
-        Diese Vorgehensweise verringert die Baudrate in Anwendungen wo nur wenig Daten
-        ausgetauscht werden müssen (z.B. eine Wetterstation) und erhöht die Robustheit.
-        Wenn immer viele Daten ausgetauscht werden (z.B. Thermal Imaging Bricklet), wird
-        die Baudrate automatisch erhöht.
+Diese Vorgehensweise verringert die Baudrate in Anwendungen wo nur wenig Daten
+ausgetauscht werden müssen (z.B. eine Wetterstation) und erhöht die Robustheit.
+Wenn immer viele Daten ausgetauscht werden (z.B. Thermal Imaging Bricklet), wird
+die Baudrate automatisch erhöht.
 
-        In Fällen wo wenige Daten all paar Sekunden so schnell wie Möglich übertragen werden
-        sollen (z.B. RS485 Bricklet mit hoher Baudrate aber kleinem Payload) kann die
-        dynamische Baudrate zum maximieren der Performance ausgestellt werden.
+In Fällen wo wenige Daten all paar Sekunden so schnell wie Möglich übertragen werden
+sollen (z.B. RS485 Bricklet mit hoher Baudrate aber kleinem Payload) kann die
+dynamische Baudrate zum maximieren der Performance ausgestellt werden.
 
-        Die maximale Baudrate kann pro Port mit der Funktion :func:`Set SPITFP Baudrate`.
-        gesetzt werden. Falls die dynamische Baudrate nicht aktiviert ist, wird die Baudrate
-        wie von :func:`Set SPITFP Baudrate` gesetzt statisch verwendet.
-         */
+Die maximale Baudrate kann pro Port mit der Funktion :func:`Set SPITFP Baudrate`.
+gesetzt werden. Falls die dynamische Baudrate nicht aktiviert ist, wird die Baudrate
+wie von :func:`Set SPITFP Baudrate` gesetzt statisch verwendet.
+*/
         pub async fn set_spitfp_baudrate_config(
             &mut self,
             request: crate::bindings::master::SetSpitfpBaudrateConfigRequest,
@@ -5456,8 +5218,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Baudratenkonfiguration zurück, siehe :func:`Set SPITFP Baudrate Config`.
-         */
+Gibt die Baudratenkonfiguration zurück, siehe :func:`Set SPITFP Baudrate Config`.
+*/
         pub async fn get_spitfp_baudrate_config(
             &mut self,
         ) -> Result<
@@ -5473,13 +5235,13 @@ pub mod master {
             )
         }
         /**
-        Gibt den Timeout-Zähler für die verschiedenen Kommunikationsmöglichkeiten zurück
+Gibt den Timeout-Zähler für die verschiedenen Kommunikationsmöglichkeiten zurück
 
-        Die Kommunikationsmöglichkeiten 0-2 stehen auf allen Bricks zur verfügung, 3-7 nur auf Master Bricks.
+Die Kommunikationsmöglichkeiten 0-2 stehen auf allen Bricks zur verfügung, 3-7 nur auf Master Bricks.
 
-        Diese Funktion ist hauptsächlich zum debuggen während der Entwicklung gedacht.
-        Im normalen Betrieb sollten alle Zähler fast immer auf 0 stehen bleiben.
-         */
+Diese Funktion ist hauptsächlich zum debuggen während der Entwicklung gedacht.
+Im normalen Betrieb sollten alle Zähler fast immer auf 0 stehen bleiben.
+*/
         pub async fn get_send_timeout_count(
             &mut self,
             request: crate::bindings::master::CommunicationMethod,
@@ -5493,19 +5255,19 @@ pub mod master {
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
         /**
-        Setzt die Baudrate eines spezifischen Bricklet Ports .
+Setzt die Baudrate eines spezifischen Bricklet Ports .
 
-        Für einen höheren Durchsatz der Bricklets kann die Baudrate erhöht werden.
-        Wenn der Fehlerzähler auf Grund von lokaler Störeinstrahlung hoch ist
-        (siehe :func:`Get SPITFP Error Count`) kann die Baudrate verringert werden.
+Für einen höheren Durchsatz der Bricklets kann die Baudrate erhöht werden.
+Wenn der Fehlerzähler auf Grund von lokaler Störeinstrahlung hoch ist
+(siehe :func:`Get SPITFP Error Count`) kann die Baudrate verringert werden.
 
-        Wenn das Feature der dynamische Baudrate aktiviert ist, setzt diese Funktion
-        die maximale Baudrate (siehe :func:`Set SPITFP Baudrate Config`).
+Wenn das Feature der dynamische Baudrate aktiviert ist, setzt diese Funktion
+die maximale Baudrate (siehe :func:`Set SPITFP Baudrate Config`).
 
-        EMV Tests werden mit der Standardbaudrate durchgeführt. Falls eine
-        CE-Kompatibilität o.ä. in der Anwendung notwendig ist empfehlen wir die
-        Baudrate nicht zu ändern.
-         */
+EMV Tests werden mit der Standardbaudrate durchgeführt. Falls eine
+CE-Kompatibilität o.ä. in der Anwendung notwendig ist empfehlen wir die
+Baudrate nicht zu ändern.
+*/
         pub async fn set_spitfp_baudrate(
             &mut self,
             request: crate::bindings::master::SetSpitfpBaudrateRequest,
@@ -5521,9 +5283,9 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt die Baudrate für einen Bricklet Port zurück, siehe
-        :func:`Set SPITFP Baudrate`.
-         */
+Gibt die Baudrate für einen Bricklet Port zurück, siehe
+:func:`Set SPITFP Baudrate`.
+*/
         pub async fn get_spitfp_baudrate(
             &mut self,
             request: char,
@@ -5537,20 +5299,20 @@ pub mod master {
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
         /**
-        Gibt die Anzahl der Fehler die während der Kommunikation zwischen Brick und
-        Bricklet aufgetreten sind zurück.
+Gibt die Anzahl der Fehler die während der Kommunikation zwischen Brick und
+Bricklet aufgetreten sind zurück.
 
-        Die Fehler sind aufgeteilt in
+Die Fehler sind aufgeteilt in
 
-        * ACK-Checksummen Fehler,
-        * Message-Checksummen Fehler,
-        * Framing Fehler und
-        * Overflow Fehler.
+* ACK-Checksummen Fehler,
+* Message-Checksummen Fehler,
+* Framing Fehler und
+* Overflow Fehler.
 
-        Die Fehlerzähler sind für Fehler die auf der Seite des Bricks auftreten.
-        Jedes Bricklet hat eine ähnliche Funktion welche die Fehler auf Brickletseite
-        ausgibt.
-         */
+Die Fehlerzähler sind für Fehler die auf der Seite des Bricks auftreten.
+Jedes Bricklet hat eine ähnliche Funktion welche die Fehler auf Brickletseite
+ausgibt.
+*/
         pub async fn get_spitfp_error_count(
             &mut self,
             request: char,
@@ -5571,14 +5333,14 @@ pub mod master {
             )
         }
         /**
-        Aktiviert die Status LED.
+Aktiviert die Status LED.
 
-        Die Status LED ist die blaue LED neben dem USB-Stecker. Wenn diese aktiviert
-        ist, ist sie an und sie flackert wenn Daten transferiert werden. Wenn sie
-        deaktiviert ist, ist sie immer aus.
+Die Status LED ist die blaue LED neben dem USB-Stecker. Wenn diese aktiviert
+ist, ist sie an und sie flackert wenn Daten transferiert werden. Wenn sie
+deaktiviert ist, ist sie immer aus.
 
-        Der Standardzustand ist aktiviert.
-         */
+Der Standardzustand ist aktiviert.
+*/
         pub async fn enable_status_led(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -5589,14 +5351,14 @@ pub mod master {
             Ok(())
         }
         /**
-        Deaktiviert die Status LED.
+Deaktiviert die Status LED.
 
-        Die Status LED ist die blaue LED neben dem USB-Stecker. Wenn diese aktiviert
-        ist, ist sie an und sie flackert wenn Daten transferiert werden. Wenn sie
-        deaktiviert ist, ist sie immer aus.
+Die Status LED ist die blaue LED neben dem USB-Stecker. Wenn diese aktiviert
+ist, ist sie an und sie flackert wenn Daten transferiert werden. Wenn sie
+deaktiviert ist, ist sie immer aus.
 
-        Der Standardzustand ist aktiviert.
-         */
+Der Standardzustand ist aktiviert.
+*/
         pub async fn disable_status_led(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -5607,8 +5369,8 @@ pub mod master {
             Ok(())
         }
         /**
-        Gibt *true* zurück wenn die Status LED aktiviert ist, *false* sonst.
-         */
+Gibt *true* zurück wenn die Status LED aktiviert ist, *false* sonst.
+*/
         pub async fn is_status_led_enabled(
             &mut self,
         ) -> Result<bool, tinkerforge_base::error::TinkerforgeError> {
@@ -5617,12 +5379,12 @@ pub mod master {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Gibt die Firmware und Protokoll Version und den Namen des Bricklets für einen
-        gegebenen Port zurück.
+Gibt die Firmware und Protokoll Version und den Namen des Bricklets für einen
+gegebenen Port zurück.
 
-        Der einzige Zweck dieser Funktion ist es, automatischen Flashen von Bricklet
-        v1.x.y Plugins zu ermöglichen.
-         */
+Der einzige Zweck dieser Funktion ist es, automatischen Flashen von Bricklet
+v1.x.y Plugins zu ermöglichen.
+*/
         pub async fn get_protocol_1_bricklet_name(
             &mut self,
             request: char,
@@ -5643,13 +5405,13 @@ pub mod master {
             )
         }
         /**
-        Gibt die Temperatur, gemessen im Mikrocontroller, aus. Der
-        Rückgabewert ist nicht die Umgebungstemperatur.
+Gibt die Temperatur, gemessen im Mikrocontroller, aus. Der
+Rückgabewert ist nicht die Umgebungstemperatur.
 
-        Die Temperatur ist lediglich proportional zur echten Temperatur und hat eine
-        Genauigkeit von ±15%. Daher beschränkt sich der praktische Nutzen auf die
-        Indikation von Temperaturveränderungen.
-         */
+Die Temperatur ist lediglich proportional zur echten Temperatur und hat eine
+Genauigkeit von ±15%. Daher beschränkt sich der praktische Nutzen auf die
+Indikation von Temperaturveränderungen.
+*/
         pub async fn get_chip_temperature(
             &mut self,
         ) -> Result<i16, tinkerforge_base::error::TinkerforgeError> {
@@ -5658,12 +5420,12 @@ pub mod master {
             Ok(i16::from_le_byte_slice(&result.body()[0..2usize]))
         }
         /**
-        Ein Aufruf dieser Funktion setzt den Brick zurück. Befindet sich der Brick
-        innerhalb eines Stapels wird der gesamte Stapel zurück gesetzt.
+Ein Aufruf dieser Funktion setzt den Brick zurück. Befindet sich der Brick
+innerhalb eines Stapels wird der gesamte Stapel zurück gesetzt.
 
-        Nach dem Zurücksetzen ist es notwendig neue Geräteobjekte zu erzeugen,
-        Funktionsaufrufe auf bestehende führt zu undefiniertem Verhalten.
-         */
+Nach dem Zurücksetzen ist es notwendig neue Geräteobjekte zu erzeugen,
+Funktionsaufrufe auf bestehende führt zu undefiniertem Verhalten.
+*/
         pub async fn reset(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -5674,12 +5436,12 @@ pub mod master {
             Ok(())
         }
         /**
-        Schreibt 32 Bytes Firmware auf das Bricklet, dass am gegebenen Port angeschlossen ist.
-        Die Bytes werden an die Position offset * 32 geschrieben.
+Schreibt 32 Bytes Firmware auf das Bricklet, dass am gegebenen Port angeschlossen ist.
+Die Bytes werden an die Position offset * 32 geschrieben.
 
-        Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
-        normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
-         */
+Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
+normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
+*/
         pub async fn write_bricklet_plugin(
             &mut self,
             request: crate::bindings::master::WriteBrickletPluginRequest,
@@ -5695,12 +5457,12 @@ pub mod master {
             Ok(())
         }
         /**
-        Liest 32 Bytes Firmware vom Bricklet, dass am gegebenen Port angeschlossen ist.
-        Die Bytes werden ab der Position offset * 32 gelesen.
+Liest 32 Bytes Firmware vom Bricklet, dass am gegebenen Port angeschlossen ist.
+Die Bytes werden ab der Position offset * 32 gelesen.
 
-        Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
-        normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
-         */
+Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
+normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
+*/
         pub async fn read_bricklet_plugin(
             &mut self,
             request: crate::bindings::master::ReadBrickletPluginRequest,
@@ -5714,15 +5476,15 @@ pub mod master {
             Ok(<[u8; 32usize]>::from_le_byte_slice(&result.body()[0..32usize]))
         }
         /**
-        Gibt die UID, die UID zu der der Brick verbunden ist, die
-        Position, die Hard- und Firmware Version sowie den Device Identifier
-        zurück.
+Gibt die UID, die UID zu der der Brick verbunden ist, die
+Position, die Hard- und Firmware Version sowie den Device Identifier
+zurück.
 
-        Die Position ist die Position im Stack von '0' (unterster Brick) bis '8' (oberster Brick).
+Die Position ist die Position im Stack von '0' (unterster Brick) bis '8' (oberster Brick).
 
-        Eine Liste der Device Identifier Werte ist :ref:`hier <device_identifier>` zu
-        finden. |device_identifier_constant|
-         */
+Eine Liste der Device Identifier Werte ist :ref:`hier <device_identifier>` zu
+finden. |device_identifier_constant|
+*/
         pub async fn get_identity(
             &mut self,
         ) -> Result<
@@ -5739,21 +5501,17 @@ pub mod master {
         }
     }
 }
-
 pub mod lcd_128_x_64 {
     #[allow(unused_imports)]
-    use std::convert::TryInto;
-
-    #[allow(unused_imports)]
-        use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
+    use tinkerforge_base::byte_converter::{FromByteSlice, ToBytes};
     #[allow(unused_imports)]
     use tokio_stream::StreamExt;
-
+    #[allow(unused_imports)]
+    use std::convert::TryInto;
     #[derive(Clone, Debug)]
     pub struct Lcd128X64Bricklet {
         device: tinkerforge_base::device::Device,
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct WritePixelsLowLevelRequest {
         pub x_start: u8,
@@ -5764,7 +5522,6 @@ pub mod lcd_128_x_64 {
         pub pixels_chunk_offset: u16,
         pub pixels_chunk_data: [bool; 448usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WritePixelsLowLevelRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -5790,7 +5547,6 @@ pub mod lcd_128_x_64 {
             64usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WritePixelsLowLevelRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.x_start).write_to_slice(&mut target[0usize..1usize]);
@@ -5803,7 +5559,6 @@ pub mod lcd_128_x_64 {
             return 64usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct WritePixelsRequest<'d> {
         pub x_start: u8,
@@ -5812,12 +5567,10 @@ pub mod lcd_128_x_64 {
         pub y_end: u8,
         pub data: &'d [bool],
     }
-
     pub struct WritePixelsIterator<'r> {
         request: &'r WritePixelsRequest<'r>,
         offset: u16,
     }
-
     impl<'d> WritePixelsRequest<'d> {
         pub fn write_to_slices(&'d self) -> WritePixelsIterator<'d> {
             WritePixelsIterator {
@@ -5826,7 +5579,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl<'r> Iterator for WritePixelsIterator<'r> {
         type Item = WritePixelsSlice<'r>;
         fn next(&mut self) -> Option<Self::Item> {
@@ -5850,14 +5602,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     pub struct WritePixelsSlice<'r> {
         request: &'r WritePixelsRequest<'r>,
         offset: u16,
         length: u16,
         data: &'r [bool],
     }
-
     impl<'r> tinkerforge_base::byte_converter::ToBytes for WritePixelsSlice<'r> {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             let mut i = 0;
@@ -5871,7 +5621,6 @@ pub mod lcd_128_x_64 {
             return i;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct ReadPixelsLowLevelRequest {
         pub x_start: u8,
@@ -5879,7 +5628,6 @@ pub mod lcd_128_x_64 {
         pub x_end: u8,
         pub y_end: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for ReadPixelsLowLevelRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -5897,7 +5645,6 @@ pub mod lcd_128_x_64 {
             4usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ReadPixelsLowLevelRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.x_start).write_to_slice(&mut target[0usize..1usize]);
@@ -5907,14 +5654,12 @@ pub mod lcd_128_x_64 {
             return 4usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct ReadPixelsLowLevelResponse {
         pub pixels_length: u16,
         pub pixels_chunk_offset: u16,
         pub pixels_chunk_data: [bool; 480usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for ReadPixelsLowLevelResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let pixels_length = u16::from_le_byte_slice(&bytes[0usize..2usize]);
@@ -5932,7 +5677,6 @@ pub mod lcd_128_x_64 {
             64usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ReadPixelsLowLevelResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.pixels_length).write_to_slice(&mut target[0usize..2usize]);
@@ -5941,7 +5685,6 @@ pub mod lcd_128_x_64 {
             return 64usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetDisplayConfigurationRequest {
         pub contrast: u8,
@@ -5949,7 +5692,6 @@ pub mod lcd_128_x_64 {
         pub invert: bool,
         pub automatic_draw: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetDisplayConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -5968,7 +5710,6 @@ pub mod lcd_128_x_64 {
             4usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetDisplayConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.contrast).write_to_slice(&mut target[0usize..1usize]);
@@ -5978,7 +5719,6 @@ pub mod lcd_128_x_64 {
             return 4usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetDisplayConfigurationResponse {
         pub contrast: u8,
@@ -5986,7 +5726,6 @@ pub mod lcd_128_x_64 {
         pub invert: bool,
         pub automatic_draw: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetDisplayConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6005,7 +5744,6 @@ pub mod lcd_128_x_64 {
             4usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetDisplayConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.contrast).write_to_slice(&mut target[0usize..1usize]);
@@ -6015,14 +5753,12 @@ pub mod lcd_128_x_64 {
             return 4usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct WriteLineRequest {
         pub line: u8,
         pub position: u8,
         pub text: [char; 22usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for WriteLineRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let line = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6034,7 +5770,6 @@ pub mod lcd_128_x_64 {
             24usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for WriteLineRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.line).write_to_slice(&mut target[0usize..1usize]);
@@ -6043,7 +5778,6 @@ pub mod lcd_128_x_64 {
             return 24usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetTouchPositionResponse {
         pub pressure: u16,
@@ -6051,7 +5785,6 @@ pub mod lcd_128_x_64 {
         pub y: u16,
         pub age: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetTouchPositionResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let pressure = u16::from_le_byte_slice(&bytes[0usize..2usize]);
@@ -6064,7 +5797,6 @@ pub mod lcd_128_x_64 {
             10usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetTouchPositionResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.pressure).write_to_slice(&mut target[0usize..2usize]);
@@ -6074,13 +5806,11 @@ pub mod lcd_128_x_64 {
             return 10usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetTouchPositionCallbackConfigurationRequest {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetTouchPositionCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6095,7 +5825,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetTouchPositionCallbackConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -6104,13 +5833,11 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetTouchPositionCallbackConfigurationResponse {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetTouchPositionCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6125,7 +5852,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetTouchPositionCallbackConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -6134,7 +5860,6 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct TouchPositionCallback {
         pub pressure: u16,
@@ -6142,7 +5867,6 @@ pub mod lcd_128_x_64 {
         pub y: u16,
         pub age: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for TouchPositionCallback {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let pressure = u16::from_le_byte_slice(&bytes[0usize..2usize]);
@@ -6155,7 +5879,6 @@ pub mod lcd_128_x_64 {
             10usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for TouchPositionCallback {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.pressure).write_to_slice(&mut target[0usize..2usize]);
@@ -6165,7 +5888,6 @@ pub mod lcd_128_x_64 {
             return 10usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Gesture {
         LeftToRight,
@@ -6173,7 +5895,6 @@ pub mod lcd_128_x_64 {
         TopToBottom,
         BottomToTop,
     }
-
     impl Into<u8> for Gesture {
         fn into(self) -> u8 {
             match self {
@@ -6184,13 +5905,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Gesture {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Gesture as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Gesture {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -6199,7 +5918,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<Gesture> for u8 {
         type Error = ();
         fn try_into(self) -> Result<Gesture, Self::Error> {
@@ -6212,7 +5930,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetTouchGestureResponse {
         pub gesture: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -6227,7 +5944,6 @@ pub mod lcd_128_x_64 {
         pub y_end: u16,
         pub age: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetTouchGestureResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let gesture = tinkerforge_base::byte_converter::ParsedOrRaw::<
@@ -6256,7 +5972,6 @@ pub mod lcd_128_x_64 {
             19usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetTouchGestureResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.gesture).write_to_slice(&mut target[0usize..1usize]);
@@ -6270,13 +5985,11 @@ pub mod lcd_128_x_64 {
             return 19usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetTouchGestureCallbackConfigurationRequest {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetTouchGestureCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6291,7 +6004,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetTouchGestureCallbackConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -6300,13 +6012,11 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetTouchGestureCallbackConfigurationResponse {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetTouchGestureCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6321,7 +6031,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetTouchGestureCallbackConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -6330,7 +6039,6 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct TouchGestureCallback {
         pub gesture: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -6345,7 +6053,6 @@ pub mod lcd_128_x_64 {
         pub y_end: u16,
         pub age: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for TouchGestureCallback {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let gesture = tinkerforge_base::byte_converter::ParsedOrRaw::<
@@ -6374,7 +6081,6 @@ pub mod lcd_128_x_64 {
             19usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for TouchGestureCallback {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.gesture).write_to_slice(&mut target[0usize..1usize]);
@@ -6388,13 +6094,11 @@ pub mod lcd_128_x_64 {
             return 19usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Color {
         White,
         Black,
     }
-
     impl Into<bool> for Color {
         fn into(self) -> bool {
             match self {
@@ -6403,13 +6107,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Color {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Color as Into<bool>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Color {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             bool::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -6418,7 +6120,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<Color> for bool {
         type Error = ();
         fn try_into(self) -> Result<Color, Self::Error> {
@@ -6429,7 +6130,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct DrawLineRequest {
         pub position_x_start: u8,
@@ -6438,7 +6138,6 @@ pub mod lcd_128_x_64 {
         pub position_y_end: u8,
         pub color: crate::bindings::lcd_128_x_64::Color,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for DrawLineRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let position_x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6460,7 +6159,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for DrawLineRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.position_x_start).write_to_slice(&mut target[0usize..1usize]);
@@ -6471,7 +6169,6 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct DrawBoxRequest {
         pub position_x_start: u8,
@@ -6481,7 +6178,6 @@ pub mod lcd_128_x_64 {
         pub fill: bool,
         pub color: crate::bindings::lcd_128_x_64::Color,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for DrawBoxRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let position_x_start = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6505,7 +6201,6 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for DrawBoxRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.position_x_start).write_to_slice(&mut target[0usize..1usize]);
@@ -6517,7 +6212,6 @@ pub mod lcd_128_x_64 {
             return 6usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Font {
         _6X8,
@@ -6531,7 +6225,6 @@ pub mod lcd_128_x_64 {
         _18X32,
         _24X32,
     }
-
     impl Into<u8> for Font {
         fn into(self) -> u8 {
             match self {
@@ -6548,13 +6241,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Font {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Font as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Font {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -6563,7 +6254,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<Font> for u8 {
         type Error = ();
         fn try_into(self) -> Result<Font, Self::Error> {
@@ -6582,7 +6272,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct DrawTextRequest {
         pub position_x: u8,
@@ -6591,7 +6280,6 @@ pub mod lcd_128_x_64 {
         pub color: crate::bindings::lcd_128_x_64::Color,
         pub text: [char; 22usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for DrawTextRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let position_x = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6615,7 +6303,6 @@ pub mod lcd_128_x_64 {
             26usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for DrawTextRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.position_x).write_to_slice(&mut target[0usize..1usize]);
@@ -6626,7 +6313,6 @@ pub mod lcd_128_x_64 {
             return 26usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiButtonRequest {
         pub index: u8,
@@ -6636,7 +6322,6 @@ pub mod lcd_128_x_64 {
         pub height: u8,
         pub text: [char; 16usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for SetGuiButtonRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6658,7 +6343,6 @@ pub mod lcd_128_x_64 {
             21usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiButtonRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..1usize]);
@@ -6670,7 +6354,6 @@ pub mod lcd_128_x_64 {
             return 21usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiButtonResponse {
         pub active: bool,
@@ -6680,7 +6363,6 @@ pub mod lcd_128_x_64 {
         pub height: u8,
         pub text: [char; 16usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetGuiButtonResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6702,7 +6384,6 @@ pub mod lcd_128_x_64 {
             21usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiButtonResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.active).write_to_slice(&mut target[0usize..1usize]);
@@ -6714,13 +6395,11 @@ pub mod lcd_128_x_64 {
             return 21usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiButtonPressedCallbackConfigurationRequest {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiButtonPressedCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6735,7 +6414,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiButtonPressedCallbackConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -6744,13 +6422,11 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiButtonPressedCallbackConfigurationResponse {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiButtonPressedCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6765,7 +6441,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiButtonPressedCallbackConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -6774,13 +6449,11 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GuiButtonPressedCallback {
         pub index: u8,
         pub pressed: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GuiButtonPressedCallback {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6791,7 +6464,6 @@ pub mod lcd_128_x_64 {
             2usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GuiButtonPressedCallback {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..1usize]);
@@ -6799,13 +6471,11 @@ pub mod lcd_128_x_64 {
             return 2usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum Direction {
         Horizontal,
         Vertical,
     }
-
     impl Into<u8> for Direction {
         fn into(self) -> u8 {
             match self {
@@ -6814,13 +6484,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for Direction {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <Direction as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for Direction {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -6829,7 +6497,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<Direction> for u8 {
         type Error = ();
         fn try_into(self) -> Result<Direction, Self::Error> {
@@ -6840,7 +6507,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiSliderRequest {
         pub index: u8,
@@ -6850,7 +6516,6 @@ pub mod lcd_128_x_64 {
         pub direction: crate::bindings::lcd_128_x_64::Direction,
         pub value: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for SetGuiSliderRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6874,7 +6539,6 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiSliderRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..1usize]);
@@ -6886,7 +6550,6 @@ pub mod lcd_128_x_64 {
             return 6usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiSliderResponse {
         pub active: bool,
@@ -6899,7 +6562,6 @@ pub mod lcd_128_x_64 {
         >,
         pub value: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetGuiSliderResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -6924,7 +6586,6 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiSliderResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.active).write_to_slice(&mut target[0usize..1usize]);
@@ -6936,13 +6597,11 @@ pub mod lcd_128_x_64 {
             return 6usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiSliderValueCallbackConfigurationRequest {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiSliderValueCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6957,7 +6616,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiSliderValueCallbackConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -6966,13 +6624,11 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiSliderValueCallbackConfigurationResponse {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiSliderValueCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -6987,7 +6643,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiSliderValueCallbackConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -6996,13 +6651,11 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GuiSliderValueCallback {
         pub index: u8,
         pub value: u8,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GuiSliderValueCallback {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -7013,7 +6666,6 @@ pub mod lcd_128_x_64 {
             2usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GuiSliderValueCallback {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..1usize]);
@@ -7021,14 +6673,12 @@ pub mod lcd_128_x_64 {
             return 2usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum ChangeTabOn {
         Click,
         Swipe,
         ClickAndSwipe,
     }
-
     impl Into<u8> for ChangeTabOn {
         fn into(self) -> u8 {
             match self {
@@ -7038,13 +6688,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for ChangeTabOn {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <ChangeTabOn as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for ChangeTabOn {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -7053,7 +6701,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<ChangeTabOn> for u8 {
         type Error = ();
         fn try_into(self) -> Result<ChangeTabOn, Self::Error> {
@@ -7065,13 +6712,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiTabConfigurationRequest {
         pub change_tab_config: crate::bindings::lcd_128_x_64::ChangeTabOn,
         pub clear_gui: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiTabConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7088,7 +6733,6 @@ pub mod lcd_128_x_64 {
             2usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.change_tab_config).write_to_slice(&mut target[0usize..1usize]);
@@ -7096,7 +6740,6 @@ pub mod lcd_128_x_64 {
             return 2usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiTabConfigurationResponse {
         pub change_tab_config: tinkerforge_base::byte_converter::ParsedOrRaw<
@@ -7105,7 +6748,6 @@ pub mod lcd_128_x_64 {
         >,
         pub clear_gui: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiTabConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7123,7 +6765,6 @@ pub mod lcd_128_x_64 {
             2usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.change_tab_config).write_to_slice(&mut target[0usize..1usize]);
@@ -7131,13 +6772,11 @@ pub mod lcd_128_x_64 {
             return 2usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiTabTextRequest {
         pub index: u8,
         pub text: [char; 5usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for SetGuiTabTextRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -7148,7 +6787,6 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabTextRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..1usize]);
@@ -7156,13 +6794,11 @@ pub mod lcd_128_x_64 {
             return 6usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiTabTextResponse {
         pub active: bool,
         pub text: [char; 5usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetGuiTabTextResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -7173,7 +6809,6 @@ pub mod lcd_128_x_64 {
             6usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabTextResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.active).write_to_slice(&mut target[0usize..1usize]);
@@ -7181,13 +6816,11 @@ pub mod lcd_128_x_64 {
             return 6usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiTabIconRequest {
         pub index: u8,
         pub icon: [bool; 168usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for SetGuiTabIconRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let index = u8::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -7198,7 +6831,6 @@ pub mod lcd_128_x_64 {
             22usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiTabIconRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..1usize]);
@@ -7206,13 +6838,11 @@ pub mod lcd_128_x_64 {
             return 22usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiTabIconResponse {
         pub active: bool,
         pub icon: [bool; 168usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetGuiTabIconResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let active = bool::from_le_byte_slice(&bytes[0usize..1usize]);
@@ -7223,7 +6853,6 @@ pub mod lcd_128_x_64 {
             22usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiTabIconResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.active).write_to_slice(&mut target[0usize..1usize]);
@@ -7231,13 +6860,11 @@ pub mod lcd_128_x_64 {
             return 22usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiTabSelectedCallbackConfigurationRequest {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiTabSelectedCallbackConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7252,7 +6879,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for SetGuiTabSelectedCallbackConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -7261,13 +6887,11 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiTabSelectedCallbackConfigurationResponse {
         pub period: u32,
         pub value_has_to_change: bool,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiTabSelectedCallbackConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7282,7 +6906,6 @@ pub mod lcd_128_x_64 {
             5usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes
     for GetGuiTabSelectedCallbackConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
@@ -7291,14 +6914,12 @@ pub mod lcd_128_x_64 {
             return 5usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum GraphType {
         Dot,
         Line,
         Bar,
     }
-
     impl Into<u8> for GraphType {
         fn into(self) -> u8 {
             match self {
@@ -7308,13 +6929,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GraphType {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <GraphType as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GraphType {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -7323,7 +6942,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<GraphType> for u8 {
         type Error = ();
         fn try_into(self) -> Result<GraphType, Self::Error> {
@@ -7335,7 +6953,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiGraphConfigurationRequest {
         pub index: u8,
@@ -7347,7 +6964,6 @@ pub mod lcd_128_x_64 {
         pub text_x: [char; 4usize],
         pub text_y: [char; 4usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiGraphConfigurationRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7376,7 +6992,6 @@ pub mod lcd_128_x_64 {
             14usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiGraphConfigurationRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..1usize]);
@@ -7390,7 +7005,6 @@ pub mod lcd_128_x_64 {
             return 14usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiGraphConfigurationResponse {
         pub active: bool,
@@ -7405,7 +7019,6 @@ pub mod lcd_128_x_64 {
         pub text_x: [char; 4usize],
         pub text_y: [char; 4usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiGraphConfigurationResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7435,7 +7048,6 @@ pub mod lcd_128_x_64 {
             14usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiGraphConfigurationResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.active).write_to_slice(&mut target[0usize..1usize]);
@@ -7449,7 +7061,6 @@ pub mod lcd_128_x_64 {
             return 14usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiGraphDataLowLevelRequest {
         pub index: u8,
@@ -7457,7 +7068,6 @@ pub mod lcd_128_x_64 {
         pub data_chunk_offset: u16,
         pub data_chunk_data: [u8; 59usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for SetGuiGraphDataLowLevelRequest {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7478,7 +7088,6 @@ pub mod lcd_128_x_64 {
             64usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for SetGuiGraphDataLowLevelRequest {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.index).write_to_slice(&mut target[0usize..1usize]);
@@ -7488,18 +7097,15 @@ pub mod lcd_128_x_64 {
             return 64usize;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct SetGuiGraphDataRequest<'d> {
         pub index: u8,
         pub data: &'d [u8],
     }
-
     pub struct SetGuiGraphDataIterator<'r> {
         request: &'r SetGuiGraphDataRequest<'r>,
         offset: u16,
     }
-
     impl<'d> SetGuiGraphDataRequest<'d> {
         pub fn write_to_slices(&'d self) -> SetGuiGraphDataIterator<'d> {
             SetGuiGraphDataIterator {
@@ -7508,7 +7114,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl<'r> Iterator for SetGuiGraphDataIterator<'r> {
         type Item = SetGuiGraphDataSlice<'r>;
         fn next(&mut self) -> Option<Self::Item> {
@@ -7532,14 +7137,12 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     pub struct SetGuiGraphDataSlice<'r> {
         request: &'r SetGuiGraphDataRequest<'r>,
         offset: u16,
         length: u16,
         data: &'r [u8],
     }
-
     impl<'r> tinkerforge_base::byte_converter::ToBytes for SetGuiGraphDataSlice<'r> {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             let mut i = 0;
@@ -7550,14 +7153,12 @@ pub mod lcd_128_x_64 {
             return i;
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetGuiGraphDataLowLevelResponse {
         pub data_length: u16,
         pub data_chunk_offset: u16,
         pub data_chunk_data: [u8; 59usize],
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetGuiGraphDataLowLevelResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7576,7 +7177,6 @@ pub mod lcd_128_x_64 {
             63usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetGuiGraphDataLowLevelResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.data_length).write_to_slice(&mut target[0usize..2usize]);
@@ -7585,7 +7185,6 @@ pub mod lcd_128_x_64 {
             return 63usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum TouchLedConfig {
         Off,
@@ -7593,7 +7192,6 @@ pub mod lcd_128_x_64 {
         ShowHeartbeat,
         ShowTouch,
     }
-
     impl Into<u8> for TouchLedConfig {
         fn into(self) -> u8 {
             match self {
@@ -7604,13 +7202,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for TouchLedConfig {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <TouchLedConfig as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for TouchLedConfig {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -7619,7 +7215,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<TouchLedConfig> for u8 {
         type Error = ();
         fn try_into(self) -> Result<TouchLedConfig, Self::Error> {
@@ -7632,7 +7227,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetSpitfpErrorCountResponse {
         pub error_count_ack_checksum: u32,
@@ -7640,7 +7234,6 @@ pub mod lcd_128_x_64 {
         pub error_count_frame: u32,
         pub error_count_overflow: u32,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice
     for GetSpitfpErrorCountResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
@@ -7663,7 +7256,6 @@ pub mod lcd_128_x_64 {
             16usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetSpitfpErrorCountResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.error_count_ack_checksum).write_to_slice(&mut target[0usize..4usize]);
@@ -7674,7 +7266,6 @@ pub mod lcd_128_x_64 {
             return 16usize;
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum BootloaderMode {
         Bootloader,
@@ -7683,7 +7274,6 @@ pub mod lcd_128_x_64 {
         FirmwareWaitForReboot,
         FirmwareWaitForEraseAndReboot,
     }
-
     impl Into<u8> for BootloaderMode {
         fn into(self) -> u8 {
             match self {
@@ -7695,13 +7285,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for BootloaderMode {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <BootloaderMode as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for BootloaderMode {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -7710,7 +7298,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<BootloaderMode> for u8 {
         type Error = ();
         fn try_into(self) -> Result<BootloaderMode, Self::Error> {
@@ -7724,7 +7311,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum BootloaderStatus {
         Ok,
@@ -7734,7 +7320,6 @@ pub mod lcd_128_x_64 {
         DeviceIdentifierIncorrect,
         CrcMismatch,
     }
-
     impl Into<u8> for BootloaderStatus {
         fn into(self) -> u8 {
             match self {
@@ -7747,13 +7332,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for BootloaderStatus {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <BootloaderStatus as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for BootloaderStatus {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -7762,7 +7345,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<BootloaderStatus> for u8 {
         type Error = ();
         fn try_into(self) -> Result<BootloaderStatus, Self::Error> {
@@ -7777,7 +7359,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
     pub enum StatusLedConfig {
         Off,
@@ -7785,7 +7366,6 @@ pub mod lcd_128_x_64 {
         ShowHeartbeat,
         ShowStatus,
     }
-
     impl Into<u8> for StatusLedConfig {
         fn into(self) -> u8 {
             match self {
@@ -7796,13 +7376,11 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for StatusLedConfig {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             <StatusLedConfig as Into<u8>>::into(*self).write_to_slice(target)
         }
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for StatusLedConfig {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             u8::from_le_byte_slice(bytes).try_into().expect("unsupported enum value")
@@ -7811,7 +7389,6 @@ pub mod lcd_128_x_64 {
             1usize
         }
     }
-
     impl std::convert::TryInto<StatusLedConfig> for u8 {
         type Error = ();
         fn try_into(self) -> Result<StatusLedConfig, Self::Error> {
@@ -7824,7 +7401,6 @@ pub mod lcd_128_x_64 {
             }
         }
     }
-
     #[derive(Copy, Clone, PartialEq, Debug)]
     pub struct GetIdentityResponse {
         pub uid: [char; 8usize],
@@ -7838,7 +7414,6 @@ pub mod lcd_128_x_64 {
         pub firmware_version_revision: u8,
         pub device_identifier: u16,
     }
-
     impl tinkerforge_base::byte_converter::FromByteSlice for GetIdentityResponse {
         fn from_le_byte_slice(bytes: &[u8]) -> Self {
             let uid = <[char; 8usize]>::from_le_byte_slice(&bytes[0usize..8usize]);
@@ -7882,7 +7457,6 @@ pub mod lcd_128_x_64 {
             25usize
         }
     }
-
     impl tinkerforge_base::byte_converter::ToBytes for GetIdentityResponse {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             (&self.uid).write_to_slice(&mut target[0usize..8usize]);
@@ -7900,7 +7474,6 @@ pub mod lcd_128_x_64 {
             return 25usize;
         }
     }
-
     impl Lcd128X64Bricklet {
         pub fn new(
             uid: impl Into<tinkerforge_base::base58::Uid>,
@@ -7918,23 +7491,23 @@ pub mod lcd_128_x_64 {
             self.device.uid()
         }
         /**
-        Schreibt Pixel in das angegebene Fenster.
+Schreibt Pixel in das angegebene Fenster.
 
-        Die Pixel werden zeilenweise von oben nach unten geschrieben
-        und die Zeilen werden jeweils von links nach rechts geschrieben.
+Die Pixel werden zeilenweise von oben nach unten geschrieben
+und die Zeilen werden jeweils von links nach rechts geschrieben.
 
-        Wenn Automatic Draw aktiviert ist (Standard), dann werden die Pixel direkt auf
-        den Display geschrieben. Nur Pixel die sich wirklich verändert haben werden
-        auf dem Display aktualisiert.
+Wenn Automatic Draw aktiviert ist (Standard), dann werden die Pixel direkt auf
+den Display geschrieben. Nur Pixel die sich wirklich verändert haben werden
+auf dem Display aktualisiert.
 
-        Wenn Automatic Draw deaktiviert ist, dann werden die Pixel in einen internen
-        Buffer geschrieben der dann durch einen Aufruf von :func:`Draw Buffered Frame`
-        auf dem Display angezeigt werden kann. Dadurch kann Flicker vermieden werden,
-        wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
+Wenn Automatic Draw deaktiviert ist, dann werden die Pixel in einen internen
+Buffer geschrieben der dann durch einen Aufruf von :func:`Draw Buffered Frame`
+auf dem Display angezeigt werden kann. Dadurch kann Flicker vermieden werden,
+wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
 
-        Automatic Draw kann über die :func:`Set Display Configuration` Funktion
-        eingestellt werden.
-         */
+Automatic Draw kann über die :func:`Set Display Configuration` Funktion
+eingestellt werden.
+*/
         pub async fn write_pixels(
             &mut self,
             request: WritePixelsRequest<'_>,
@@ -7950,20 +7523,20 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Liest Pixel aus dem angegebenen Fenster.
+Liest Pixel aus dem angegebenen Fenster.
 
-        Die Pixel werden zeilenweise von oben nach unten
-        und die Zeilen werden jeweils von links nach rechts gelesen.
+Die Pixel werden zeilenweise von oben nach unten
+und die Zeilen werden jeweils von links nach rechts gelesen.
 
-        Wenn Automatic Draw aktiviert ist (Standard), dann werden die Pixel direkt vom
-        Display gelesen.
+Wenn Automatic Draw aktiviert ist (Standard), dann werden die Pixel direkt vom
+Display gelesen.
 
-        Wenn Automatic Draw deaktiviert ist, dann werden die Pixel aus einen internen
-        Buffer gelesen (siehe :func:`Draw Buffered Frame`).
+Wenn Automatic Draw deaktiviert ist, dann werden die Pixel aus einen internen
+Buffer gelesen (siehe :func:`Draw Buffered Frame`).
 
-        Automatic Draw kann über die :func:`Set Display Configuration` Funktion
-        eingestellt werden.
-         */
+Automatic Draw kann über die :func:`Set Display Configuration` Funktion
+eingestellt werden.
+*/
         pub async fn read_pixels_low_level(
             &mut self,
             request: crate::bindings::lcd_128_x_64::ReadPixelsLowLevelRequest,
@@ -7984,19 +7557,19 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Löscht den kompletten aktuellen Inhalt des Displays.
+Löscht den kompletten aktuellen Inhalt des Displays.
 
-        Wenn Automatic Draw aktiviert ist (Standard), dann werden die Pixel direkt
-        gelöscht.
+Wenn Automatic Draw aktiviert ist (Standard), dann werden die Pixel direkt
+gelöscht.
 
-        Wenn Automatic Draw deaktiviert ist, dann werden die Pixel im internen
-        Buffer gelöscht der dann durch einen Aufruf von :func:`Draw Buffered Frame`
-        auf dem Display angezeigt werden kann. Dadurch kann Flicker vermieden werden,
-        wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
+Wenn Automatic Draw deaktiviert ist, dann werden die Pixel im internen
+Buffer gelöscht der dann durch einen Aufruf von :func:`Draw Buffered Frame`
+auf dem Display angezeigt werden kann. Dadurch kann Flicker vermieden werden,
+wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
 
-        Automatic Draw kann über die :func:`Set Display Configuration` Funktion
-        eingestellt werden.
-         */
+Automatic Draw kann über die :func:`Set Display Configuration` Funktion
+eingestellt werden.
+*/
         pub async fn clear_display(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -8007,14 +7580,14 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Setzt die Konfiguration des Displays.
+Setzt die Konfiguration des Displays.
 
-        Wenn Automatic Draw aktiviert (*true*) ist dann wird das Display bei jedem
-        Aufruf von :func:`Write Pixels` und :func:`Write Line` aktualisiert. Wenn
-        Automatic Draw deaktiviert (*false*) ist, dann werden Änderungen in einen
-        internen Buffer geschrieben, der dann bei bei einem Aufruf von
-        :func:`Draw Buffered Frame` auf dem Display angezeigt wird.
-         */
+Wenn Automatic Draw aktiviert (*true*) ist dann wird das Display bei jedem
+Aufruf von :func:`Write Pixels` und :func:`Write Line` aktualisiert. Wenn
+Automatic Draw deaktiviert (*false*) ist, dann werden Änderungen in einen
+internen Buffer geschrieben, der dann bei bei einem Aufruf von
+:func:`Draw Buffered Frame` auf dem Display angezeigt wird.
+*/
         pub async fn set_display_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetDisplayConfigurationRequest,
@@ -8030,8 +7603,8 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Konfiguration zurück, wie von :func:`Set Display Configuration` gesetzt.
-         */
+Gibt die Konfiguration zurück, wie von :func:`Set Display Configuration` gesetzt.
+*/
         pub async fn get_display_configuration(
             &mut self,
         ) -> Result<
@@ -8047,30 +7620,30 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Schreibt einen Text in die angegebene Zeile mit einer vorgegebenen Position.
+Schreibt einen Text in die angegebene Zeile mit einer vorgegebenen Position.
 
-        Beispiel: (1, 10, "Hallo") schreibt *Hallo* in die Mitte der zweiten Zeile
-        des Displays.
+Beispiel: (1, 10, "Hallo") schreibt *Hallo* in die Mitte der zweiten Zeile
+des Displays.
 
-        Das Display nutzt einen speziellen 5x7 Pixel Zeichensatz. Der Zeichensatz
-        kann mit Hilfe von Brick Viewer angezeigt werden.
+Das Display nutzt einen speziellen 5x7 Pixel Zeichensatz. Der Zeichensatz
+kann mit Hilfe von Brick Viewer angezeigt werden.
 
-        Wenn Automatic Draw aktiviert ist (Standard), dann wird der Text direkt auf
-        den Display geschrieben. Nur Pixel die sich wirklich verändert haben werden
-        auf dem Display aktualisiert.
+Wenn Automatic Draw aktiviert ist (Standard), dann wird der Text direkt auf
+den Display geschrieben. Nur Pixel die sich wirklich verändert haben werden
+auf dem Display aktualisiert.
 
-        Wenn Automatic Draw deaktiviert ist, dann wird der Text in einen internen
-        Buffer geschrieben der dann durch einen Aufruf von :func:`Draw Buffered Frame`
-        auf dem Display angezeigt werden kann. Dadurch kann Flicker vermieden werden,
-        wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
+Wenn Automatic Draw deaktiviert ist, dann wird der Text in einen internen
+Buffer geschrieben der dann durch einen Aufruf von :func:`Draw Buffered Frame`
+auf dem Display angezeigt werden kann. Dadurch kann Flicker vermieden werden,
+wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
 
-        Automatic Draw kann über die :func:`Set Display Configuration` Funktion
-        eingestellt werden.
+Automatic Draw kann über die :func:`Set Display Configuration` Funktion
+eingestellt werden.
 
-        Diese Funktion ist ein 1:1-Ersatz für die Funktion mit dem gleichen Namen
-        im LCD 20x4 Bricklet. Mit der Funktion :func:`Draw Text` kann Text Pixelgenau
-        und mit unterschiedlichen Font-Größen gezeichnet werden.
-         */
+Diese Funktion ist ein 1:1-Ersatz für die Funktion mit dem gleichen Namen
+im LCD 20x4 Bricklet. Mit der Funktion :func:`Draw Text` kann Text Pixelgenau
+und mit unterschiedlichen Font-Größen gezeichnet werden.
+*/
         pub async fn write_line(
             &mut self,
             request: crate::bindings::lcd_128_x_64::WriteLineRequest,
@@ -8086,18 +7659,18 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Stellt den aktuell Inhalt des internen Buffers auf dem Display dar. Normalerweise
-        schreibt jeder Aufruf von :func:`Write Pixels` und :func:`Write Line` direkt auf
-        den Display. Wenn jedoch Automatic Draw deaktiviert ist (:func:`Set Display Configuration`),
-        dann werden Änderungen in einen internen Buffer anstatt auf den
-        Display geschrieben. Der internen Buffer kann dann durch einen Aufruf dieser
-        Funktion auf den Display geschrieben werden. Dadurch kann Flicker vermieden werden,
-        wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
+Stellt den aktuell Inhalt des internen Buffers auf dem Display dar. Normalerweise
+schreibt jeder Aufruf von :func:`Write Pixels` und :func:`Write Line` direkt auf
+den Display. Wenn jedoch Automatic Draw deaktiviert ist (:func:`Set Display Configuration`),
+dann werden Änderungen in einen internen Buffer anstatt auf den
+Display geschrieben. Der internen Buffer kann dann durch einen Aufruf dieser
+Funktion auf den Display geschrieben werden. Dadurch kann Flicker vermieden werden,
+wenn ein komplexes Bild in mehreren Schritten aufgebaut wird.
 
-        Wenn `Force Complete Redraw` auf *true* gesetzt ist, dann wird der gesamte Display
-        aktualisiert, anstatt nur die Pixel die sich wirklich verändert haben. Normalerweise
-        sollte dies nicht notwendig sein, außer bei hängenden Pixeln bedingt durch Fehler.
-         */
+Wenn `Force Complete Redraw` auf *true* gesetzt ist, dann wird der gesamte Display
+aktualisiert, anstatt nur die Pixel die sich wirklich verändert haben. Normalerweise
+sollte dies nicht notwendig sein, außer bei hängenden Pixeln bedingt durch Fehler.
+*/
         pub async fn draw_buffered_frame(
             &mut self,
             request: bool,
@@ -8113,13 +7686,13 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die letzte gültige Touch-Position zurück:
+Gibt die letzte gültige Touch-Position zurück:
 
-        * Pressure: Anpressdruck des Touches
-        * X: Touch-Position auf der X-Achse
-        * Y: Touch-Position auf der Y-Achse
-        * Age: Alter des Touches (wie lange ist die Erkennung des Touches her)
-         */
+* Pressure: Anpressdruck des Touches
+* X: Touch-Position auf der X-Achse
+* Y: Touch-Position auf der Y-Achse
+* Age: Alter des Touches (wie lange ist die Erkennung des Touches her)
+*/
         pub async fn get_touch_position(
             &mut self,
         ) -> Result<
@@ -8135,17 +7708,17 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Die Periode ist die Periode mit der der :cb:`Touch Position` Callback
-        ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
+Die Periode ist die Periode mit der der :cb:`Touch Position` Callback
+ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
 
-        Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
-        Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
-        hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
-        sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
+Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
+Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
+hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
+sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
 
-        Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
-        festen Periode ausgelöst unabhängig von den Änderungen des Werts.
-         */
+Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
+festen Periode ausgelöst unabhängig von den Änderungen des Werts.
+*/
         pub async fn set_touch_position_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetTouchPositionCallbackConfigurationRequest,
@@ -8161,9 +7734,9 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Callback-Konfiguration zurück, wie mittels
-        :func:`Set Touch Position Callback Configuration` gesetzt.
-         */
+Gibt die Callback-Konfiguration zurück, wie mittels
+:func:`Set Touch Position Callback Configuration` gesetzt.
+*/
         pub async fn get_touch_position_callback_configuration(
             &mut self,
         ) -> Result<
@@ -8179,14 +7752,14 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Dieser Callback wird mit der Periode, wie gesetzt mit
-        :func:`Set Touch Position Callback Configuration`, ausgelöst. Die :word:`parameters` sind
-        die gleichen wie die von :func:`Get Touch Position`.
-         */
+Dieser Callback wird mit der Periode, wie gesetzt mit
+:func:`Set Touch Position Callback Configuration`, ausgelöst. Die :word:`parameters` sind
+die gleichen wie die von :func:`Get Touch Position`.
+*/
         pub async fn touch_position_stream(
             &mut self,
         ) -> impl futures_core::Stream<
-            Item=crate::bindings::lcd_128_x_64::TouchPositionCallback,
+            Item = crate::bindings::lcd_128_x_64::TouchPositionCallback,
         > {
             self.device
                 .get_callback_receiver(11u8)
@@ -8194,19 +7767,19 @@ pub mod lcd_128_x_64 {
                 .map(|p| TouchPositionCallback::from_le_byte_slice(p.body()))
         }
         /**
-        Gibt eine der vier Touch-Gesten zurück, die das Bricklet automatisch erkennen kann.
+Gibt eine der vier Touch-Gesten zurück, die das Bricklet automatisch erkennen kann.
 
-        Die Gesten umfassen Wischen von links nach rechts, rechts nach links, oben nach
-        unten und unten nach oben.
+Die Gesten umfassen Wischen von links nach rechts, rechts nach links, oben nach
+unten und unten nach oben.
 
-        Zusätzlich zu Geste wird der Vektor von Start- nach Endposition des Wischens
-        angegeben. Dieser kann genutzt werden um die genaue Position der Geste zu
-        ermitteln (z.B. ob ein Wischen von oben nach unten auf der linken oder rechten
-        des Bildschirms erkannt wurde).
+Zusätzlich zu Geste wird der Vektor von Start- nach Endposition des Wischens
+angegeben. Dieser kann genutzt werden um die genaue Position der Geste zu
+ermitteln (z.B. ob ein Wischen von oben nach unten auf der linken oder rechten
+des Bildschirms erkannt wurde).
 
-        Der Age Parameter gibt das Alter der Geste an (wie lange ist die Erkennung
-        der Geste her).
-         */
+Der Age Parameter gibt das Alter der Geste an (wie lange ist die Erkennung
+der Geste her).
+*/
         pub async fn get_touch_gesture(
             &mut self,
         ) -> Result<
@@ -8222,17 +7795,17 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Die Periode ist die Periode mit der der :cb:`Touch Gesture` Callback
-        ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
+Die Periode ist die Periode mit der der :cb:`Touch Gesture` Callback
+ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
 
-        Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
-        Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
-        hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
-        sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
+Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
+Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
+hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
+sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
 
-        Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
-        festen Periode ausgelöst unabhängig von den Änderungen des Werts.
-         */
+Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
+festen Periode ausgelöst unabhängig von den Änderungen des Werts.
+*/
         pub async fn set_touch_gesture_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetTouchGestureCallbackConfigurationRequest,
@@ -8248,9 +7821,9 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Callback-Konfiguration zurück, wie mittels
-        :func:`Set Touch Gesture Callback Configuration` gesetzt.
-         */
+Gibt die Callback-Konfiguration zurück, wie mittels
+:func:`Set Touch Gesture Callback Configuration` gesetzt.
+*/
         pub async fn get_touch_gesture_callback_configuration(
             &mut self,
         ) -> Result<
@@ -8266,14 +7839,14 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Dieser Callback wird mit der Periode, wie gesetzt mit
-        :func:`Set Touch Gesture Callback Configuration`, ausgelöst. Die :word:`parameters` sind
-        die gleichen wie die von :func:`Get Touch Gesture`.
-         */
+Dieser Callback wird mit der Periode, wie gesetzt mit
+:func:`Set Touch Gesture Callback Configuration`, ausgelöst. Die :word:`parameters` sind
+die gleichen wie die von :func:`Get Touch Gesture`.
+*/
         pub async fn touch_gesture_stream(
             &mut self,
         ) -> impl futures_core::Stream<
-            Item=crate::bindings::lcd_128_x_64::TouchGestureCallback,
+            Item = crate::bindings::lcd_128_x_64::TouchGestureCallback,
         > {
             self.device
                 .get_callback_receiver(15u8)
@@ -8281,9 +7854,9 @@ pub mod lcd_128_x_64 {
                 .map(|p| TouchGestureCallback::from_le_byte_slice(p.body()))
         }
         /**
-        Zeichnet eine weiße oder schwarze Linie von (x, y)-start nach
-        (x, y)-end.
-         */
+Zeichnet eine weiße oder schwarze Linie von (x, y)-start nach
+(x, y)-end.
+*/
         pub async fn draw_line(
             &mut self,
             request: crate::bindings::lcd_128_x_64::DrawLineRequest,
@@ -8299,13 +7872,13 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Zeichnet ein weißes oder schwarzes Rechteck von (x, y)-start nach
-        (x, y)-end.
+Zeichnet ein weißes oder schwarzes Rechteck von (x, y)-start nach
+(x, y)-end.
 
-        Wenn fill auf true gesetzt wird, wird das Rechteck mit
-        der angegebenen Farbe ausgefüllt. Ansonsten wird nur der Umriss
-        gezeichnet.
-         */
+Wenn fill auf true gesetzt wird, wird das Rechteck mit
+der angegebenen Farbe ausgefüllt. Ansonsten wird nur der Umriss
+gezeichnet.
+*/
         pub async fn draw_box(
             &mut self,
             request: crate::bindings::lcd_128_x_64::DrawBoxRequest,
@@ -8321,13 +7894,13 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Zeichnet einen Text an die Pixelposition (x, y).
+Zeichnet einen Text an die Pixelposition (x, y).
 
-        Es können 9 unterschiedliche Font-Größen genutzt werden und der Text
-        kann in weiß oder schwarz gezeichnet werden.
+Es können 9 unterschiedliche Font-Größen genutzt werden und der Text
+kann in weiß oder schwarz gezeichnet werden.
 
-        Der der Zeichensatz entspricht Codepage 437.
-         */
+Der der Zeichensatz entspricht Codepage 437.
+*/
         pub async fn draw_text(
             &mut self,
             request: crate::bindings::lcd_128_x_64::DrawTextRequest,
@@ -8343,27 +7916,27 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Zeichnet einen klickbaren Button an Position (x, y) mit dem gegebenem Text.
+Zeichnet einen klickbaren Button an Position (x, y) mit dem gegebenem Text.
 
-        Es können bis zu 12 Buttons genutzt werden.
+Es können bis zu 12 Buttons genutzt werden.
 
-        Die x-Position + Width muss im Wertebereich von 1 bis 128 liegen und die
-        y-Position+Height muss im Wertebereich von 1 bis 64 liegen.
+Die x-Position + Width muss im Wertebereich von 1 bis 128 liegen und die
+y-Position+Height muss im Wertebereich von 1 bis 64 liegen.
 
-        Die minimale nützliche Breite/Höhe eines Buttons ist 3.
+Die minimale nützliche Breite/Höhe eines Buttons ist 3.
 
-        Der Callback für Button-Events kann mit der Funktion
-        :func:`Set GUI Button Pressed Callback Configuration` eingestellt werden.
-        Der Callback wird sowohl für gedrückt als auch losgelassen Events ausgelöst.
+Der Callback für Button-Events kann mit der Funktion
+:func:`Set GUI Button Pressed Callback Configuration` eingestellt werden.
+Der Callback wird sowohl für gedrückt als auch losgelassen Events ausgelöst.
 
-        Der Button wird in einem separaten GUI-Buffer gezeichnet und der Rahmen des
-        Buttons wird immer über den Grafiken bleiben die mit :func:`Write Pixels`
-        gezeichnet werden. Um einen Button zu entfernen kann die Funktion
-        :func:`Remove GUI Button` genutzt werden.
+Der Button wird in einem separaten GUI-Buffer gezeichnet und der Rahmen des
+Buttons wird immer über den Grafiken bleiben die mit :func:`Write Pixels`
+gezeichnet werden. Um einen Button zu entfernen kann die Funktion
+:func:`Remove GUI Button` genutzt werden.
 
-        Wenn anstatt des Textes ein Icon verwendet werden soll, kann dieses innerhalb
-        des Buttons mit per :func:`Write Pixels` gezeichnet werden.
-         */
+Wenn anstatt des Textes ein Icon verwendet werden soll, kann dieses innerhalb
+des Buttons mit per :func:`Write Pixels` gezeichnet werden.
+*/
         pub async fn set_gui_button(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiButtonRequest,
@@ -8379,12 +7952,12 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Button-Eigenschaften für den gegebenen `Index` zurück, wie von
-        :func:`Set GUI Button` gesetzt.
+Gibt die Button-Eigenschaften für den gegebenen `Index` zurück, wie von
+:func:`Set GUI Button` gesetzt.
 
-        Zusätzlich gibt der `Active`-Parameter an ob der Button aktuell aktiv/sichtbar ist
-        oder nicht.
-         */
+Zusätzlich gibt der `Active`-Parameter an ob der Button aktuell aktiv/sichtbar ist
+oder nicht.
+*/
         pub async fn get_gui_button(
             &mut self,
             request: u8,
@@ -8405,10 +7978,10 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Entfernt den Button mit dem gegebenen Index.
+Entfernt den Button mit dem gegebenen Index.
 
-        Index 255 kann genutzt werden um alle Buttons zu entfernen.
-         */
+Index 255 kann genutzt werden um alle Buttons zu entfernen.
+*/
         pub async fn remove_gui_button(
             &mut self,
             request: u8,
@@ -8424,17 +7997,17 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Die Periode ist die Periode mit der der :cb:`GUI Button Pressed` Callback
-        ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
+Die Periode ist die Periode mit der der :cb:`GUI Button Pressed` Callback
+ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
 
-        Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
-        Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
-        hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
-        sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
+Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
+Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
+hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
+sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
 
-        Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
-        festen Periode ausgelöst unabhängig von den Änderungen des Werts.
-         */
+Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
+festen Periode ausgelöst unabhängig von den Änderungen des Werts.
+*/
         pub async fn set_gui_button_pressed_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiButtonPressedCallbackConfigurationRequest,
@@ -8450,9 +8023,9 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Callback-Konfiguration zurück, wie mittels
-        :func:`Set GUI Button Pressed Callback Configuration` gesetzt.
-         */
+Gibt die Callback-Konfiguration zurück, wie mittels
+:func:`Set GUI Button Pressed Callback Configuration` gesetzt.
+*/
         pub async fn get_gui_button_pressed_callback_configuration(
             &mut self,
         ) -> Result<
@@ -8468,10 +8041,10 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Gibt den aktuellen Button-Zustand für einen gegebenen Index zurück.
+Gibt den aktuellen Button-Zustand für einen gegebenen Index zurück.
 
-        Der Zustand kann entweder gedrückt (true) oder losgelassen (false) sein.
-         */
+Der Zustand kann entweder gedrückt (true) oder losgelassen (false) sein.
+*/
         pub async fn get_gui_button_pressed(
             &mut self,
             request: u8,
@@ -8485,14 +8058,14 @@ pub mod lcd_128_x_64 {
             Ok(bool::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Dieser Callback wird mit der Periode, wie gesetzt mit
-        :func:`Set GUI Button Pressed Callback Configuration`, ausgelöst. Die :word:`parameters` sind
-        die gleichen wie die von :func:`Get GUI Button Pressed`.
-         */
+Dieser Callback wird mit der Periode, wie gesetzt mit
+:func:`Set GUI Button Pressed Callback Configuration`, ausgelöst. Die :word:`parameters` sind
+die gleichen wie die von :func:`Get GUI Button Pressed`.
+*/
         pub async fn gui_button_pressed_stream(
             &mut self,
         ) -> impl futures_core::Stream<
-            Item=crate::bindings::lcd_128_x_64::GuiButtonPressedCallback,
+            Item = crate::bindings::lcd_128_x_64::GuiButtonPressedCallback,
         > {
             self.device
                 .get_callback_receiver(25u8)
@@ -8500,31 +8073,31 @@ pub mod lcd_128_x_64 {
                 .map(|p| GuiButtonPressedCallback::from_le_byte_slice(p.body()))
         }
         /**
-        Zeichnet einen Slider an Position (x, y) mit der gegebenen Länge.
+Zeichnet einen Slider an Position (x, y) mit der gegebenen Länge.
 
-        Es können bis zu 6 Slider genutzt werden.
+Es können bis zu 6 Slider genutzt werden.
 
-        Wenn eine horizontale Richtung verwendet wird muss Die x-Position + Länge
-        im Wertebereich von 1 bis 128 und die y-Position im Wertebereich von
-        0 bis 46 liegen.
+Wenn eine horizontale Richtung verwendet wird muss Die x-Position + Länge
+im Wertebereich von 1 bis 128 und die y-Position im Wertebereich von
+0 bis 46 liegen.
 
-        Wenn eine vertikale Richtung verwendet wird muss Die y-Position + Länge
-        im Wertebereich von 1 bis 64 und die x-Position im Wertebereich von
-        0 bis 110 liegen.
+Wenn eine vertikale Richtung verwendet wird muss Die y-Position + Länge
+im Wertebereich von 1 bis 64 und die x-Position im Wertebereich von
+0 bis 110 liegen.
 
-        Die minimale Länge des Sliders ist 8.
+Die minimale Länge des Sliders ist 8.
 
-        Der :word:`parameter` value ist die Startposition des Sliders. Diese kann
-        zwischen 0 und length-8 liegen.
+Der :word:`parameter` value ist die Startposition des Sliders. Diese kann
+zwischen 0 und length-8 liegen.
 
-        Der Callback für Slider-Events kann mit der Funktion
-        :func:`Set GUI Slider Value Callback Configuration` eingestellt werden.
+Der Callback für Slider-Events kann mit der Funktion
+:func:`Set GUI Slider Value Callback Configuration` eingestellt werden.
 
-        Der Slider wird in einem separaten GUI-Buffer gezeichnet und der Rahmen des
-        Buttons wrd immer über den Grafiken bleiben die mit :func:`Write Pixels`
-        gezeichnet werden. Um einen Button zu entfernen kann die Funktion
-        :func:`Remove GUI Slider` genutzt werden.
-         */
+Der Slider wird in einem separaten GUI-Buffer gezeichnet und der Rahmen des
+Buttons wrd immer über den Grafiken bleiben die mit :func:`Write Pixels`
+gezeichnet werden. Um einen Button zu entfernen kann die Funktion
+:func:`Remove GUI Slider` genutzt werden.
+*/
         pub async fn set_gui_slider(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiSliderRequest,
@@ -8540,12 +8113,12 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Slider-Eigenschaften für den gegebenen `Index` zurück, wie von
-        :func:`Set GUI Slider` gesetzt.
+Gibt die Slider-Eigenschaften für den gegebenen `Index` zurück, wie von
+:func:`Set GUI Slider` gesetzt.
 
-        Zusätzlich gibt der `Active`-Parameter an ob der Button aktuell aktiv/sichtbar ist
-        oder nicht.
-         */
+Zusätzlich gibt der `Active`-Parameter an ob der Button aktuell aktiv/sichtbar ist
+oder nicht.
+*/
         pub async fn get_gui_slider(
             &mut self,
             request: u8,
@@ -8566,10 +8139,10 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Entfernt den Slider mit dem gegebenen Index.
+Entfernt den Slider mit dem gegebenen Index.
 
-        Index 255 kann genutzt werden um alle Slider zu entfernen.
-         */
+Index 255 kann genutzt werden um alle Slider zu entfernen.
+*/
         pub async fn remove_gui_slider(
             &mut self,
             request: u8,
@@ -8585,17 +8158,17 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Die Periode ist die Periode mit der der :cb:`GUI Slider Value` Callback
-        ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
+Die Periode ist die Periode mit der der :cb:`GUI Slider Value` Callback
+ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
 
-        Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
-        Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
-        hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
-        sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
+Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
+Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
+hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
+sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
 
-        Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
-        festen Periode ausgelöst unabhängig von den Änderungen des Werts.
-         */
+Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
+festen Periode ausgelöst unabhängig von den Änderungen des Werts.
+*/
         pub async fn set_gui_slider_value_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiSliderValueCallbackConfigurationRequest,
@@ -8611,9 +8184,9 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Callback-Konfiguration zurück, wie mittels
-        :func:`Set GUI Slider Value Callback Configuration` gesetzt.
-         */
+Gibt die Callback-Konfiguration zurück, wie mittels
+:func:`Set GUI Slider Value Callback Configuration` gesetzt.
+*/
         pub async fn get_gui_slider_value_callback_configuration(
             &mut self,
         ) -> Result<
@@ -8629,8 +8202,8 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Gibt den aktuellen Wert des Slider mit dem gegebenen Index zurück.
-         */
+Gibt den aktuellen Wert des Slider mit dem gegebenen Index zurück.
+*/
         pub async fn get_gui_slider_value(
             &mut self,
             request: u8,
@@ -8644,14 +8217,14 @@ pub mod lcd_128_x_64 {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Dieser Callback wird mit der Periode, wie gesetzt mit
-        :func:`Set GUI Slider Value Callback Configuration`, ausgelöst. Die :word:`parameters` sind
-        die gleichen wie die von :func:`Get GUI Slider Value`.
-         */
+Dieser Callback wird mit der Periode, wie gesetzt mit
+:func:`Set GUI Slider Value Callback Configuration`, ausgelöst. Die :word:`parameters` sind
+die gleichen wie die von :func:`Get GUI Slider Value`.
+*/
         pub async fn gui_slider_value_stream(
             &mut self,
         ) -> impl futures_core::Stream<
-            Item=crate::bindings::lcd_128_x_64::GuiSliderValueCallback,
+            Item = crate::bindings::lcd_128_x_64::GuiSliderValueCallback,
         > {
             self.device
                 .get_callback_receiver(32u8)
@@ -8659,13 +8232,13 @@ pub mod lcd_128_x_64 {
                 .map(|p| GuiSliderValueCallback::from_le_byte_slice(p.body()))
         }
         /**
-        Setzt die generelle Konfiguration für Tabs. Tabs können auf klicken, wischen
-        (links/rechts und rechts/links) oder beides reagieren.
+Setzt die generelle Konfiguration für Tabs. Tabs können auf klicken, wischen
+(links/rechts und rechts/links) oder beides reagieren.
 
-        Zusätzlich kann `Clear GUI` auf true gesetzt werden. In diesem Fall werden
-        bei einem wechsel der Tabs automatisch alle GUI Elemente (Buttons, Slider,
-        Graphen) gelöscht.
-         */
+Zusätzlich kann `Clear GUI` auf true gesetzt werden. In diesem Fall werden
+bei einem wechsel der Tabs automatisch alle GUI Elemente (Buttons, Slider,
+Graphen) gelöscht.
+*/
         pub async fn set_gui_tab_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiTabConfigurationRequest,
@@ -8681,8 +8254,8 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Tab-Konfiguration zurück, wie von :func:`Set GUI Tab Configuration` gesetzt.
-         */
+Gibt die Tab-Konfiguration zurück, wie von :func:`Set GUI Tab Configuration` gesetzt.
+*/
         pub async fn get_gui_tab_configuration(
             &mut self,
         ) -> Result<
@@ -8698,12 +8271,12 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Fügt einen Text-Tab mit dem gegebenen Index hinzu.
+Fügt einen Text-Tab mit dem gegebenen Index hinzu.
 
-        Es können bis zu 10 Tabs verwendet werden.
+Es können bis zu 10 Tabs verwendet werden.
 
-        Ein Text-Tab mit dem gleichen Index wie ein Icon-Tab überschreibt diesen.
-         */
+Ein Text-Tab mit dem gleichen Index wie ein Icon-Tab überschreibt diesen.
+*/
         pub async fn set_gui_tab_text(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiTabTextRequest,
@@ -8719,12 +8292,12 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt den Text für den gegebenen Index zurück, wie von :func:`Set GUI Tab Text`
-        gesetzt.
+Gibt den Text für den gegebenen Index zurück, wie von :func:`Set GUI Tab Text`
+gesetzt.
 
-        Zusätzlich gibt der `Active`-Parameter an ob der Tab aktuell aktiv/sichtbar ist
-        oder nicht.
-         */
+Zusätzlich gibt der `Active`-Parameter an ob der Tab aktuell aktiv/sichtbar ist
+oder nicht.
+*/
         pub async fn get_gui_tab_text(
             &mut self,
             request: u8,
@@ -8745,14 +8318,14 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Fügt einen Icon-Tab mit dem gegebenen Index hinzu. Das Icon kann eine Breite von
-        28 Pixel bei einer Höhe von 6 Pixel haben. Es wird Zeile für Zeile von links
-        nach rechts gezeichnet.
+Fügt einen Icon-Tab mit dem gegebenen Index hinzu. Das Icon kann eine Breite von
+28 Pixel bei einer Höhe von 6 Pixel haben. Es wird Zeile für Zeile von links
+nach rechts gezeichnet.
 
-        Es können bis zu 10 Tabs verwendet werden.
+Es können bis zu 10 Tabs verwendet werden.
 
-        Ein Icon-Tab mit dem gleichen Index wie ein Text-Tab überschreibt diesen.
-         */
+Ein Icon-Tab mit dem gleichen Index wie ein Text-Tab überschreibt diesen.
+*/
         pub async fn set_gui_tab_icon(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiTabIconRequest,
@@ -8768,12 +8341,12 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt das Icon für den gegebenen Index zurück, wie von :func:`Set GUI Tab Icon`
-        gesetzt.
+Gibt das Icon für den gegebenen Index zurück, wie von :func:`Set GUI Tab Icon`
+gesetzt.
 
-        Zusätzlich gibt der `Active`-Parameter an ob der Tab aktuell aktiv/sichtbar ist
-        oder nicht.
-         */
+Zusätzlich gibt der `Active`-Parameter an ob der Tab aktuell aktiv/sichtbar ist
+oder nicht.
+*/
         pub async fn get_gui_tab_icon(
             &mut self,
             request: u8,
@@ -8794,10 +8367,10 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Entfernt den Tab mit dem gegebenen Index.
+Entfernt den Tab mit dem gegebenen Index.
 
-        Index 255 kann genutzt werden um alle Tabs zu entfernen.
-         */
+Index 255 kann genutzt werden um alle Tabs zu entfernen.
+*/
         pub async fn remove_gui_tab(
             &mut self,
             request: u8,
@@ -8813,9 +8386,9 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Setzt den Tab mit dem gegebenen Index als "selected" (wird auf dem Display als
-        ausgewählt gezeichnet)
-         */
+Setzt den Tab mit dem gegebenen Index als "selected" (wird auf dem Display als
+ausgewählt gezeichnet)
+*/
         pub async fn set_gui_tab_selected(
             &mut self,
             request: u8,
@@ -8831,17 +8404,17 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Die Periode ist die Periode mit der der :cb:`GUI Tab Selected` Callback
-        ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
+Die Periode ist die Periode mit der der :cb:`GUI Tab Selected` Callback
+ausgelöst wird. Ein Wert von 0 schaltet den Callback ab.
 
-        Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
-        Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
-        hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
-        sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
+Wenn der `value has to change`-Parameter auf True gesetzt wird, wird der
+Callback nur ausgelöst, wenn der Wert sich im Vergleich zum letzten mal geändert
+hat. Ändert der Wert sich nicht innerhalb der Periode, so wird der Callback
+sofort ausgelöst, wenn der Wert sich das nächste mal ändert.
 
-        Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
-        festen Periode ausgelöst unabhängig von den Änderungen des Werts.
-         */
+Wird der Parameter auf False gesetzt, so wird der Callback dauerhaft mit der
+festen Periode ausgelöst unabhängig von den Änderungen des Werts.
+*/
         pub async fn set_gui_tab_selected_callback_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiTabSelectedCallbackConfigurationRequest,
@@ -8857,9 +8430,9 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Callback-Konfiguration zurück, wie mittels
-        :func:`Set GUI Tab Selected Callback Configuration` gesetzt.
-         */
+Gibt die Callback-Konfiguration zurück, wie mittels
+:func:`Set GUI Tab Selected Callback Configuration` gesetzt.
+*/
         pub async fn get_gui_tab_selected_callback_configuration(
             &mut self,
         ) -> Result<
@@ -8875,9 +8448,9 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Gibt den Index des aktuell ausgewählten Tabs zurück.
-        Wenn es keine Tabs gibt, wird -1 als Index zurückgegeben.
-         */
+Gibt den Index des aktuell ausgewählten Tabs zurück.
+Wenn es keine Tabs gibt, wird -1 als Index zurückgegeben.
+*/
         pub async fn get_gui_tab_selected(
             &mut self,
         ) -> Result<i8, tinkerforge_base::error::TinkerforgeError> {
@@ -8886,39 +8459,39 @@ pub mod lcd_128_x_64 {
             Ok(i8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Dieser Callback wird mit der Periode, wie gesetzt mit
-        :func:`Set GUI Tab Selected Callback Configuration`, ausgelöst. Die :word:`parameters` sind
-        die gleichen wie die von :func:`Get GUI Tab Selected`.
-         */
+Dieser Callback wird mit der Periode, wie gesetzt mit
+:func:`Set GUI Tab Selected Callback Configuration`, ausgelöst. Die :word:`parameters` sind
+die gleichen wie die von :func:`Get GUI Tab Selected`.
+*/
         pub async fn gui_tab_selected_stream(
             &mut self,
-        ) -> impl futures_core::Stream<Item=i8> {
+        ) -> impl futures_core::Stream<Item = i8> {
             self.device
                 .get_callback_receiver(44u8)
                 .await
                 .map(|p| i8::from_le_byte_slice(&p.body()[0..1usize]))
         }
         /**
-        Setzt die Konfiguration für bis zu vier Graphen.
+Setzt die Konfiguration für bis zu vier Graphen.
 
-        Der Graph kann vom Typ Dot-, Line- oder Bar-Graph sein.
+Der Graph kann vom Typ Dot-, Line- oder Bar-Graph sein.
 
-        Die x- und y-Positionen sind Pixel-Positionen.
+Die x- und y-Positionen sind Pixel-Positionen.
 
-        Es können bis zu 4 Buchstaben Text zur Beschreibung der x- und y-Achse
-        genutzt werden. Der Text wird auf die Innenseite des Graphen gezeichnet und
-        er kann Datenpunkte des Graphen überschreiben. Wenn der Text außerhalb des
-        Graphen benötigt wird kann die Beschriftung hier leer gelassen werden. Der
-        Text kann im Nachhinein mit :func:`Draw Text` hinzugefügt werden.
+Es können bis zu 4 Buchstaben Text zur Beschreibung der x- und y-Achse
+genutzt werden. Der Text wird auf die Innenseite des Graphen gezeichnet und
+er kann Datenpunkte des Graphen überschreiben. Wenn der Text außerhalb des
+Graphen benötigt wird kann die Beschriftung hier leer gelassen werden. Der
+Text kann im Nachhinein mit :func:`Draw Text` hinzugefügt werden.
 
-        Die Datenpunkte des Graphen können mit der Funktion :func:`Set GUI Graph Data`
-        gesetzt und aktualisiert werden.
+Die Datenpunkte des Graphen können mit der Funktion :func:`Set GUI Graph Data`
+gesetzt und aktualisiert werden.
 
-        Der Graph wird in einem separaten GUI-Buffer gezeichnet und der Rahmen sowie die
-        Datenpunkte des Graphen werden immer über den Grafiken bleiben die mit
-        :func:`Write Pixels` gezeichnet werden. Um einen Graphen zu entfernen kann die
-        Funktion :func:`Remove GUI Graph` genutzt werden.
-         */
+Der Graph wird in einem separaten GUI-Buffer gezeichnet und der Rahmen sowie die
+Datenpunkte des Graphen werden immer über den Grafiken bleiben die mit
+:func:`Write Pixels` gezeichnet werden. Um einen Graphen zu entfernen kann die
+Funktion :func:`Remove GUI Graph` genutzt werden.
+*/
         pub async fn set_gui_graph_configuration(
             &mut self,
             request: crate::bindings::lcd_128_x_64::SetGuiGraphConfigurationRequest,
@@ -8934,12 +8507,12 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Graph-Eigenschaften für den gegebenen `Index` zurück, wie von
-        :func:`Set GUI Graph Configuration` gesetzt.
+Gibt die Graph-Eigenschaften für den gegebenen `Index` zurück, wie von
+:func:`Set GUI Graph Configuration` gesetzt.
 
-        Zusätzlich gibt der `Active`-Parameter an ob der Button aktuell aktiv/sichtbar ist
-        oder nicht.
-         */
+Zusätzlich gibt der `Active`-Parameter an ob der Button aktuell aktiv/sichtbar ist
+oder nicht.
+*/
         pub async fn get_gui_graph_configuration(
             &mut self,
             request: u8,
@@ -8960,20 +8533,20 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Setzt die Datenpukte für den Graph mit dem gegebenen Index. Der Graph muss mit
-        :func:`Set GUI Graph Configuration` konfiguriert werden bevor die ersten Daten
-        gesetzt werden können.
+Setzt die Datenpukte für den Graph mit dem gegebenen Index. Der Graph muss mit
+:func:`Set GUI Graph Configuration` konfiguriert werden bevor die ersten Daten
+gesetzt werden können.
 
-        Der Graph zeigt die ersten n Werte der gesetzten Daten an, wobei n die Breite (width)
-        ist die mit :func:`Set GUI Graph Configuration` gesetzt wurde. Wenn weniger als
-        n Werte gesetzt werden, werden die restlichen Datenpunkte als 0 angezeigt.
+Der Graph zeigt die ersten n Werte der gesetzten Daten an, wobei n die Breite (width)
+ist die mit :func:`Set GUI Graph Configuration` gesetzt wurde. Wenn weniger als
+n Werte gesetzt werden, werden die restlichen Datenpunkte als 0 angezeigt.
 
-        Die maximale Anzahl an Datenpunkte die gesetzt werden kann ist 118 (dies entspricht
-        auch der maximalen Breite des Graphen).
+Die maximale Anzahl an Datenpunkte die gesetzt werden kann ist 118 (dies entspricht
+auch der maximalen Breite des Graphen).
 
-        Die gesetzten Werte müssen zwischen 0 und 255 skaliert werden. 0 wird unten und
-        255 wird oben im Graph gezeichnet.
-         */
+Die gesetzten Werte müssen zwischen 0 und 255 skaliert werden. 0 wird unten und
+255 wird oben im Graph gezeichnet.
+*/
         pub async fn set_gui_graph_data(
             &mut self,
             request: SetGuiGraphDataRequest<'_>,
@@ -8989,9 +8562,9 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Datenpunkte des Graphen mit dem gegebenen Index zurück, wie von
-        :func:`Set GUI Graph Data` gesetzt.
-         */
+Gibt die Datenpunkte des Graphen mit dem gegebenen Index zurück, wie von
+:func:`Set GUI Graph Data` gesetzt.
+*/
         pub async fn get_gui_graph_data_low_level(
             &mut self,
             request: u8,
@@ -9012,10 +8585,10 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Entfernt den Graph mit dem gegebenen Index.
+Entfernt den Graph mit dem gegebenen Index.
 
-        Index 255 kann genutzt werden um alle Graphen zu entfernen.
-         */
+Index 255 kann genutzt werden um alle Graphen zu entfernen.
+*/
         pub async fn remove_gui_graph(
             &mut self,
             request: u8,
@@ -9031,8 +8604,8 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Entfernt alle GUI-Elemente (Buttons, Slider, Graphen, Tabs).
-         */
+Entfernt alle GUI-Elemente (Buttons, Slider, Graphen, Tabs).
+*/
         pub async fn remove_all_gui(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -9043,13 +8616,13 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Setzt die Konfiguration der Kommunikations-LED. Standardmäßig ist die
-        LED an wenn das LCD berührt wird.
+Setzt die Konfiguration der Kommunikations-LED. Standardmäßig ist die
+LED an wenn das LCD berührt wird.
 
-        Die LED kann auch permanent an/aus gestellt werden oder einen Herzschlag anzeigen.
+Die LED kann auch permanent an/aus gestellt werden oder einen Herzschlag anzeigen.
 
-        Wenn das Bricklet sich im Bootloadermodus befindet ist die LED aus.
-         */
+Wenn das Bricklet sich im Bootloadermodus befindet ist die LED aus.
+*/
         pub async fn set_touch_led_config(
             &mut self,
             request: crate::bindings::lcd_128_x_64::TouchLedConfig,
@@ -9065,8 +8638,8 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Konfiguration zurück, wie von :func:`Set Touch LED Config` gesetzt.
-         */
+Gibt die Konfiguration zurück, wie von :func:`Set Touch LED Config` gesetzt.
+*/
         pub async fn get_touch_led_config(
             &mut self,
         ) -> Result<
@@ -9086,20 +8659,20 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Gibt die Anzahl der Fehler die während der Kommunikation zwischen Brick und
-        Bricklet aufgetreten sind zurück.
+Gibt die Anzahl der Fehler die während der Kommunikation zwischen Brick und
+Bricklet aufgetreten sind zurück.
 
-        Die Fehler sind aufgeteilt in
+Die Fehler sind aufgeteilt in
 
-        * ACK-Checksummen Fehler,
-        * Message-Checksummen Fehler,
-        * Framing Fehler und
-        * Overflow Fehler.
+* ACK-Checksummen Fehler,
+* Message-Checksummen Fehler,
+* Framing Fehler und
+* Overflow Fehler.
 
-        Die Fehlerzähler sind für Fehler die auf der Seite des Bricklets auftreten.
-        Jedes Brick hat eine ähnliche Funktion welche die Fehler auf Brickseite
-        ausgibt.
-         */
+Die Fehlerzähler sind für Fehler die auf der Seite des Bricklets auftreten.
+Jedes Brick hat eine ähnliche Funktion welche die Fehler auf Brickseite
+ausgibt.
+*/
         pub async fn get_spitfp_error_count(
             &mut self,
         ) -> Result<
@@ -9115,17 +8688,17 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Setzt den Bootloader-Modus und gibt den Status zurück nachdem die
-        Modusänderungsanfrage bearbeitet wurde.
+Setzt den Bootloader-Modus und gibt den Status zurück nachdem die
+Modusänderungsanfrage bearbeitet wurde.
 
-        Mit dieser Funktion ist es möglich vom Bootloader- in den Firmware-Modus zu
-        wechseln und umgekehrt. Ein Welchsel vom Bootloader- in der den Firmware-Modus
-        ist nur möglich wenn Entry-Funktion, Device Identifier und CRC vorhanden und
-        korrekt sind.
+Mit dieser Funktion ist es möglich vom Bootloader- in den Firmware-Modus zu
+wechseln und umgekehrt. Ein Welchsel vom Bootloader- in der den Firmware-Modus
+ist nur möglich wenn Entry-Funktion, Device Identifier und CRC vorhanden und
+korrekt sind.
 
-        Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
-        normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
-         */
+Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
+normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
+*/
         pub async fn set_bootloader_mode(
             &mut self,
             request: crate::bindings::lcd_128_x_64::BootloaderMode,
@@ -9150,8 +8723,8 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Gibt den aktuellen Bootloader-Modus zurück, siehe :func:`Set Bootloader Mode`.
-         */
+Gibt den aktuellen Bootloader-Modus zurück, siehe :func:`Set Bootloader Mode`.
+*/
         pub async fn get_bootloader_mode(
             &mut self,
         ) -> Result<
@@ -9171,13 +8744,13 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Setzt den Firmware-Pointer für :func:`Write Firmware`. Der Pointer
-        muss um je 64 Byte erhöht werden. Die Daten werden alle 4 Datenblöcke
-        in den Flash geschrieben (4 Datenblöcke entsprechen einer Page mit 256 Byte).
+Setzt den Firmware-Pointer für :func:`Write Firmware`. Der Pointer
+muss um je 64 Byte erhöht werden. Die Daten werden alle 4 Datenblöcke
+in den Flash geschrieben (4 Datenblöcke entsprechen einer Page mit 256 Byte).
 
-        Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
-        normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
-         */
+Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
+normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
+*/
         pub async fn set_write_firmware_pointer(
             &mut self,
             request: u32,
@@ -9193,15 +8766,15 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Schreibt 64 Bytes Firmware an die Position die vorher von
-        :func:`Set Write Firmware Pointer` gesetzt wurde. Die Firmware wird
-        alle 4 Datenblöcke in den Flash geschrieben.
+Schreibt 64 Bytes Firmware an die Position die vorher von
+:func:`Set Write Firmware Pointer` gesetzt wurde. Die Firmware wird
+alle 4 Datenblöcke in den Flash geschrieben.
 
-        Eine Firmware kann nur im Bootloader-Mode geschrieben werden.
+Eine Firmware kann nur im Bootloader-Mode geschrieben werden.
 
-        Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
-        normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
-         */
+Diese Funktion wird vom Brick Viewer während des Flashens benutzt. In einem
+normalem Nutzerprogramm sollte diese Funktion nicht benötigt werden.
+*/
         pub async fn write_firmware(
             &mut self,
             request: [u8; 64usize],
@@ -9215,14 +8788,14 @@ pub mod lcd_128_x_64 {
             Ok(u8::from_le_byte_slice(&result.body()[0..1usize]))
         }
         /**
-        Setzt die Konfiguration der Status-LED. Standardmäßig zeigt
-        die LED die Kommunikationsdatenmenge an. Sie blinkt einmal auf pro 10 empfangenen
-        Datenpaketen zwischen Brick und Bricklet.
+Setzt die Konfiguration der Status-LED. Standardmäßig zeigt
+die LED die Kommunikationsdatenmenge an. Sie blinkt einmal auf pro 10 empfangenen
+Datenpaketen zwischen Brick und Bricklet.
 
-        Die LED kann auch permanent an/aus gestellt werden oder einen Herzschlag anzeigen.
+Die LED kann auch permanent an/aus gestellt werden oder einen Herzschlag anzeigen.
 
-        Wenn das Bricklet sich im Bootlodermodus befindet ist die LED aus.
-         */
+Wenn das Bricklet sich im Bootlodermodus befindet ist die LED aus.
+*/
         pub async fn set_status_led_config(
             &mut self,
             request: crate::bindings::lcd_128_x_64::StatusLedConfig,
@@ -9238,8 +8811,8 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die Konfiguration zurück, wie von :func:`Set Status LED Config` gesetzt.
-         */
+Gibt die Konfiguration zurück, wie von :func:`Set Status LED Config` gesetzt.
+*/
         pub async fn get_status_led_config(
             &mut self,
         ) -> Result<
@@ -9259,13 +8832,13 @@ pub mod lcd_128_x_64 {
             )
         }
         /**
-        Gibt die Temperatur, gemessen im Mikrocontroller, aus. Der
-        Rückgabewert ist nicht die Umgebungstemperatur.
+Gibt die Temperatur, gemessen im Mikrocontroller, aus. Der
+Rückgabewert ist nicht die Umgebungstemperatur.
 
-        Die Temperatur ist lediglich proportional zur echten Temperatur und hat eine
-        hohe Ungenauigkeit. Daher beschränkt sich der praktische Nutzen auf die
-        Indikation von Temperaturveränderungen.
-         */
+Die Temperatur ist lediglich proportional zur echten Temperatur und hat eine
+hohe Ungenauigkeit. Daher beschränkt sich der praktische Nutzen auf die
+Indikation von Temperaturveränderungen.
+*/
         pub async fn get_chip_temperature(
             &mut self,
         ) -> Result<i16, tinkerforge_base::error::TinkerforgeError> {
@@ -9274,12 +8847,12 @@ pub mod lcd_128_x_64 {
             Ok(i16::from_le_byte_slice(&result.body()[0..2usize]))
         }
         /**
-        Ein Aufruf dieser Funktion setzt das Bricklet zurück. Nach einem
-        Neustart sind alle Konfiguration verloren.
+Ein Aufruf dieser Funktion setzt das Bricklet zurück. Nach einem
+Neustart sind alle Konfiguration verloren.
 
-        Nach dem Zurücksetzen ist es notwendig neue Objekte zu erzeugen,
-        Funktionsaufrufe auf bestehenden führen zu undefiniertem Verhalten.
-         */
+Nach dem Zurücksetzen ist es notwendig neue Objekte zu erzeugen,
+Funktionsaufrufe auf bestehenden führen zu undefiniertem Verhalten.
+*/
         pub async fn reset(
             &mut self,
         ) -> Result<(), tinkerforge_base::error::TinkerforgeError> {
@@ -9290,13 +8863,13 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Schreibt eine neue UID in den Flash. Die UID muss zuerst
-        vom Base58 encodierten String in einen Integer decodiert
-        werden.
+Schreibt eine neue UID in den Flash. Die UID muss zuerst
+vom Base58 encodierten String in einen Integer decodiert
+werden.
 
-        Wir empfehlen die Nutzung des Brick Viewers zum ändern
-        der UID.
-         */
+Wir empfehlen die Nutzung des Brick Viewers zum ändern
+der UID.
+*/
         pub async fn write_uid(
             &mut self,
             request: u32,
@@ -9312,10 +8885,10 @@ pub mod lcd_128_x_64 {
             Ok(())
         }
         /**
-        Gibt die aktuelle UID als Integer zurück. Dieser Integer
-        kann als Base58 encodiert werden um an den üblichen
-        UID-String zu gelangen.
-         */
+Gibt die aktuelle UID als Integer zurück. Dieser Integer
+kann als Base58 encodiert werden um an den üblichen
+UID-String zu gelangen.
+*/
         pub async fn read_uid(
             &mut self,
         ) -> Result<u32, tinkerforge_base::error::TinkerforgeError> {
@@ -9324,17 +8897,17 @@ pub mod lcd_128_x_64 {
             Ok(u32::from_le_byte_slice(&result.body()[0..4usize]))
         }
         /**
-        Gibt die UID, die UID zu der das Bricklet verbunden ist, die
-        Position, die Hard- und Firmware Version sowie den Device Identifier
-        zurück.
+Gibt die UID, die UID zu der das Bricklet verbunden ist, die
+Position, die Hard- und Firmware Version sowie den Device Identifier
+zurück.
 
-        Die Position ist 'a', 'b', 'c', 'd', 'e', 'f', 'g' oder 'h' (Bricklet Anschluss).
-        Ein Bricklet hinter einem :ref:`Isolator Bricklet <isolator_bricklet>` ist immer an
-        Position 'z'.
+Die Position ist 'a', 'b', 'c', 'd', 'e', 'f', 'g' oder 'h' (Bricklet Anschluss).
+Ein Bricklet hinter einem :ref:`Isolator Bricklet <isolator_bricklet>` ist immer an
+Position 'z'.
 
-        Eine Liste der Device Identifier Werte ist :ref:`hier <device_identifier>` zu
-        finden. |device_identifier_constant|
-         */
+Eine Liste der Device Identifier Werte ist :ref:`hier <device_identifier>` zu
+finden. |device_identifier_constant|
+*/
         pub async fn get_identity(
             &mut self,
         ) -> Result<
@@ -9351,13 +8924,11 @@ pub mod lcd_128_x_64 {
         }
     }
 }
-
 #[derive(Copy, Clone, Eq, PartialEq, Debug, Ord, PartialOrd)]
 pub enum DeviceIdentifier {
     MasterBrick,
     Lcd128X64Bricklet,
 }
-
 impl DeviceIdentifier {
     pub fn name(self) -> &'static str {
         match self {
@@ -9366,7 +8937,6 @@ impl DeviceIdentifier {
         }
     }
 }
-
 impl Into<u16> for DeviceIdentifier {
     fn into(self) -> u16 {
         match self {
@@ -9375,7 +8945,6 @@ impl Into<u16> for DeviceIdentifier {
         }
     }
 }
-
 impl std::convert::TryInto<DeviceIdentifier> for u16 {
     type Error = ();
     fn try_into(self) -> Result<DeviceIdentifier, Self::Error> {
