@@ -14,4 +14,4 @@ anyhow = "1.0.82"
 
 [build-dependencies]
 tinkerforge-generator = {path = "../tinkerforge-generator"}
-prettyplease = "0.2.17"
+prettyplease = "0.2.19"
