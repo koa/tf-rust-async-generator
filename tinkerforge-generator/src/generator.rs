@@ -8,8 +8,8 @@ use std::path::PathBuf;
 
 use convert_case::{Case, Casing};
 use prettyplease::unparse;
-use proc_macro2::{Span, TokenStream};
-use quote::{quote, TokenStreamExt, ToTokens};
+use proc_macro2::Span;
+use quote::ToTokens;
 use syn::{
     Arm,
     Block,
@@ -19,10 +19,7 @@ use syn::{
     TypePath, Variant, Visibility,
 };
 
-use crate::json_model::{
-    JsonAnyDefaultValue, JsonCategory, JsonConstantGroup, JsonContent, JsonDirection, JsonElement,
-    JsonLevel, JsonLocale, JsonPacketDescription, JsonPacketType, JsonRole,
-};
+use crate::json_model::{JsonCategory, JsonConstantGroup, JsonContent, JsonDirection, JsonElement, JsonElementType, JsonLevel, JsonLocale, JsonPacketDescription, JsonPacketType, JsonRole};
 
 pub fn parse_json() {
     let file = process_directory(
@@ -41,7 +38,6 @@ pub fn process_directory(bindings_dir: PathBuf) -> File {
         bindings_dir
             .read_dir()
             .expect("Cannot read directory")
-            .into_iter()
             .map(|entry| entry.expect("cannot access directory entry"))
             .filter(|entry| {
                 entry
@@ -51,7 +47,7 @@ pub fn process_directory(bindings_dir: PathBuf) -> File {
                     .unwrap_or(false)
             })
             .map(|json_dir_entry| {
-                fs::File::open(&json_dir_entry.path()).expect("Cannot open json file")
+                fs::File::open(json_dir_entry.path()).expect("Cannot open json file")
             })
             .map(|json_file| {
                 serde_json::from_reader::<_, JsonContent>(json_file).expect("Cannot parse json")
@@ -198,146 +194,13 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
             }
         }
     )));
-
-    let file = File {
+    File {
         shebang: None,
         attrs: vec![],
         items: bindings_content,
-    };
-    file
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub enum TfValueType {
-    U8,
-    I8,
-    U16,
-    I16,
-    U32,
-    I32,
-    U64,
-    I64,
-    Bool,
-    Char,
-    String,
-    Float,
-}
-
-impl ToTokens for TfValueType {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
-        tokens.append_all(
-            match self {
-                TfValueType::U8 => {
-                    quote!(u8)
-                }
-                TfValueType::U32 => {
-                    quote!(u32)
-                }
-                TfValueType::U16 => {
-                    quote!(u16)
-                }
-                TfValueType::Bool => {
-                    quote!(bool)
-                }
-                TfValueType::Char => {
-                    quote!(char)
-                }
-                TfValueType::String => {
-                    quote!(Box<str>)
-                }
-                TfValueType::I8 => {
-                    quote!(i8)
-                }
-                TfValueType::I16 => {
-                    quote!(i16)
-                }
-                TfValueType::I32 => {
-                    quote!(i32)
-                }
-                TfValueType::Float => {
-                    quote!(f32)
-                }
-                TfValueType::U64 => {
-                    quote!(u64)
-                }
-                TfValueType::I64 => {
-                    quote!(i64)
-                }
-            }
-                .into_token_stream(),
-        )
     }
 }
 
-impl TfValueType {
-    fn convert_value(&self, value: &JsonAnyDefaultValue) -> TokenStream {
-        match (self, value) {
-            (TfValueType::U8, JsonAnyDefaultValue::Integer(v)) => {
-                let value: u8 = *v as u8;
-                parse_quote!(#value)
-            }
-            (TfValueType::I8, JsonAnyDefaultValue::Integer(v)) => {
-                let value: i8 = *v as i8;
-                parse_quote!(#value)
-            }
-            (TfValueType::U16, JsonAnyDefaultValue::Integer(v)) => {
-                let value: u16 = *v as u16;
-                parse_quote!(#value)
-            }
-            (TfValueType::I16, JsonAnyDefaultValue::Integer(v)) => {
-                let value: i16 = *v as i16;
-                parse_quote!(#value)
-            }
-            (TfValueType::U32, JsonAnyDefaultValue::Integer(v)) => {
-                let value: u32 = *v as u32;
-                parse_quote!(#value)
-            }
-            (TfValueType::I32, JsonAnyDefaultValue::Integer(v)) => {
-                let value: i32 = *v as i32;
-                parse_quote!(#value)
-            }
-            (TfValueType::U64, JsonAnyDefaultValue::Integer(v)) => {
-                let value: u64 = *v as u64;
-                parse_quote!(#value)
-            }
-            (TfValueType::I64, JsonAnyDefaultValue::Integer(v)) => {
-                let value: i64 = *v as i64;
-                parse_quote!(#value)
-            }
-            (TfValueType::Bool, JsonAnyDefaultValue::Bool(b)) => {
-                parse_quote!(#b)
-            }
-            (TfValueType::Char, JsonAnyDefaultValue::Character(c)) => {
-                parse_quote!(#c)
-            }
-            (TfValueType::String, JsonAnyDefaultValue::String(v)) => {
-                let string = v.as_ref();
-                parse_quote!(#string)
-            }
-            (TfValueType::Float, JsonAnyDefaultValue::Float(v)) => {
-                parse_quote!(#v)
-            }
-
-            _ => panic!("Invalid combination: Type {self:?}, value: {value:?}"),
-        }
-    }
-    fn bytecount(&self, array_length: usize) -> usize {
-        match self {
-            TfValueType::U8 => array_length,
-            TfValueType::I8 => array_length,
-            TfValueType::U16 => array_length * 2,
-            TfValueType::I16 => array_length * 2,
-            TfValueType::U32 => array_length * 4,
-            TfValueType::I32 => array_length * 4,
-            TfValueType::Bool => (array_length + 7) / 8,
-            TfValueType::Char => array_length,
-            TfValueType::String => array_length,
-            TfValueType::Float => array_length * 4,
-            TfValueType::U64 => array_length * 8,
-            TfValueType::I64 => array_length * 8,
-        }
-    }
-}
 
 fn generate_packet_element_item(
     items: &mut Vec<Item>,
@@ -474,24 +337,24 @@ fn generate_element_function(
                         None => {
                             let field_name = field.0.ident.clone().unwrap();
                             let increment = field.size();
-                            writer_statements.push(parse_quote!(i+=(&self.request.#field_name).write_to_slice(&mut target[i..i+#increment]);));
+                            writer_statements.push(parse_quote!(i+=self.request.#field_name.write_to_slice(&mut target[i..i+#increment]);));
                             struct_fields.push(field.0.clone());
                         }
                         Some(JsonRole::StreamChunkData) => {
                             writer_statements.push(
-                                parse_quote!(i+=(&self.data).write_to_slice(&mut target[i..]);),
+                                parse_quote!(i+=self.data.write_to_slice(&mut target[i..]);),
                             );
                             data_field = Some(field.1);
                         }
                         Some(JsonRole::StreamLength) => {
                             let increment = field.size();
-                            writer_statements.push(parse_quote!(i+=(&self.length).write_to_slice(&mut target[i..i+#increment]);));
+                            writer_statements.push(parse_quote!(i+=self.length.write_to_slice(&mut target[i..i+#increment]);));
                             stream_length_field = Some(field.1);
                         }
                         Some(JsonRole::StreamData) => {}
                         Some(JsonRole::StreamChunkOffset) => {
                             let increment = field.size();
-                            writer_statements.push(parse_quote!(i+=(&self.offset).write_to_slice(&mut target[i..i+#increment]);));
+                            writer_statements.push(parse_quote!(i+=self.offset.write_to_slice(&mut target[i..i+#increment]);));
                             chunk_offset_field = Some(field.1);
                         }
                         Some(JsonRole::StreamChunkWritten) => {}
@@ -503,9 +366,9 @@ fn generate_element_function(
                     (data_field, chunk_offset_field, stream_length_field)
                 {
                     let max_chunk_size = data_element.cardinality as usize;
-                    let element_type: TfValueType = data_element.r#type.into();
-                    let offset_type: TfValueType = offset_element.r#type.into();
-                    let length_type: TfValueType = length_element.r#type.into();
+                    let element_type = data_element.r#type;
+                    let offset_type = offset_element.r#type;
+                    let length_type = length_element.r#type;
                     let high_level_struct_name: Ident =
                         create_ident(&format!("{stripped_struct_name}Request"));
                     let high_level_iterator_name: Ident =
@@ -594,7 +457,7 @@ fn generate_element_function(
                             for slice in request.write_to_slices() {
                                 let length = slice.write_to_slice(&mut buffer);
                                 let payload = &buffer[0..length];
-                                self.device.set(#function_id, &payload,Some(std::time::Duration::from_secs(20))).await?;
+                                self.device.set(#function_id, payload,Some(std::time::Duration::from_secs(20))).await?;
                             }
                             Ok(())
                         }
@@ -624,7 +487,7 @@ fn generate_element_function(
     } else {
         let name = format!("{packet_name}Response");
         let struct_name: Ident = create_ident(&name);
-        append_data_object(items, &out_fields, &struct_name);
+        append_data_object(items, out_fields, &struct_name);
         (
             parse_quote!(#base_path::#struct_name),
             Some(Stmt::Expr(
@@ -687,9 +550,9 @@ impl FieldWithSize for (Field, &JsonElement) {
 
     fn size(&self) -> usize {
         let element_entry = self.1;
-        let transfer_type: TfValueType = element_entry.r#type.into();
+        let transfer_type = element_entry.r#type;
         if element_entry.cardinality > 1
-            && (transfer_type == TfValueType::String || element_entry.extra.len() == 1)
+            && (transfer_type == JsonElementType::String || element_entry.extra.len() == 1)
         {
             transfer_type.bytecount(element_entry.cardinality as usize)
         } else if element_entry.extra.len() as i32 == element_entry.cardinality {
@@ -715,11 +578,11 @@ fn parse_packet_elements<'a>(
     for element_entry in packet_entry.elements.iter() {
         let element_name = element_entry.name.as_ref();
         let element_name_rust = element_name.to_case(Case::Camel);
-        let transfer_type: TfValueType = element_entry.r#type.into();
+        let transfer_type = element_entry.r#type;
         if element_entry.cardinality < 1 {
             println!(
                 "Skip negative cardinality on {}; {element_name}",
-                base_path.into_token_stream().to_string()
+                base_path.into_token_stream()
             );
             continue;
         }
@@ -732,7 +595,7 @@ fn parse_packet_elements<'a>(
 
         let ident = create_ident(&element_name_rust.to_case(Case::Snake));
         let create_fields: Box<[(Type, Ident)]> = if element_entry.cardinality > 1
-            && transfer_type == TfValueType::String
+            && transfer_type == JsonElementType::String
         {
             vec![(parse_quote!([char;#repeat_count]), parse_quote!(#ident))].into()
         } else {
@@ -804,7 +667,7 @@ fn process_constant_group(items: &mut Vec<Item>, element: &JsonElement, group: &
     let camel_name = group.name.as_ref().to_case(Case::UpperCamel);
     println!("Constant group: {}", group.name);
 
-    let ty: TfValueType = element.r#type.into();
+    let ty = element.r#type;
     let enum_name_ident = create_ident(&camel_name);
     let mut variants: Punctuated<Variant, Comma> = Default::default();
     let mut encode_arms = vec![];

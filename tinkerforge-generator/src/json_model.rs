@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
+use proc_macro2::TokenStream;
+use quote::{quote, TokenStreamExt, ToTokens};
 use serde::{Deserialize, Serialize};
-
-use crate::generator::TfValueType;
+use syn::parse_quote;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
@@ -109,7 +110,7 @@ pub struct JsonElement {
     pub extra: Box<[JsonElementExtra]>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, Eq, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum JsonElementType {
     Int8,
@@ -126,24 +127,122 @@ pub enum JsonElementType {
     String,
 }
 
-impl Into<TfValueType> for JsonElementType {
-    fn into(self) -> TfValueType {
+impl JsonElementType {
+    pub fn convert_value(&self, value: &JsonAnyDefaultValue) -> TokenStream {
+        match (self, value) {
+            (JsonElementType::UInt8, JsonAnyDefaultValue::Integer(v)) => {
+                let value: u8 = *v as u8;
+                parse_quote!(#value)
+            }
+            (JsonElementType::Int8, JsonAnyDefaultValue::Integer(v)) => {
+                let value: i8 = *v as i8;
+                parse_quote!(#value)
+            }
+            (JsonElementType::UInt16, JsonAnyDefaultValue::Integer(v)) => {
+                let value: u16 = *v as u16;
+                parse_quote!(#value)
+            }
+            (JsonElementType::Int16, JsonAnyDefaultValue::Integer(v)) => {
+                let value: i16 = *v as i16;
+                parse_quote!(#value)
+            }
+            (JsonElementType::UInt32, JsonAnyDefaultValue::Integer(v)) => {
+                let value: u32 = *v as u32;
+                parse_quote!(#value)
+            }
+            (JsonElementType::Int32, JsonAnyDefaultValue::Integer(v)) => {
+                let value: i32 = *v as i32;
+                parse_quote!(#value)
+            }
+            (JsonElementType::UInt64, JsonAnyDefaultValue::Integer(v)) => {
+                let value: u64 = *v as u64;
+                parse_quote!(#value)
+            }
+            (JsonElementType::Int64, JsonAnyDefaultValue::Integer(v)) => {
+                let value: i64 = *v;
+                parse_quote!(#value)
+            }
+            (JsonElementType::Bool, JsonAnyDefaultValue::Bool(b)) => {
+                parse_quote!(#b)
+            }
+            (JsonElementType::Char, JsonAnyDefaultValue::Character(c)) => {
+                parse_quote!(#c)
+            }
+            (JsonElementType::String, JsonAnyDefaultValue::String(v)) => {
+                let string = v.as_ref();
+                parse_quote!(#string)
+            }
+            (JsonElementType::Float, JsonAnyDefaultValue::Float(v)) => {
+                parse_quote!(#v)
+            }
+
+            _ => panic!("Invalid combination: Type {self:?}, value: {value:?}"),
+        }
+    }
+    pub fn bytecount(&self, array_length: usize) -> usize {
         match self {
-            JsonElementType::Int8 => TfValueType::I8,
-            JsonElementType::Int16 => TfValueType::I16,
-            JsonElementType::Int32 => TfValueType::I32,
-            JsonElementType::Int64 => TfValueType::I64,
-            JsonElementType::UInt8 => TfValueType::U8,
-            JsonElementType::UInt16 => TfValueType::U16,
-            JsonElementType::UInt32 => TfValueType::U32,
-            JsonElementType::UInt64 => TfValueType::U64,
-            JsonElementType::Float => TfValueType::Float,
-            JsonElementType::Bool => TfValueType::Bool,
-            JsonElementType::Char => TfValueType::Char,
-            JsonElementType::String => TfValueType::String,
+            JsonElementType::UInt8 => array_length,
+            JsonElementType::Int8 => array_length,
+            JsonElementType::UInt16 => array_length * 2,
+            JsonElementType::Int16 => array_length * 2,
+            JsonElementType::UInt32 => array_length * 4,
+            JsonElementType::Int32 => array_length * 4,
+            JsonElementType::Bool => (array_length + 7) / 8,
+            JsonElementType::Char => array_length,
+            JsonElementType::String => array_length,
+            JsonElementType::Float => array_length * 4,
+            JsonElementType::UInt64 => array_length * 8,
+            JsonElementType::Int64 => array_length * 8,
         }
     }
 }
+
+impl ToTokens for JsonElementType {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        tokens.append_all(
+            match self {
+                JsonElementType::UInt8 => {
+                    quote!(u8)
+                }
+                JsonElementType::UInt32 => {
+                    quote!(u32)
+                }
+                JsonElementType::UInt16 => {
+                    quote!(u16)
+                }
+                JsonElementType::Bool => {
+                    quote!(bool)
+                }
+                JsonElementType::Char => {
+                    quote!(char)
+                }
+                JsonElementType::String => {
+                    quote!(Box<str>)
+                }
+                JsonElementType::Int8 => {
+                    quote!(i8)
+                }
+                JsonElementType::Int16 => {
+                    quote!(i16)
+                }
+                JsonElementType::Int32 => {
+                    quote!(i32)
+                }
+                JsonElementType::Float => {
+                    quote!(f32)
+                }
+                JsonElementType::UInt64 => {
+                    quote!(u64)
+                }
+                JsonElementType::Int64 => {
+                    quote!(i64)
+                }
+            }
+                .into_token_stream(),
+        )
+    }
+}
+
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, Eq, PartialEq)]
 #[serde(rename_all = "lowercase")]

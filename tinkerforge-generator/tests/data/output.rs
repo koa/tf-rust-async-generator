@@ -5611,13 +5611,13 @@ pub mod lcd_128_x_64 {
     impl<'r> tinkerforge_base::byte_converter::ToBytes for WritePixelsSlice<'r> {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             let mut i = 0;
-            i += (&self.request.x_start).write_to_slice(&mut target[i..i + 1usize]);
-            i += (&self.request.y_start).write_to_slice(&mut target[i..i + 1usize]);
-            i += (&self.request.x_end).write_to_slice(&mut target[i..i + 1usize]);
-            i += (&self.request.y_end).write_to_slice(&mut target[i..i + 1usize]);
-            i += (&self.length).write_to_slice(&mut target[i..i + 2usize]);
-            i += (&self.offset).write_to_slice(&mut target[i..i + 2usize]);
-            i += (&self.data).write_to_slice(&mut target[i..]);
+            i += self.request.x_start.write_to_slice(&mut target[i..i + 1usize]);
+            i += self.request.y_start.write_to_slice(&mut target[i..i + 1usize]);
+            i += self.request.x_end.write_to_slice(&mut target[i..i + 1usize]);
+            i += self.request.y_end.write_to_slice(&mut target[i..i + 1usize]);
+            i += self.length.write_to_slice(&mut target[i..i + 2usize]);
+            i += self.offset.write_to_slice(&mut target[i..i + 2usize]);
+            i += self.data.write_to_slice(&mut target[i..]);
             return i;
         }
     }
@@ -7146,10 +7146,10 @@ pub mod lcd_128_x_64 {
     impl<'r> tinkerforge_base::byte_converter::ToBytes for SetGuiGraphDataSlice<'r> {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             let mut i = 0;
-            i += (&self.request.index).write_to_slice(&mut target[i..i + 1usize]);
-            i += (&self.length).write_to_slice(&mut target[i..i + 2usize]);
-            i += (&self.offset).write_to_slice(&mut target[i..i + 2usize]);
-            i += (&self.data).write_to_slice(&mut target[i..]);
+            i += self.request.index.write_to_slice(&mut target[i..i + 1usize]);
+            i += self.length.write_to_slice(&mut target[i..i + 2usize]);
+            i += self.offset.write_to_slice(&mut target[i..i + 2usize]);
+            i += self.data.write_to_slice(&mut target[i..]);
             return i;
         }
     }

@@ -57,7 +57,7 @@ impl<const N: usize> ToBytes for [u8; N] {
 
 impl ToBytes for [u8] {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
-        target.copy_from_slice(&self);
+        target.copy_from_slice(self);
         self.len()
     }
 }
@@ -73,6 +73,15 @@ impl<const N: usize> ToBytes for [u16; N] {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
         write_bytes_to_target(self, target);
         2 * N
+    }
+}
+
+impl ToBytes for [u16] {
+    fn write_to_slice(&self, target: &mut [u8]) -> usize {
+        for (idx, value) in self.iter().enumerate() {
+            value.write_to_slice(&mut target[idx * 2..idx * 2 + 2]);
+        }
+        2 * self.len()
     }
 }
 
@@ -145,13 +154,13 @@ fn write_bytes_to_target<T: Default + Copy + FromByteSlice + ToBytes, const N: u
     }
 }
 
-impl<const N: usize> ToBytes for &[bool; N] {
+impl<const N: usize> ToBytes for [bool; N] {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
         let bytecount = (N + 7) / 8;
-        for i in 0..bytecount {
-            target[i] = 0;
+        for value in target.iter_mut().take(bytecount) {
+            *value = 0;
         }
-        for (i, b) in self.into_iter().enumerate() {
+        for (i, b) in self.iter().enumerate() {
             target[i / 8] |= (*b as u8) << (i % 8);
         }
         bytecount
@@ -161,8 +170,8 @@ impl<const N: usize> ToBytes for &[bool; N] {
 impl ToBytes for &[bool] {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
         let bytecount = (self.len() + 7) / 8;
-        for i in 0..bytecount {
-            target[i] = 0;
+        for value in target.iter_mut().take(bytecount) {
+            *value = 0;
         }
         for (i, b) in self.iter().enumerate() {
             target[i / 8] |= (*b as u8) << (i % 8);
@@ -434,7 +443,7 @@ impl<P, R> Debug for ParsedOrRaw<P, R>
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             ParsedOrRaw::Parsed(value) => {
-                write!(f, "{value:?}({:?})", value.clone().into())
+                write!(f, "{value:?}({:?})", (*value).into())
             }
             ParsedOrRaw::Raw(raw_value) => {
                 write!(f, "<unknown>({:?})", raw_value)
@@ -478,7 +487,7 @@ impl<P, R> FromByteSlice for ParsedOrRaw<P, R>
 {
     fn from_le_byte_slice(bytes: &[u8]) -> Self {
         let raw_value = R::from_le_byte_slice(bytes);
-        if let Ok(value) = raw_value.clone().try_into() {
+        if let Ok(value) = raw_value.try_into() {
             Self::Parsed(value)
         } else {
             Self::Raw(raw_value)
