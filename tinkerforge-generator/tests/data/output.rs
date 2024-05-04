@@ -7517,7 +7517,7 @@ eingestellt werden.
                 let length = slice.write_to_slice(&mut buffer);
                 let payload = &buffer[0..length];
                 self.device
-                    .set(1u8, &payload, Some(std::time::Duration::from_secs(20)))
+                    .set(1u8, payload, Some(std::time::Duration::from_secs(20)))
                     .await?;
             }
             Ok(())
@@ -8556,7 +8556,7 @@ Die gesetzten Werte müssen zwischen 0 und 255 skaliert werden. 0 wird unten und
                 let length = slice.write_to_slice(&mut buffer);
                 let payload = &buffer[0..length];
                 self.device
-                    .set(47u8, &payload, Some(std::time::Duration::from_secs(20)))
+                    .set(47u8, payload, Some(std::time::Duration::from_secs(20)))
                     .await?;
             }
             Ok(())
