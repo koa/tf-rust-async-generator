@@ -19,7 +19,10 @@ use syn::{
     TypePath, Variant, Visibility,
 };
 
-use crate::json_model::{JsonCategory, JsonConstantGroup, JsonContent, JsonDirection, JsonElement, JsonElementType, JsonLevel, JsonLocale, JsonPacketDescription, JsonPacketType, JsonRole};
+use crate::json_model::{
+    JsonCategory, JsonConstantGroup, JsonContent, JsonDirection, JsonElement, JsonElementType,
+    JsonLevel, JsonLocale, JsonPacketDescription, JsonPacketType, JsonRole,
+};
 
 pub fn parse_json() {
     let file = process_directory(
@@ -177,10 +180,10 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
             }
         }
     )));
-    let encode_match = match_self(device_encode_arms);
+    let encode_match = match_val(device_encode_arms);
     bindings_content.push(Item::Impl(parse_quote!(
-        impl Into<u16> for DeviceIdentifier {
-            fn into(self) -> u16 {
+        impl From<DeviceIdentifier> for u16{
+            fn from(val: DeviceIdentifier) -> Self{
                 #encode_match
             }
         }
@@ -201,6 +204,15 @@ pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File 
     }
 }
 
+fn match_val(device_encode_arms: Vec<Arm>) -> ExprMatch {
+    ExprMatch {
+        attrs: vec![],
+        match_token: Default::default(),
+        expr: Box::new(parse_quote!(val)),
+        brace_token: Default::default(),
+        arms: device_encode_arms,
+    }
+}
 
 fn generate_packet_element_item(
     items: &mut Vec<Item>,
@@ -322,7 +334,8 @@ fn generate_element_function(
         let struct_name: Ident = create_ident(&format!("{packet_name}Request"));
         let size = append_data_object(items, in_fields, &struct_name);
         if packet_description.level == JsonLevel::Low {
-            if let Some(stripped_raw_name) = packet_description.name.strip_suffix(LOW_LEVEL_SUFFIX) {
+            if let Some(stripped_raw_name) = packet_description.name.strip_suffix(LOW_LEVEL_SUFFIX)
+            {
                 let stripped_struct_name = stripped_raw_name.to_case(Case::UpperCamel);
                 let stripped_function_name = stripped_raw_name.to_case(Case::Snake);
                 let mut struct_fields = Punctuated::<Field, Comma>::new();
@@ -341,9 +354,8 @@ fn generate_element_function(
                             struct_fields.push(field.0.clone());
                         }
                         Some(JsonRole::StreamChunkData) => {
-                            writer_statements.push(
-                                parse_quote!(i+=self.data.write_to_slice(&mut target[i..]);),
-                            );
+                            writer_statements
+                                .push(parse_quote!(i+=self.data.write_to_slice(&mut target[i..]);));
                             data_field = Some(field.1);
                         }
                         Some(JsonRole::StreamLength) => {
@@ -687,26 +699,14 @@ fn process_constant_group(items: &mut Vec<Item>, element: &JsonElement, group: &
             #variants
         }
     ));
-    let encode_match = ExprMatch {
-        attrs: vec![],
-        match_token: Default::default(),
-        expr: Box::new(parse_quote!(self)),
-        brace_token: Default::default(),
-        arms: encode_arms,
-    };
+    let encode_match = match_val(encode_arms);
 
     parse_arms.push(parse_quote!(_ => Err(())));
-    let parse_match = ExprMatch {
-        attrs: vec![],
-        match_token: Default::default(),
-        expr: Box::new(parse_quote!(self)),
-        brace_token: Default::default(),
-        arms: parse_arms,
-    };
+    let parse_match = match_self(parse_arms);
 
     items.push(Item::Impl(parse_quote!(
-        impl Into<#ty> for #enum_name_ident {
-            fn into(self) -> #ty {
+        impl From<#enum_name_ident> for #ty{
+            fn from(val: #enum_name_ident) -> Self{
                 #encode_match
             }
         }
@@ -788,7 +788,7 @@ fn append_data_object<F: FieldWithSize>(
             );
             reader_statements.push(parse_quote!(let #field_name = #read_method_call;));
             initialization_fields.push(parse_quote!(#field_name));
-            writer_statements.push(parse_quote!((&self.#field_name).write_to_slice(&mut target[#offset_before..#offset_after]);));
+            writer_statements.push(parse_quote!(self.#field_name.write_to_slice(&mut target[#offset_before..#offset_after]);));
             struct_fields.push(field.clone());
         }
     }
