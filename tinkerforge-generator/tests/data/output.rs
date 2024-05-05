@@ -75,7 +75,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.extension.write_to_slice(&mut target[0usize..1usize]);
             self.exttype.write_to_slice(&mut target[1usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -98,7 +98,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.num.write_to_slice(&mut target[0usize..1usize]);
             self.address.write_to_slice(&mut target[1usize..2usize]);
-            return 2usize;
+            2usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -131,7 +131,7 @@ pub mod master {
             self.crc_error.write_to_slice(&mut target[2usize..4usize]);
             self.no_ack.write_to_slice(&mut target[4usize..6usize]);
             self.overflow.write_to_slice(&mut target[6usize..8usize]);
-            return 8usize;
+            8usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -196,7 +196,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.num.write_to_slice(&mut target[0usize..1usize]);
             self.address.write_to_slice(&mut target[1usize..2usize]);
-            return 2usize;
+            2usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -263,7 +263,7 @@ pub mod master {
             self.speed.write_to_slice(&mut target[0usize..4usize]);
             self.parity.write_to_slice(&mut target[4usize..5usize]);
             self.stopbits.write_to_slice(&mut target[5usize..6usize]);
-            return 6usize;
+            6usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -295,7 +295,7 @@ pub mod master {
             self.speed.write_to_slice(&mut target[0usize..4usize]);
             self.parity.write_to_slice(&mut target[4usize..5usize]);
             self.stopbits.write_to_slice(&mut target[5usize..6usize]);
-            return 6usize;
+            6usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -389,7 +389,7 @@ pub mod master {
             self.subnet_mask.write_to_slice(&mut target[37usize..41usize]);
             self.gateway.write_to_slice(&mut target[41usize..45usize]);
             self.port.write_to_slice(&mut target[45usize..47usize]);
-            return 47usize;
+            47usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -439,7 +439,7 @@ pub mod master {
             self.subnet_mask.write_to_slice(&mut target[37usize..41usize]);
             self.gateway.write_to_slice(&mut target[41usize..45usize]);
             self.port.write_to_slice(&mut target[45usize..47usize]);
-            return 47usize;
+            47usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -591,7 +591,7 @@ pub mod master {
             self.ca_certificate_length.write_to_slice(&mut target[53usize..55usize]);
             self.client_certificate_length.write_to_slice(&mut target[55usize..57usize]);
             self.private_key_length.write_to_slice(&mut target[57usize..59usize]);
-            return 59usize;
+            59usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -652,7 +652,7 @@ pub mod master {
             self.ca_certificate_length.write_to_slice(&mut target[53usize..55usize]);
             self.client_certificate_length.write_to_slice(&mut target[55usize..57usize]);
             self.private_key_length.write_to_slice(&mut target[57usize..59usize]);
-            return 59usize;
+            59usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -762,7 +762,7 @@ pub mod master {
             self.rx_count.write_to_slice(&mut target[27usize..31usize]);
             self.tx_count.write_to_slice(&mut target[31usize..35usize]);
             self.state.write_to_slice(&mut target[35usize..36usize]);
-            return 36usize;
+            36usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -787,7 +787,7 @@ pub mod master {
             self.index.write_to_slice(&mut target[0usize..2usize]);
             self.data.write_to_slice(&mut target[2usize..34usize]);
             self.data_length.write_to_slice(&mut target[34usize..35usize]);
-            return 35usize;
+            35usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -809,7 +809,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.data.write_to_slice(&mut target[0usize..32usize]);
             self.data_length.write_to_slice(&mut target[32usize..33usize]);
-            return 33usize;
+            33usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -874,7 +874,7 @@ pub mod master {
             self.overflow.write_to_slice(&mut target[0usize..4usize]);
             self.low_watermark.write_to_slice(&mut target[4usize..6usize]);
             self.used.write_to_slice(&mut target[6usize..8usize]);
-            return 8usize;
+            8usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -987,7 +987,7 @@ pub mod master {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
             self.max.write_to_slice(&mut target[3usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1020,7 +1020,7 @@ pub mod master {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
             self.max.write_to_slice(&mut target[3usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1049,7 +1049,7 @@ pub mod master {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
             self.max.write_to_slice(&mut target[3usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1082,7 +1082,7 @@ pub mod master {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
             self.max.write_to_slice(&mut target[3usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1111,7 +1111,7 @@ pub mod master {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
             self.max.write_to_slice(&mut target[3usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1144,7 +1144,7 @@ pub mod master {
             self.option.write_to_slice(&mut target[0usize..1usize]);
             self.min.write_to_slice(&mut target[1usize..3usize]);
             self.max.write_to_slice(&mut target[3usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1220,7 +1220,7 @@ pub mod master {
             self.subnet_mask.write_to_slice(&mut target[5usize..9usize]);
             self.gateway.write_to_slice(&mut target[9usize..13usize]);
             self.port.write_to_slice(&mut target[13usize..15usize]);
-            return 15usize;
+            15usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1264,7 +1264,7 @@ pub mod master {
             self.subnet_mask.write_to_slice(&mut target[5usize..9usize]);
             self.gateway.write_to_slice(&mut target[9usize..13usize]);
             self.port.write_to_slice(&mut target[13usize..15usize]);
-            return 15usize;
+            15usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1313,7 +1313,7 @@ pub mod master {
             self.rx_count.write_to_slice(&mut target[18usize..22usize]);
             self.tx_count.write_to_slice(&mut target[22usize..26usize]);
             self.hostname.write_to_slice(&mut target[26usize..58usize]);
-            return 58usize;
+            58usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1337,7 +1337,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.sockets.write_to_slice(&mut target[0usize..1usize]);
             self.port.write_to_slice(&mut target[1usize..3usize]);
-            return 3usize;
+            3usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1361,7 +1361,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.sockets.write_to_slice(&mut target[0usize..1usize]);
             self.port.write_to_slice(&mut target[1usize..3usize]);
-            return 3usize;
+            3usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1438,7 +1438,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.data.write_to_slice(&mut target[0usize..60usize]);
             self.length.write_to_slice(&mut target[60usize..61usize]);
-            return 61usize;
+            61usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1461,7 +1461,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.data.write_to_slice(&mut target[0usize..60usize]);
             self.result.write_to_slice(&mut target[60usize..61usize]);
-            return 61usize;
+            61usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1544,7 +1544,7 @@ pub mod master {
             self.phy_mode.write_to_slice(&mut target[6usize..7usize]);
             self.sleep_mode.write_to_slice(&mut target[7usize..8usize]);
             self.website.write_to_slice(&mut target[8usize..9usize]);
-            return 9usize;
+            9usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1592,7 +1592,7 @@ pub mod master {
             self.phy_mode.write_to_slice(&mut target[6usize..7usize]);
             self.sleep_mode.write_to_slice(&mut target[7usize..8usize]);
             self.website.write_to_slice(&mut target[8usize..9usize]);
-            return 9usize;
+            9usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1746,7 +1746,7 @@ pub mod master {
             self.ap_rx_count.write_to_slice(&mut target[48usize..52usize]);
             self.ap_tx_count.write_to_slice(&mut target[52usize..56usize]);
             self.ap_connected_count.write_to_slice(&mut target[56usize..57usize]);
-            return 57usize;
+            57usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1797,7 +1797,7 @@ pub mod master {
             self.gateway.write_to_slice(&mut target[41usize..45usize]);
             self.mac_address.write_to_slice(&mut target[45usize..51usize]);
             self.bssid.write_to_slice(&mut target[51usize..57usize]);
-            return 57usize;
+            57usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -1848,7 +1848,7 @@ pub mod master {
             self.gateway.write_to_slice(&mut target[41usize..45usize]);
             self.mac_address.write_to_slice(&mut target[45usize..51usize]);
             self.bssid.write_to_slice(&mut target[51usize..57usize]);
-            return 57usize;
+            57usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1953,7 +1953,7 @@ pub mod master {
             self.hidden.write_to_slice(&mut target[46usize..47usize]);
             self.channel.write_to_slice(&mut target[47usize..48usize]);
             self.mac_address.write_to_slice(&mut target[48usize..54usize]);
-            return 54usize;
+            54usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2017,7 +2017,7 @@ pub mod master {
             self.hidden.write_to_slice(&mut target[46usize..47usize]);
             self.channel.write_to_slice(&mut target[47usize..48usize]);
             self.mac_address.write_to_slice(&mut target[48usize..54usize]);
-            return 54usize;
+            54usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2049,7 +2049,7 @@ pub mod master {
             self.firmware_version_major.write_to_slice(&mut target[0usize..1usize]);
             self.firmware_version_minor.write_to_slice(&mut target[1usize..2usize]);
             self.firmware_version_revision.write_to_slice(&mut target[2usize..3usize]);
-            return 3usize;
+            3usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2113,7 +2113,7 @@ pub mod master {
             self.group_ssid_prefix.write_to_slice(&mut target[25usize..41usize]);
             self.gateway_ip.write_to_slice(&mut target[41usize..45usize]);
             self.gateway_port.write_to_slice(&mut target[45usize..47usize]);
-            return 47usize;
+            47usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2178,7 +2178,7 @@ pub mod master {
             self.group_ssid_prefix.write_to_slice(&mut target[25usize..41usize]);
             self.gateway_ip.write_to_slice(&mut target[41usize..45usize]);
             self.gateway_port.write_to_slice(&mut target[45usize..47usize]);
-            return 47usize;
+            47usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -2280,7 +2280,7 @@ pub mod master {
             self.connected_nodes.write_to_slice(&mut target[3usize..5usize]);
             self.rx_count.write_to_slice(&mut target[5usize..9usize]);
             self.tx_count.write_to_slice(&mut target[9usize..13usize]);
-            return 13usize;
+            13usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2324,7 +2324,7 @@ pub mod master {
             self.subnet_mask.write_to_slice(&mut target[36usize..40usize]);
             self.gateway.write_to_slice(&mut target[40usize..44usize]);
             self.mac_address.write_to_slice(&mut target[44usize..50usize]);
-            return 50usize;
+            50usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2366,7 +2366,7 @@ pub mod master {
             self.subnet_mask.write_to_slice(&mut target[36usize..40usize]);
             self.gateway.write_to_slice(&mut target[40usize..44usize]);
             self.mac_address.write_to_slice(&mut target[44usize..50usize]);
-            return 50usize;
+            50usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2400,7 +2400,7 @@ pub mod master {
             self.parameter_1.write_to_slice(&mut target[4usize..8usize]);
             self.parameter_2.write_to_slice(&mut target[8usize..12usize]);
             self.data.write_to_slice(&mut target[12usize..64usize]);
-            return 64usize;
+            64usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2426,7 +2426,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.return_value.write_to_slice(&mut target[0usize..4usize]);
             self.return_data.write_to_slice(&mut target[4usize..64usize]);
-            return 64usize;
+            64usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2456,7 +2456,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.enable_dynamic_baudrate.write_to_slice(&mut target[0usize..1usize]);
             self.minimum_dynamic_baudrate.write_to_slice(&mut target[1usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2486,7 +2486,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.enable_dynamic_baudrate.write_to_slice(&mut target[0usize..1usize]);
             self.minimum_dynamic_baudrate.write_to_slice(&mut target[1usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -2562,7 +2562,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.bricklet_port.write_to_slice(&mut target[0usize..1usize]);
             self.baudrate.write_to_slice(&mut target[1usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2601,7 +2601,7 @@ pub mod master {
                 .write_to_slice(&mut target[4usize..8usize]);
             self.error_count_frame.write_to_slice(&mut target[8usize..12usize]);
             self.error_count_overflow.write_to_slice(&mut target[12usize..16usize]);
-            return 16usize;
+            16usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2641,7 +2641,7 @@ pub mod master {
             self.firmware_version_minor.write_to_slice(&mut target[2usize..3usize]);
             self.firmware_version_revision.write_to_slice(&mut target[3usize..4usize]);
             self.name.write_to_slice(&mut target[4usize..44usize]);
-            return 44usize;
+            44usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2666,7 +2666,7 @@ pub mod master {
             self.port.write_to_slice(&mut target[0usize..1usize]);
             self.offset.write_to_slice(&mut target[1usize..2usize]);
             self.chunk.write_to_slice(&mut target[2usize..34usize]);
-            return 34usize;
+            34usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2688,7 +2688,7 @@ pub mod master {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.port.write_to_slice(&mut target[0usize..1usize]);
             self.offset.write_to_slice(&mut target[1usize..2usize]);
-            return 2usize;
+            2usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2759,7 +2759,7 @@ pub mod master {
             self.firmware_version_minor.write_to_slice(&mut target[21usize..22usize]);
             self.firmware_version_revision.write_to_slice(&mut target[22usize..23usize]);
             self.device_identifier.write_to_slice(&mut target[23usize..25usize]);
-            return 25usize;
+            25usize
         }
     }
     impl MasterBrick {
@@ -5550,7 +5550,7 @@ pub mod lcd_128_x_64 {
             self.pixels_length.write_to_slice(&mut target[4usize..6usize]);
             self.pixels_chunk_offset.write_to_slice(&mut target[6usize..8usize]);
             self.pixels_chunk_data.write_to_slice(&mut target[8usize..64usize]);
-            return 64usize;
+            64usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5590,7 +5590,7 @@ pub mod lcd_128_x_64 {
                 Some(WritePixelsSlice {
                     request: self.request,
                     offset: slice_offset,
-                    length: length,
+                    length,
                     data,
                 })
             }
@@ -5612,7 +5612,7 @@ pub mod lcd_128_x_64 {
             i += self.length.write_to_slice(&mut target[i..i + 2usize]);
             i += self.offset.write_to_slice(&mut target[i..i + 2usize]);
             i += self.data.write_to_slice(&mut target[i..]);
-            return i;
+            i
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5645,7 +5645,7 @@ pub mod lcd_128_x_64 {
             self.y_start.write_to_slice(&mut target[1usize..2usize]);
             self.x_end.write_to_slice(&mut target[2usize..3usize]);
             self.y_end.write_to_slice(&mut target[3usize..4usize]);
-            return 4usize;
+            4usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5676,7 +5676,7 @@ pub mod lcd_128_x_64 {
             self.pixels_length.write_to_slice(&mut target[0usize..2usize]);
             self.pixels_chunk_offset.write_to_slice(&mut target[2usize..4usize]);
             self.pixels_chunk_data.write_to_slice(&mut target[4usize..64usize]);
-            return 64usize;
+            64usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5710,7 +5710,7 @@ pub mod lcd_128_x_64 {
             self.backlight.write_to_slice(&mut target[1usize..2usize]);
             self.invert.write_to_slice(&mut target[2usize..3usize]);
             self.automatic_draw.write_to_slice(&mut target[3usize..4usize]);
-            return 4usize;
+            4usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5744,7 +5744,7 @@ pub mod lcd_128_x_64 {
             self.backlight.write_to_slice(&mut target[1usize..2usize]);
             self.invert.write_to_slice(&mut target[2usize..3usize]);
             self.automatic_draw.write_to_slice(&mut target[3usize..4usize]);
-            return 4usize;
+            4usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5769,7 +5769,7 @@ pub mod lcd_128_x_64 {
             self.line.write_to_slice(&mut target[0usize..1usize]);
             self.position.write_to_slice(&mut target[1usize..2usize]);
             self.text.write_to_slice(&mut target[2usize..24usize]);
-            return 24usize;
+            24usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5797,7 +5797,7 @@ pub mod lcd_128_x_64 {
             self.x.write_to_slice(&mut target[2usize..4usize]);
             self.y.write_to_slice(&mut target[4usize..6usize]);
             self.age.write_to_slice(&mut target[6usize..10usize]);
-            return 10usize;
+            10usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5824,7 +5824,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5851,7 +5851,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -5879,7 +5879,7 @@ pub mod lcd_128_x_64 {
             self.x.write_to_slice(&mut target[2usize..4usize]);
             self.y.write_to_slice(&mut target[4usize..6usize]);
             self.age.write_to_slice(&mut target[6usize..10usize]);
-            return 10usize;
+            10usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -5976,7 +5976,7 @@ pub mod lcd_128_x_64 {
             self.x_end.write_to_slice(&mut target[11usize..13usize]);
             self.y_end.write_to_slice(&mut target[13usize..15usize]);
             self.age.write_to_slice(&mut target[15usize..19usize]);
-            return 19usize;
+            19usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6003,7 +6003,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6030,7 +6030,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6085,7 +6085,7 @@ pub mod lcd_128_x_64 {
             self.x_end.write_to_slice(&mut target[11usize..13usize]);
             self.y_end.write_to_slice(&mut target[13usize..15usize]);
             self.age.write_to_slice(&mut target[15usize..19usize]);
-            return 19usize;
+            19usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6160,7 +6160,7 @@ pub mod lcd_128_x_64 {
             self.position_x_end.write_to_slice(&mut target[2usize..3usize]);
             self.position_y_end.write_to_slice(&mut target[3usize..4usize]);
             self.color.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6203,7 +6203,7 @@ pub mod lcd_128_x_64 {
             self.position_y_end.write_to_slice(&mut target[3usize..4usize]);
             self.fill.write_to_slice(&mut target[4usize..5usize]);
             self.color.write_to_slice(&mut target[5usize..6usize]);
-            return 6usize;
+            6usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6304,7 +6304,7 @@ pub mod lcd_128_x_64 {
             self.font.write_to_slice(&mut target[2usize..3usize]);
             self.color.write_to_slice(&mut target[3usize..4usize]);
             self.text.write_to_slice(&mut target[4usize..26usize]);
-            return 26usize;
+            26usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6345,7 +6345,7 @@ pub mod lcd_128_x_64 {
             self.width.write_to_slice(&mut target[3usize..4usize]);
             self.height.write_to_slice(&mut target[4usize..5usize]);
             self.text.write_to_slice(&mut target[5usize..21usize]);
-            return 21usize;
+            21usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6386,7 +6386,7 @@ pub mod lcd_128_x_64 {
             self.width.write_to_slice(&mut target[3usize..4usize]);
             self.height.write_to_slice(&mut target[4usize..5usize]);
             self.text.write_to_slice(&mut target[5usize..21usize]);
-            return 21usize;
+            21usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6413,7 +6413,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6440,7 +6440,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6462,7 +6462,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.pressed.write_to_slice(&mut target[1usize..2usize]);
-            return 2usize;
+            2usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6541,7 +6541,7 @@ pub mod lcd_128_x_64 {
             self.length.write_to_slice(&mut target[3usize..4usize]);
             self.direction.write_to_slice(&mut target[4usize..5usize]);
             self.value.write_to_slice(&mut target[5usize..6usize]);
-            return 6usize;
+            6usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6588,7 +6588,7 @@ pub mod lcd_128_x_64 {
             self.length.write_to_slice(&mut target[3usize..4usize]);
             self.direction.write_to_slice(&mut target[4usize..5usize]);
             self.value.write_to_slice(&mut target[5usize..6usize]);
-            return 6usize;
+            6usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6615,7 +6615,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6642,7 +6642,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6664,7 +6664,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.value.write_to_slice(&mut target[1usize..2usize]);
-            return 2usize;
+            2usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6731,7 +6731,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.change_tab_config.write_to_slice(&mut target[0usize..1usize]);
             self.clear_gui.write_to_slice(&mut target[1usize..2usize]);
-            return 2usize;
+            2usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6763,7 +6763,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.change_tab_config.write_to_slice(&mut target[0usize..1usize]);
             self.clear_gui.write_to_slice(&mut target[1usize..2usize]);
-            return 2usize;
+            2usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6785,7 +6785,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.text.write_to_slice(&mut target[1usize..6usize]);
-            return 6usize;
+            6usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6807,7 +6807,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.active.write_to_slice(&mut target[0usize..1usize]);
             self.text.write_to_slice(&mut target[1usize..6usize]);
-            return 6usize;
+            6usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6829,7 +6829,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.index.write_to_slice(&mut target[0usize..1usize]);
             self.icon.write_to_slice(&mut target[1usize..22usize]);
-            return 22usize;
+            22usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6851,7 +6851,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.active.write_to_slice(&mut target[0usize..1usize]);
             self.icon.write_to_slice(&mut target[1usize..22usize]);
-            return 22usize;
+            22usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6878,7 +6878,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -6905,7 +6905,7 @@ pub mod lcd_128_x_64 {
         fn write_to_slice(&self, target: &mut [u8]) -> usize {
             self.period.write_to_slice(&mut target[0usize..4usize]);
             self.value_has_to_change.write_to_slice(&mut target[4usize..5usize]);
-            return 5usize;
+            5usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -6996,7 +6996,7 @@ pub mod lcd_128_x_64 {
             self.height.write_to_slice(&mut target[5usize..6usize]);
             self.text_x.write_to_slice(&mut target[6usize..10usize]);
             self.text_y.write_to_slice(&mut target[10usize..14usize]);
-            return 14usize;
+            14usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -7052,7 +7052,7 @@ pub mod lcd_128_x_64 {
             self.height.write_to_slice(&mut target[5usize..6usize]);
             self.text_x.write_to_slice(&mut target[6usize..10usize]);
             self.text_y.write_to_slice(&mut target[10usize..14usize]);
-            return 14usize;
+            14usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -7088,7 +7088,7 @@ pub mod lcd_128_x_64 {
             self.data_length.write_to_slice(&mut target[1usize..3usize]);
             self.data_chunk_offset.write_to_slice(&mut target[3usize..5usize]);
             self.data_chunk_data.write_to_slice(&mut target[5usize..64usize]);
-            return 64usize;
+            64usize
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -7125,7 +7125,7 @@ pub mod lcd_128_x_64 {
                 Some(SetGuiGraphDataSlice {
                     request: self.request,
                     offset: slice_offset,
-                    length: length,
+                    length,
                     data,
                 })
             }
@@ -7144,7 +7144,7 @@ pub mod lcd_128_x_64 {
             i += self.length.write_to_slice(&mut target[i..i + 2usize]);
             i += self.offset.write_to_slice(&mut target[i..i + 2usize]);
             i += self.data.write_to_slice(&mut target[i..]);
-            return i;
+            i
         }
     }
     #[derive(Copy, Clone, PartialEq, Debug)]
@@ -7176,7 +7176,7 @@ pub mod lcd_128_x_64 {
             self.data_length.write_to_slice(&mut target[0usize..2usize]);
             self.data_chunk_offset.write_to_slice(&mut target[2usize..4usize]);
             self.data_chunk_data.write_to_slice(&mut target[4usize..63usize]);
-            return 63usize;
+            63usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -7257,7 +7257,7 @@ pub mod lcd_128_x_64 {
                 .write_to_slice(&mut target[4usize..8usize]);
             self.error_count_frame.write_to_slice(&mut target[8usize..12usize]);
             self.error_count_overflow.write_to_slice(&mut target[12usize..16usize]);
-            return 16usize;
+            16usize
         }
     }
     #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -7463,7 +7463,7 @@ pub mod lcd_128_x_64 {
             self.firmware_version_minor.write_to_slice(&mut target[21usize..22usize]);
             self.firmware_version_revision.write_to_slice(&mut target[22usize..23usize]);
             self.device_identifier.write_to_slice(&mut target[23usize..25usize]);
-            return 25usize;
+            25usize
         }
     }
     impl Lcd128X64Bricklet {

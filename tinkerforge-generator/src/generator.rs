@@ -373,7 +373,7 @@ fn generate_element_function(
                         Some(JsonRole::StreamWritten) => {}
                     }
                 }
-                writer_statements.push(parse_quote!(return i;));
+                writer_statements.push(Stmt::Expr(parse_quote!(i), None));
                 if let (Some(data_element), Some(offset_element), Some(length_element)) =
                     (data_field, chunk_offset_field, stream_length_field)
                 {
@@ -436,7 +436,7 @@ fn generate_element_function(
                                     Some(#high_level_slice_name {
                                         request: self.request,
                                         offset: slice_offset,
-                                        length: length,
+                                        length,
                                         data,
                                     })
                                 }
@@ -814,7 +814,7 @@ fn append_data_object<F: FieldWithSize>(
          #total_size
        }
     }));
-    writer_statements.push(parse_quote!(return #total_size;));
+    writer_statements.push(Stmt::Expr(parse_quote!(#total_size), None));
     let write_fields = Block {
         brace_token: Default::default(),
         stmts: writer_statements,
