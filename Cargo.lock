@@ -491,7 +491,7 @@ dependencies = [
 
 [[package]]
 name = "test-compile"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "futures-core",
@@ -524,7 +524,7 @@ dependencies = [
 
 [[package]]
 name = "tinkerforge-base"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "byteorder",
  "const-str",
@@ -546,7 +546,7 @@ dependencies = [
 
 [[package]]
 name = "tinkerforge-generator"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "convert_case",
  "prettyplease",
