@@ -1,3 +1,4 @@
 [workspace]
 resolver = "2"
-members = [ "tinkerforge-base", "tinkerforge-generator","test-compile"]
+members = ["tinkerforge-base", "tinkerforge-generator", "test-compile"]
+publish = ["kellnr-berg-turbenthal"]
