@@ -1,21 +1,21 @@
+use std::path::PathBuf;
 use std::{
     collections::HashSet,
     default::Default,
     env::{self, current_dir},
     fs, path,
 };
-use std::path::PathBuf;
 
 use convert_case::{Case, Casing};
 use prettyplease::unparse;
 use proc_macro2::Span;
 use quote::ToTokens;
 use syn::{
-    Arm,
-    Block,
-    Expr,
-    ExprMatch, Field, FieldMutability, FieldValue, File, Ident, ImplItem, ImplItemFn, Item, ItemImpl,
-    ItemMod, Lit, parse_quote, Path, PathArguments, PathSegment, punctuated::Punctuated, Stmt, token::{Comma, PathSep, Pub}, Type,
+    parse_quote,
+    punctuated::Punctuated,
+    token::{Comma, PathSep, Pub},
+    Arm, Block, Expr, ExprMatch, Field, FieldMutability, FieldValue, File, Ident, ImplItem,
+    ImplItemFn, Item, ItemImpl, ItemMod, Lit, Path, PathArguments, PathSegment, Stmt, Type,
     TypePath, Variant, Visibility,
 };
 
@@ -58,7 +58,7 @@ pub fn process_directory(bindings_dir: PathBuf) -> File {
     )
 }
 
-pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File {
+pub fn generate_code<IT: Iterator<Item = JsonContent>>(file_contents: IT) -> File {
     let mut bindings_content = Vec::new();
 
     let mut device_variants: Punctuated<Variant, Comma> = Default::default();
@@ -830,18 +830,18 @@ fn append_data_object<F: FieldWithSize>(
 
 fn static_method_call(ty: &Type, method: Ident, args: Punctuated<Expr, Comma>) -> Expr {
     if let Type::Path(TypePath {
-                          qself: None,
-                          path: Path {
-                              leading_colon: _,
-                              segments,
-                          },
-                      }) = &ty
+        qself: None,
+        path: Path {
+            leading_colon: _,
+            segments,
+        },
+    }) = &ty
     {
         let seg = segments.last();
         if let Some(PathSegment {
-                        ident,
-                        arguments: PathArguments::AngleBracketed(bracketed),
-                    }) = seg
+            ident,
+            arguments: PathArguments::AngleBracketed(bracketed),
+        }) = seg
         {
             return if segments.len() > 1 {
                 let mut type_path: Punctuated<PathSegment, PathSep> = Punctuated::new();

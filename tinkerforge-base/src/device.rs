@@ -6,7 +6,7 @@ use futures_core::Stream;
 #[cfg(feature = "prometheus")]
 use lazy_static::lazy_static;
 #[cfg(feature = "prometheus")]
-use prometheus::{HistogramVec, register_histogram_vec};
+use prometheus::{register_histogram_vec, HistogramVec};
 
 use crate::{
     base58::Uid,
@@ -101,7 +101,7 @@ impl Device {
         timeout: Option<Duration>,
     ) -> Result<Option<PacketData>, TinkerforgeError> {
         #[cfg(feature = "prometheus")]
-            let timer = REQUEST_TIMING
+        let timer = REQUEST_TIMING
             .with_label_values(&[
                 self.device_display_name,
                 function_id.to_string().as_str(),
@@ -109,7 +109,7 @@ impl Device {
             ])
             .start_timer();
         #[allow(clippy::let_and_return)]
-            let result = self
+        let result = self
             .connection
             .set(self.internal_uid, function_id, payload, timeout)
             .await;
@@ -121,7 +121,7 @@ impl Device {
     pub async fn get_callback_receiver(
         &mut self,
         function_id: u8,
-    ) -> impl Stream<Item=PacketData> {
+    ) -> impl Stream<Item = PacketData> {
         self.connection
             .callback_stream(self.internal_uid, function_id)
             .await
@@ -133,7 +133,7 @@ impl Device {
         payload: &[u8],
     ) -> Result<PacketData, TinkerforgeError> {
         #[cfg(feature = "prometheus")]
-            let timer = REQUEST_TIMING
+        let timer = REQUEST_TIMING
             .with_label_values(&[
                 self.device_display_name,
                 function_id.to_string().as_str(),
@@ -141,7 +141,7 @@ impl Device {
             ])
             .start_timer();
         #[allow(clippy::let_and_return)]
-            let result = self
+        let result = self
             .connection
             .get(self.internal_uid, function_id, payload, DEFAULT_TIMEOUT)
             .await;

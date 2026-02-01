@@ -3,15 +3,11 @@ use anyhow::Result;
 use tinkerforge_base::ip_connection::async_io::AsyncIpConnection;
 
 use crate::bindings::lcd_128_x_64::{
-    Lcd128X64Bricklet,
-    SetDisplayConfigurationRequest,
-    TouchLedConfig,
-    WritePixelsRequest,
+    Lcd128X64Bricklet, SetDisplayConfigurationRequest, TouchLedConfig, WritePixelsRequest,
 };
 use crate::bindings::master::MasterBrick;
 
 mod bindings;
-
 
 #[tokio::main]
 async fn main() -> Result<()> {

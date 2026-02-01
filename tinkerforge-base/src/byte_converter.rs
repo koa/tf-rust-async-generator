@@ -408,18 +408,18 @@ impl FromByteSlice for f64 {
 
 #[derive(PartialEq, Clone, Copy)]
 pub enum ParsedOrRaw<P, R>
-    where
-        P: Into<R> + Debug + Clone + Copy,
-        R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
+where
+    P: Into<R> + Debug + Clone + Copy,
+    R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
 {
     Parsed(P),
     Raw(R),
 }
 
 impl<P, R> ParsedOrRaw<P, R>
-    where
-        P: Into<R> + Debug + Clone + Copy,
-        R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
+where
+    P: Into<R> + Debug + Clone + Copy,
+    R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
 {
     pub fn parsed(&self) -> Option<P> {
         match self {
@@ -436,9 +436,9 @@ impl<P, R> ParsedOrRaw<P, R>
 }
 
 impl<P, R> Debug for ParsedOrRaw<P, R>
-    where
-        P: Into<R> + Debug + Clone + Copy,
-        R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
+where
+    P: Into<R> + Debug + Clone + Copy,
+    R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -453,9 +453,9 @@ impl<P, R> Debug for ParsedOrRaw<P, R>
 }
 
 impl<P, R> From<R> for ParsedOrRaw<P, R>
-    where
-        P: Into<R> + Debug + Clone + Copy,
-        R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
+where
+    P: Into<R> + Debug + Clone + Copy,
+    R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
 {
     fn from(value: R) -> Self {
         if let Ok(parsed) = value.try_into() {
@@ -467,9 +467,9 @@ impl<P, R> From<R> for ParsedOrRaw<P, R>
 }
 
 impl<P, R> ToBytes for ParsedOrRaw<P, R>
-    where
-        P: Into<R> + Debug + Clone + Copy,
-        R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
+where
+    P: Into<R> + Debug + Clone + Copy,
+    R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
 {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
         let raw_value = match self {
@@ -481,9 +481,9 @@ impl<P, R> ToBytes for ParsedOrRaw<P, R>
 }
 
 impl<P, R> FromByteSlice for ParsedOrRaw<P, R>
-    where
-        P: Into<R> + Debug + Clone + Copy,
-        R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
+where
+    P: Into<R> + Debug + Clone + Copy,
+    R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy,
 {
     fn from_le_byte_slice(bytes: &[u8]) -> Self {
         let raw_value = R::from_le_byte_slice(bytes);
@@ -500,9 +500,9 @@ impl<P, R> FromByteSlice for ParsedOrRaw<P, R>
 }
 
 impl<P, R> Default for ParsedOrRaw<P, R>
-    where
-        P: Into<R> + Debug + Clone + Copy,
-        R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy + Default,
+where
+    P: Into<R> + Debug + Clone + Copy,
+    R: TryInto<P> + FromByteSlice + ToBytes + Debug + Clone + Copy + Default,
 {
     fn default() -> Self {
         Self::from(R::default())

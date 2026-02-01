@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use proc_macro2::TokenStream;
-use quote::{quote, TokenStreamExt, ToTokens};
+use quote::{quote, ToTokens, TokenStreamExt};
 use serde::{Deserialize, Serialize};
 use syn::parse_quote;
 
@@ -238,11 +238,10 @@ impl ToTokens for JsonElementType {
                     quote!(i64)
                 }
             }
-                .into_token_stream(),
+            .into_token_stream(),
         )
     }
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, Eq, PartialEq)]
 #[serde(rename_all = "lowercase")]
