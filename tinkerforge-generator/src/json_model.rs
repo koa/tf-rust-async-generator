@@ -187,7 +187,7 @@ impl JsonElementType {
             JsonElementType::Int16 => array_length * 2,
             JsonElementType::UInt32 => array_length * 4,
             JsonElementType::Int32 => array_length * 4,
-            JsonElementType::Bool => (array_length + 7) / 8,
+            JsonElementType::Bool => array_length.div_ceil(8),
             JsonElementType::Char => array_length,
             JsonElementType::String => array_length,
             JsonElementType::Float => array_length * 4,
@@ -238,7 +238,7 @@ impl ToTokens for JsonElementType {
                     quote!(i64)
                 }
             }
-            .into_token_stream(),
+                .into_token_stream(),
         )
     }
 }

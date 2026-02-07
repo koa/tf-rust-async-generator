@@ -58,7 +58,7 @@ pub fn process_directory(bindings_dir: PathBuf) -> File {
     )
 }
 
-pub fn generate_code<IT: Iterator<Item = JsonContent>>(file_contents: IT) -> File {
+pub fn generate_code<IT: Iterator<Item=JsonContent>>(file_contents: IT) -> File {
     let mut bindings_content = Vec::new();
 
     let mut device_variants: Punctuated<Variant, Comma> = Default::default();
@@ -830,18 +830,18 @@ fn append_data_object<F: FieldWithSize>(
 
 fn static_method_call(ty: &Type, method: Ident, args: Punctuated<Expr, Comma>) -> Expr {
     if let Type::Path(TypePath {
-        qself: None,
-        path: Path {
-            leading_colon: _,
-            segments,
-        },
-    }) = &ty
+                          qself: None,
+                          path: Path {
+                              leading_colon: _,
+                              segments,
+                          },
+                      }) = &ty
     {
         let seg = segments.last();
         if let Some(PathSegment {
-            ident,
-            arguments: PathArguments::AngleBracketed(bracketed),
-        }) = seg
+                        ident,
+                        arguments: PathArguments::AngleBracketed(bracketed),
+                    }) = seg
         {
             return if segments.len() > 1 {
                 let mut type_path: Punctuated<PathSegment, PathSep> = Punctuated::new();

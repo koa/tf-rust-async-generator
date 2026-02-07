@@ -192,7 +192,7 @@ impl Base58 for str {
             }
         }
 
-        let result = if result_u64 > u32::max_value().into() {
+        let result = if result_u64 > u32::MAX.into() {
             let value1 = result_u64 & 0xFF_FF_FF_FF;
             let value2 = (result_u64 >> 32) & 0xFF_FF_FF_FF;
             ((value1 & 0x00_00_0F_FF)
