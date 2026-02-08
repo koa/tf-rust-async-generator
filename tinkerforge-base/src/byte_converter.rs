@@ -57,9 +57,9 @@ impl<const N: usize> ToBytes for [u8; N] {
 
 impl ToBytes for [u8] {
     fn write_to_slice(&self, target: &mut [u8]) -> usize {
-        let target_len = target.len();
-        target[0..target_len].copy_from_slice(self);
-        self.len()
+        let len = self.len();
+        target[0..len].copy_from_slice(self);
+        len
     }
 }
 

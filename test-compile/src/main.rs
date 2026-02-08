@@ -36,6 +36,7 @@ async fn main() -> Result<()> {
         x_end: 127,
         y_end: 63,
         data: &pattern,
+        offset: 0,
     };
     bricklet.write_pixels(request).await?;
 

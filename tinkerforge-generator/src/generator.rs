@@ -393,6 +393,7 @@ fn generate_element_function(
                             #[derive(Copy, Clone, PartialEq, Debug)]
                             pub struct #high_level_struct_name<'d> {
                                 pub data: &'d [#element_type],
+                                pub offset: #offset_type,
                             }
                         ));
                     } else {
@@ -401,6 +402,7 @@ fn generate_element_function(
                             pub struct #high_level_struct_name<'d> {
                                 #struct_fields,
                                 pub data: &'d [#element_type],
+                                pub offset: #offset_type,
                             }
                         ));
                     }
@@ -435,7 +437,7 @@ fn generate_element_function(
                                     let data = &self.request.data[slice_offset as usize..slice_offset as usize + packet_length as usize];
                                     Some(#high_level_slice_name {
                                         request: self.request,
-                                        offset: slice_offset,
+                                        offset: slice_offset+self.request.offset,
                                         length,
                                         data,
                                     })
