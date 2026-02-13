@@ -1,3 +1,7 @@
+use convert_case::{Case, Casing};
+use prettyplease::unparse;
+use proc_macro2::Span;
+use quote::ToTokens;
 use std::path::PathBuf;
 use std::{
     collections::HashSet,
@@ -5,11 +9,6 @@ use std::{
     env::{self, current_dir},
     fs, path,
 };
-
-use convert_case::{Case, Casing};
-use prettyplease::unparse;
-use proc_macro2::Span;
-use quote::ToTokens;
 use syn::{
     parse_quote,
     punctuated::Punctuated,
@@ -355,18 +354,28 @@ fn generate_element_function(
                         }
                         Some(JsonRole::StreamChunkData) => {
                             writer_statements
-                                .push(parse_quote!(i+=self.data.write_to_slice(&mut target[i..]);));
+                                .push(parse_quote! {
+                                    #[doc = "StreamChunkData"]
+                                    (i+=self.data.write_to_slice(&mut target[i..]));
+                                });
                             data_field = Some(field.1);
                         }
                         Some(JsonRole::StreamLength) => {
                             let increment = field.size();
-                            writer_statements.push(parse_quote!(i+=self.length.write_to_slice(&mut target[i..i+#increment]);));
+                            writer_statements.push(parse_quote! {
+                                #[doc = "StreamLength"]
+                                (i+=(self.request.data.len() as u16).write_to_slice(&mut target[i..i+#increment]));
+                            });
                             stream_length_field = Some(field.1);
                         }
                         Some(JsonRole::StreamData) => {}
                         Some(JsonRole::StreamChunkOffset) => {
                             let increment = field.size();
-                            writer_statements.push(parse_quote!(i+=self.offset.write_to_slice(&mut target[i..i+#increment]);));
+
+                            writer_statements.push(parse_quote! {
+                                #[doc = "StreamChunkOffset"]
+                                (i+=self.offset.write_to_slice(&mut target[i..i+#increment]));
+                            });
                             chunk_offset_field = Some(field.1);
                         }
                         Some(JsonRole::StreamChunkWritten) => {}
@@ -393,7 +402,6 @@ fn generate_element_function(
                             #[derive(Copy, Clone, PartialEq, Debug)]
                             pub struct #high_level_struct_name<'d> {
                                 pub data: &'d [#element_type],
-                                pub offset: #offset_type,
                             }
                         ));
                     } else {
@@ -402,7 +410,6 @@ fn generate_element_function(
                             pub struct #high_level_struct_name<'d> {
                                 #struct_fields,
                                 pub data: &'d [#element_type],
-                                pub offset: #offset_type,
                             }
                         ));
                     }
@@ -437,7 +444,7 @@ fn generate_element_function(
                                     let data = &self.request.data[slice_offset as usize..slice_offset as usize + packet_length as usize];
                                     Some(#high_level_slice_name {
                                         request: self.request,
-                                        offset: slice_offset+self.request.offset,
+                                        offset: slice_offset,
                                         length,
                                         data,
                                     })
